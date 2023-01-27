@@ -11,6 +11,8 @@
 - Enjoy the teamwork.
 - What skills do we want to develop or refine?
 - R Programming skills.
+- Python programming skills.
+- Skills on making trustworth workflow.
 - Data analysis skills.
 - Statistical modeling skills
 - To be more detailed, we want to gain more literacy and confidence in generating samples and developing conclusions based off these samples (i.e. Use the correct models/tests for the research question + Be able to ascertain the confidence intervals + learn how to determine if findings are statistically significant) and just become more comfortable working with data in general (data manipulation/cleaning), learning how to optimize the data - gain as much useful info as possible from the limited data we have.
