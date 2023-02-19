@@ -8,7 +8,7 @@ Authors: Group 07: Harbor Zhang, Jiaying Liao, Ning Wang, Xiwen Wei
 
 ## Report
 
-The analysis report can be found [here](dsci310_milestone1.rmd).
+The analysis report can be found [here](analysis/dsci310_milestone1.rmd).
 
 ## Usage
 
