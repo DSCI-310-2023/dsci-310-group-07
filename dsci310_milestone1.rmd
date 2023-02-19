@@ -1,0 +1,496 @@
+---
+title: "Untitled"
+author: "Ning Wang (20552618)"
+date: "2023-02-19"
+output: html_document
+---
+
+## Predicting Car Prices Based on Certain Characteristics
+Group 36: Henry Zhang, Moira Renata, Ning Wang, Paige Wills, Xinrui Wang
+
+## **Introduction**
+
+Over the past few decades, we have seen a rapid increase in demand for the car industry. The high market price of both brand new and used cars have created a large economic impact all over the world. Based on previous studies, it was found that there are multiple factors affecting  the final price of a car (Balce, 2016) and that while most factors do have a positive contribution or effect to the final price, there are still some factors that create a negative effect (Erdem and Senturk, 2009). 
+
+Therefore, in this project, we hope to create a model that allows us to predict the final price of a car given its characteristics.
+
+## **Description**
+
+The sample we use is from the The Automobile Data Set that was created by Jeffrey C. Schlimmer in 1985. The author created a data set that consists of 26 columns with 205 rows, where each row refers to one car sample. Out of the 25 columns predictor variables, there are 9  categorical variables and 16 numerical variables. Our response variable is the 26th column, which represents the price of a car in USD($). 
+
+Variable|Type|Description|
+|-|-|-|
+|symboling|Categorical|Assigned insurance risk rating|
+|normalized-losses|Numerical|Relative average loss payment per insured vehicle year in dollars (USD)|
+|make|Categorical|Car manufacturer/model|
+|fuel-type|Categorical|Type of fuel to power car|
+|aspiration|Categorical|Engine aspiration (std, turbo)|
+|num-of-doors|Numerical|Number of doors|
+|body-style|Categorical|Car's style (sedan, convertible, etc.)|
+|drive-wheels|Categorical|amount and location of wheels|
+|engine-location|Categorical|Engine location (front, back)|
+|wheel-base|Numerical|Horizontal distance between the front and rear wheel in inches.|
+|length|Numerical|Length of car in inches|
+|width|Numerical|Width of car in inches|
+|height|Numerical|Height of car in inches|
+|curb-weight|Numerical|Weight of car in pounds|
+|engine-type|Categorical|Engine type (dohc, dohcv, etc.)|
+|num-of-cylinders|Categorical|Number of cylinders in engine|
+|Engine-size|Numerical|Engine size in cubic inches|
+|fuel-system|Categorical|Fuel system in car (1bbl, mfi. etc.)|
+|bore|Numerical|Diameter of each cylinder in inches|
+|stroke|Numerical|Movement of piston in gigapascal|
+|compression-ratio|Numerical|Ratio between the cylinder's highest and lowest volumes at the bottom and top of the piston's stroke. |
+|horsepower|Numerical|Engine horsepower (hp)|
+|peak-rpm|Numerical|RPM at which engine delivers peak horsepower|
+|city-mpg|Numerical|Mileage in the city in miles per gallon|
+|highway-mpg|Numerical|Mileage in the highway in miles per gallon|
+|price|Numerical|Price of car in USD ($)|
+
+## **Preliminary Analysis**
+In this section, we load the data into our notebook and perform data cleaning to obtain tidy data.
+
+```{r}
+library(tidyverse)
+library(leaps)
+```
+
+```{r}
+# Labelling all the columns
+names<-c("symboling","normalized-losses","make","fuel-type","aspiration",
+         "num-of-doors","body-style","drive-wheels","engine-location",
+        "wheel-base","length","width","height","curb-weight","engine-type",
+        "num-of-cylinders","engine-size","fuel-system","bore","stroke",
+        "compression-ratio","horsepower","peak-rpm","city-mpg","highway-mpg","price")
+
+# Reading the data from the web 
+df<-read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.data",
+            col_names=names,col_types = cols(
+                symboling = col_factor(),
+                `normalized-losses`= col_double(),
+                make = col_factor(),
+                `fuel-type`= col_factor(),
+                aspiration = col_factor(),
+                `num-of-doors`= col_factor(),
+                `body-style` = col_factor(),
+                `drive-wheels` = col_factor(),
+                `engine-location` = col_factor(),
+                `wheel-base` = col_double(),
+                length = col_double(),
+                width = col_double(),
+                `curb-weight` = col_double(),
+                `engine-type` = col_factor(),
+                `num-of-cylinders` = col_factor(),
+                `engine-size` = col_double(),
+                `fuel-system` = col_factor(),
+                bore = col_double(),
+                stroke = col_double(),
+                `compression-ratio` = col_double(),
+                horsepower = col_double(),
+                `peak-rpm` = col_double(),
+                `city-mpg` = col_double(),
+                `highway-mpg` = col_double(),
+                price = col_double()
+                 ))%>%replace("?",NA)
+head(df)
+```
+#### **Tidying our Data**
+
+From the dataframe above, we noticed that there are some NA values, and that the last column `?` can be removed as it does not represent anything. Other than that, each row represents an observation, each column is a variable, and each cell is a value, which means there is not a lot of data tidying to do. We will first check the number of NA values in each column, the number of levels in columns that are categorical variables, and the summary statistics of each variable.
+
+From the dataframe above, we noticed that there are some NA values, and that the last column `?` can be removed as it does not represent anything. Other than that, each row represents an observation, each column is a variable, and each cell is a value, which means there is not a lot of data tidying to do. We will first check the number of NA values in each column, the number of levels in columns that are categorical variables, and the summary statistics of each variable.
+
+```{r}
+# Checking the summary of results of each column
+sum_df <- summary(df)
+sum_df
+```
+
+Based on the above summary statistics, we noticed that there are some variables that contain NA values, and that the last column does not contain data. 
+
+```{r}
+#Remove the last column
+automobile<-df[,-27]
+#Check that the last column is now the response variable
+colnames(automobile[,26])
+#number of rows in the dataframe
+nrow(automobile)
+#number of rows in the dataframe after NAs are removed
+nrow(na.omit(automobile))
+```
+
+From above, we can see that there are 45 rows that contain NA values; this is calculated by 205-160.
+
+```{r}
+#print our tidy dataset
+head(automobile)
+```
+
+#### **Exploratory Data Analysis**
+
+Next, we will perform EDA to better understand the variables that we will be using in our analysis. 
+
+It would be beneficial to visualize the pairwise correlation coefficients of our dataset to check for multicollinearity. This can be done either by using the `ggpairs` function, or by creating a correlation heatmap. However, since our data contains mulitple categorical variables with a large number of levels, this is not possible to do at this point. Therefore, our EDA is limited to checking the Coefficient of Determination of all the predictor variables and visualizing the realitionship of the top 8 predictor variables based on their R^2 value. 
+
+Firstly, we want to calculate the coefficient of determination of all of our predicted variables.
+
+```{r}
+#print out the R^2 (coefficient of determination) of all the variables
+r_sqr<-c()
+for (x in 1:25){
+     r_sqr<-c(r_sqr,summary(lm(unlist(automobile[,26])~unlist(automobile[,x])))$r.squared)
+
+ }
+```
+
+```{r}
+#removes the price variable (response) since we are not calculating the R^2 of it.  
+names<-colnames(automobile[,-26])
+#create a summary table of the predictor variables with the top 8 highest R^2 values
+df_sqr<-cbind(r_sqr,names)%>%as.data.frame()
+df_sqr$r_sqr<-as.numeric(df_sqr$r_sqr)
+head(df_sqr%>%arrange(desc(df_sqr$r_sqr)),8)
+```
+
+Based on the summary table, the variable that has the highest R^2 value is `make` with a value of 0.796. This can be interpreted as 79.6% of the variation observed in `price` is explained by the model with `make` as the explanatory variable. 
+
+Then, we created plots for the top 8 predictor variables. For the numerical variables, we created both a histogram to see the distribution, and a scatterplot to see the relationship between the variable and the car price. For the categorical variables, we created a bar graph to compare the count of each category in a variable. Analysis of the plots created are written after the code. 
+
+```{r}
+#a list of the top  8 variables with the highest coefficient of determination
+nms <-head(df_sqr%>%arrange(desc(df_sqr$r_sqr)),8)%>%select(names)%>%pull()
+nms
+```
+
+```{r}
+options(repr.plot.height = 3, repr.plot.width = 7)
+for (x in 1:25){
+    if (colnames(automobile[,x]) %in% nms){
+    
+    if (typeof(unlist(automobile[,x]))=="double"){
+         print(automobile %>%
+         ggplot() +
+         geom_histogram(aes(x = unlist(automobile[,x])), bins = 30)+
+              xlab(colnames(automobile[,x])))
+        
+         print(automobile %>% 
+         ggplot(aes(x = unlist(automobile[,x]),y=unlist(automobile[,26]))) +
+         geom_point()+
+         geom_smooth(method=lm,formula=y~x,se=FALSE)+
+              xlab(colnames(automobile[,x]))+
+              ylab("Car price (USD)"))}
+        
+    else{
+        print(automobile %>%
+            ggplot(aes(x=unlist(automobile[,x]))) +
+            geom_bar(stat="count",bins=30)+
+            xlab(colnames(automobile[,x])) +
+            theme(axis.text.x = element_text(angle = 40, hjust = 1)))
+    
+    }
+
+}
+      
+    
+    }
+
+oldw <- getOption("warn")
+
+options(warn = -1)
+```
+
+Analysis on the plots:
+
+- For the variable `make`, we can see that Japanese brands, such as Toyota, Nissan and Mazada have the top 3 counts, which means they produce the most cars. 
+- For the variable `length`, we can see the distribution is approximately normal and has a positive linear relationship with `price`. 
+- For the variable `width`, we can see the distribution is approximately normal and has a positive linear relationship with `price`. 
+- For the variable `curb-weight`, we can see the distribution is skewed to right and has a positive linear relationship with `price`. 
+- For the variable `num-of-cylinders`, we can see that most cars have 4-cyclinders.
+- For the variable `engine-size`, we can see the distribution is skewed to right and has a positive linear relationship with `price`. 
+- For the variable `horse-power`, we can see the distribution is skewed to right and has a positive linear relationship with `price`.
+- For the variable `highway-mpg`, we can see the distribution is approximately normal and has a negative linear relationship with `price`. 
+
+## **Methods**
+
+```{r}
+#removes duplicate elements in the dataframe after omitting the NA values. 
+sapply(lapply(na.omit(automobile), unique), length)
+
+```
+
+Since lm will automatically omit the NA values in data, we check the number of unique values if NA is removed. We notice that after we omit NA, the levels of engine-location appears to be 1. This will cause contrasts since we need a categorical variables to be factors with 2 or more levels. Thus we need to remove `engine-location`.
+
+```{r}
+levels(automobile$`num-of-doors`)
+```
+
+We also check the levels in `num-of-doors` and realize that one of the levels is `?`, which also appears to be an NA value. Thus, we need to remove it.
+
+First the data is prepared. The variable `num-of-doors` needs to be converted to characters and have `?`s removed and the variable `engine-location` is dropped. Them, the dataset is split into two data sets - training and testing using a 70-30% basis and the ID variables are removed.
+
+```{r}
+set.seed(123)
+
+#dropping engine-location variable
+drop <- "engine-location"
+df_no_eng_loc <-automobile[,!(names(automobile) %in% drop)]
+
+
+#dropping ? level in num-of-doors
+df_no_eng_loc$`num-of-doors`<-as.character(df_no_eng_loc$`num-of-doors`)
+
+clean_automobile <-df_no_eng_loc%>%filter(`num-of-doors`!='?')%>%na.omit()
+
+clean_automobile$`num-of-doors`<-as.factor(clean_automobile$`num-of-doors`)
+
+#split data into training and testing
+clean_automobile$ID <- 1:nrow(clean_automobile)
+training_df <- sample_n(clean_automobile, size = nrow(clean_automobile) * 0.70,
+  replace = FALSE
+)
+
+testing_df <- anti_join(clean_automobile,
+  training_df,
+  by = "ID"
+)
+
+#remove ID variables
+training_df_at <- training_df[,-26]
+testing_df_at <- testing_df [,-26]
+```
+
+A full model is created using `lm()` with `price` as our response variable and **all input variables** as our predictor variables, using training data. A stepwise model is created using forward selection because we have more predictor variables (p) than observations (n). A backward selection and stepwise selection will not work. 
+
+** note: We have more than 25 predictors since a lot of our predictor variables are categorical data with many levels. 
+
+
+```{r}
+library(MASS)
+
+full_mod<-lm(price ~.,data=training_df)
+step_mod_fs <- stepAIC(full_mod, direction = "forward")
+
+summary(step_mod_fs)
+
+```
+
+Based on the summary we found in `sum_df` (above), we noticed that the variables:`symboling`, `make`, `body-style`, `drive-wheels`, `engine-type`, `num-of-cylinders`, and `fuel-system` have more than 2 levels. Since the shrinkage methods we are planning to use to perform model selection (LASSO and Ridge) is not possible when there are more than 2 levels in a categorical variable, the variables listed above are all dropped because of their high levels.
+
+We then create new training and testing datasets that excludes the variables listed. We call them: 
+1. `training_df_sub`
+2. `testing_df_sub`
+
+```{r}
+drops <- c("symboling","make","body-style","drive-wheels","engine-type","num-of-cylinders","fuel-system")
+training_df_sub<-training_df_at[,!(names(training_df_at) %in% drops)]
+testing_df_sub<-testing_df_at[,!(names(testing_df_at) %in% drops)]
+
+head(training_df_sub)
+head(testing_df_sub)
+```
+
+This code prepares the dataset(s) for `glmnet()` which only takes matrices (hence `model.matrix`). The `glmnet()` function has an argument `object`, which is the formula of the model and therefore needs clear x and y variables, explaining why the training and testing datasets are split into subsets of x and y. 
+
+```{r}
+library(glmnet)
+
+#training matrix
+x_train_mat <-model.matrix( ~ ., training_df_sub[,-18])
+y_train_mat <-training_df_sub$price
+
+#testing matrix
+x_test_mat <-model.matrix( ~ ., testing_df_sub[,-18])
+y_test_mat <-testing_df_sub$price
+
+oldw <- getOption("warn")
+
+options(warn = -1)
+
+```
+
+Now our data is prepared for the `glmnet()` function, we will use `cv.glmnet` to obtain the optimal value of lambda using the training set. Since this is a LASSO model, we will use the argument `alpha=1` and `n.folds=10` to find the optimal value of lambda using cross-validation by defining a sequence of values.
+
+Then the plot function will be used to visualise the MSE of different lambdas.
+
+`lasso_mod` provides the  $\hat{\lambda}_{\text{min}}$  for LASSO (explained below) and `lasso_mod_1se` provides the $\hat{\lambda}_{\text{1SE}}$ for LASSO (explained below).
+
+```{r}
+set.seed(123)
+lasso_cv<-cv.glmnet(x=x_train_mat,y=y_train_mat,alpha=1,nfolds=10)
+plot(lasso_cv, main = "MSE of LASSO estimated by CV for different lambdas\n\n")
+
+lasso_mod<-glmnet(x=x_train_mat,y=y_train_mat,alpha=1,lambda=lasso_cv$lambda.min)
+lasso_mod_1se<-glmnet(x=x_train_mat,y=y_train_mat,alpha=1,lambda=lasso_cv$lambda.1se)
+```
+
+The plot shows the estimated testMSE on the y-axis for a grid of values of ${\lambda}$ on the x-axis (on a natural log-scale). The two vertical dotted lines show us where lambda is minimized, in other words, how many variables are needed for the best model. The numbers on the top x-axis indicate the number of input variables whose estimated coefficients are different for 0 for different values of lambda. The error bars represent the variation across the different sets of the CV folds.  The left line shows $\hat{\lambda}_{\text{min}}$ - which is the minimum MSE in the grind and the right line represents $\hat{\lambda}_{\text{1SE}}$ - which is the largest values of lambda such that the corresponding MSE is still within 1 standard error of that of the minimum (more penalization at low cost). 
+
+A similar method is followed for Ridge, except `alpha = 0`. 
+`ridge_mod` provides the  $\hat{\lambda}_{\text{min}}$ for Ridge and `ridge_mod_1se` provides the  $\hat{\lambda}_{\text{1SE}}$ value for Ridge (explained above).
+
+```{r}
+set.seed(123)
+ridge_cv<-cv.glmnet(x=x_train_mat,y=y_train_mat,alpha=0,nfolds=10)
+plot(ridge_cv, main = "MSE of Ridge estimated by CV for different lambdas\n\n")
+
+ridge_mod<-glmnet(x=x_train_mat,y=y_train_mat,alpha=0,lambda=ridge_cv$lambda.min)
+ridge_mod_1se<-glmnet(x=x_train_mat,y=y_train_mat,alpha=0,lambda=ridge_cv$lambda.1se)
+```
+
+The plot for Ridge shows the estimated testMSE’s for each value of lambda, just like that of LASSO. However the main difference here is that the top x-axis is all the same value - 17. This is because the Ridge estimator never shrinks estimates to 0, unlike LASSO. The two vertical lines represent $\hat{\lambda}_{\text{min}}$ and  $\hat{\lambda}_{\text{1SE}}$ with the x and y axis being the same as LASSO.
+
+For explanatory analysis purposes, we will be using both $\hat{\lambda}_{\text{min}}$ and $\hat{\lambda}_{\text{1SE}}$ for both LASSO and Ridge to create four different regression models. Additionally, we also be creating an OLS model for comparison. The 5 models we will be creating are listed below: 
+1. `mod_lasso`:  LASSO regression using $\lambda$ = $\hat{\lambda}_{\text{min}}$ from LASSO
+2. `mod_lasso_1se`: LASSO regression using $\lambda$ = $\hat{\lambda}_{\text{1SE}}$ from LASSO
+3. `ridge_mod`:  Ridge regression using $\lambda$ = $\hat{\lambda}_{\text{min}}$ from Ridge
+4. `ridge_mod_1se`: Ridge regression using $\lambda$ = $\hat{\lambda}_{\text{1SE}}$ from Ridge
+5. `ols_fs`: Ordinary least squares full regression using $\lambda$ = 0
+
+After creating the 5 models, we will then obtain the out-of-sample predictions for the test sets of all five different models above, shown by `preds_1`, `preds_2`, `preds_3`, `preds_4` and `preds_5`.
+
+Finally, we are able to compute the RMSE (root mean squared error) to evaluate the predicted models, which is clearly summarised in the tibble below.
+
+```{r}
+set.seed(123)
+kfolds=10
+
+fold_labels <- sample(rep(seq(kfolds), length.out = nrow(training_df_sub)))
+errors <- matrix(NA,ncol=5,nrow=10)
+  for (fold in seq_len(kfolds)) {
+    test_rows <- fold_labels == fold
+    train <- training_df_sub[!test_rows, ]
+    test <- training_df_sub[test_rows, ]
+      
+    #since the matrix size for LASSO and Ridge is different from OLS, we will be using different training and testing sets for OLS
+    train_ols <- training_df_at[!test_rows, ]
+    test_ols <- training_df_at[test_rows, ]
+    
+    x_train_mat<-model.matrix( ~ ., train[,-18])
+    y_train_mat<-train$price
+      
+    x_test_mat<-model.matrix( ~ ., test[,-18])
+    y_test_mat<-test$price
+      
+    # We fit the LASSO and Ridge regression models using lambda values found using cross-validation. 
+    mod_lasso_min <- glmnet(x=x_train_mat,y=y_train_mat,alpha=1,lambda=lasso_cv$lambda.min)
+      
+    mod_lasso_1se <- glmnet(x=x_train_mat,y=y_train_mat,alpha=1,lambda=lasso_cv$lambda.1se)
+      
+    ridge_mod_min<-glmnet(x=x_train_mat,y=y_train_mat,alpha=0,lambda=ridge_cv$lambda.min)
+      
+    ridge_mod_1se<-glmnet(x=x_train_mat,y=y_train_mat,alpha=0,lambda=ridge_cv$lambda.1se)
+
+      
+    #There is a slight issue with the variable `make`, it has new levels in new folds,
+    #and the OLS model cannot perform the OLS function in the k-folds cross validation; 
+    #the variable has been removed in order to successfully create our training and testing sets for our OLS model. 
+
+    #building a matrix for the training set
+    ols_x_red_train<-train_ols%>%as.data.frame()%>%dplyr::select(symboling , `normalized-losses` , make , 
+    `fuel-type` , aspiration , `num-of-doors` , `body-style` , 
+    `drive-wheels` , `wheel-base` , length , width , height , 
+    `curb-weight` , `engine-type` , `num-of-cylinders` , `engine-size` , 
+    `fuel-system` , bore ,stroke , `compression-ratio` , horsepower , 
+    `peak-rpm` , `city-mpg` , `highway-mpg`)
+      
+    ols_x_mat_train<-model.matrix(~.,ols_x_red_train)
+    
+    #building a matrix for the testing set
+    ols_x_red_test<-test_ols%>%as.data.frame()%>%dplyr::select(symboling , `normalized-losses` , make , 
+    `fuel-type` , aspiration , `num-of-doors` , `body-style` , 
+    `drive-wheels` , `wheel-base` , length , width , height , 
+    `curb-weight` , `engine-type` , `num-of-cylinders` , `engine-size` , 
+    `fuel-system` , bore , stroke , `compression-ratio` , horsepower , 
+    `peak-rpm` , `city-mpg` , `highway-mpg`)
+      
+    ols_x_mat_test<-model.matrix(~.,ols_x_red_test)
+      
+    # we know that when lambda = 0 and alpha=1, the glmnet() performs the same as lm
+    ols_fs<- glmnet(x=ols_x_mat_train,y=y_train_mat,alpha=1,lambda=0)
+    
+    
+    #compute the cross-validation RMSE
+    preds_1<-predict(mod_lasso_min,x_test_mat)
+    preds_2<-predict(mod_lasso_1se,x_test_mat)
+    preds_3<-predict(ridge_mod_min,x_test_mat)
+    preds_4<-predict(ridge_mod_1se,x_test_mat)
+    preds_5<-predict(ols_fs,ols_x_mat_test)
+      
+    errors[fold,1] <- sqrt(mean(y_test_mat-preds_1)^2)
+    errors[fold,2] <- sqrt(mean(y_test_mat-preds_2)^2)
+    errors[fold,3] <- sqrt(mean(y_test_mat-preds_3)^2)
+    errors[fold,4] <- sqrt(mean(y_test_mat-preds_4)^2)
+    errors[fold,5] <- sqrt(mean(y_test_mat-preds_5)^2)
+  }
+
+tibble(
+    Model = c("LASSO Regression with minimum MSE", "LASSO Regression with 1SE MSE", "Ridge Regression with minimum MSE", "LASSO Regression with 1SE MSE", "OLS Full Regression"), 
+    R_MSE = c(mean(errors[, 1]), mean(errors[, 2]), mean(errors[, 3]), mean(errors[, 4]), mean(errors[, 5])))
+        
+
+```
+
+
+Through the 10 fold cross validation error (root mean squared error), we see that lasso model with $\hat{\lambda}_{\text{1SE}}$ has the lowest value. Thus we decide to use the LASSO Regression model with 1se MSE for our final predictions.
+
+```{r}
+#redefine model matrix for training and testing
+x_train_mat<-model.matrix( ~ ., training_df_sub[,-18])
+y_train_mat<-training_df_sub$price
+
+x_test_mat<-model.matrix( ~ ., testing_df_sub[,-18])
+y_test_mat<-testing_df_sub$price
+```
+
+```{r}
+#compute the RMSPE (the prediction error) on the test set to evaluate our final LASSO model
+lasso_mod_1se<-glmnet(x=x_train_mat,y=y_train_mat,alpha=1,lambda=lasso_cv$lambda.1se)
+
+preds<-predict(lasso_mod_1se,x_test_mat)
+
+sqrt(mean(y_test_mat-preds)^2)
+```
+
+Based on the output above, we obtained a root mean squared prediction error of 65.427 when using the LASSO Regression model on the test set.
+
+```{r}
+coef_mat<-coef(lasso_mod_1se)
+
+summs <- summary(coef_mat)
+
+vars_df<-data.frame(kept_variables = rownames(coef_mat)[summs$i],
+           coefficient = summs$x)
+
+vars_df
+```
+
+ Taking a look at the coefficients of our model, we noticed that the LASSO model had selected only three variables, which are `width`, `curb-weight`, and `horsepower`, while all the coefficients of other input variables were reduced to 0.
+ 
+
+## **Discussion**
+
+Our goal requires generating a prediction model with potential independent variables that can predict the price of the car. Based on our exploratory data analysis and regression model comparisons, we chose the LASSO model with $\hat{\lambda}_{\text{1SE}}$ , which we expect to have good prediction performance.
+ 
+### Summary
+
+Based on the results above, the variables `width`,`curb-weight`, and `horsepower` were chosen by the LASSO model. With lasso_mod_1se (more penalization at a low cost) to penalize, all of the other regression coefficients of the input variables were shrunk to 0. If we refer back to our EDA, we notice that the three variables selected by LASSO are included in the list of top 8 variables with the highest coefficient of determination. However, it was surprising to see that there were only 3 predictor variables in our final LASSO model, which means all the other variables were shrunk to 0. Some variables that we thought were going to be important, like `city-mpg`, `length`, and `height` were surprisingly not included in the final model. 
+
+We also noticed that the LASSO model with $\hat{\lambda}_{\text{1SE}}$ yielded the smallest RMSE value compared to the other models, which means that it provides higher accuracy. LASSO penalizes the RSS with an $L_1$ penalty, and the penalty parameter $\hat{\lambda}_{\text{1SE}}$ that we chose was selected through a process called tuning in order to avoid using the test set when creating our model. Although this shrinkage method (LASSO) might lead to bias of the estimated coefficients, we sacrifice this for a lower variance to gain better prediction performance in our model.
+
+We hope that this fitted LASSO model will allow users to predict the price of a car in USD based on the 3 variables that were selected. Although we initially expected to have more predictor variables, we believe that the 3 predictor variables can give a rough prediction of the price of a car (USD). Moreover, we believe such a model could not only provide the expected price of a new car to customers, but also help sellers of second-hand cars set ideal prices. 
+
+
+### Further Questions and Improvements
+There are two main problems that need to be improved:
+1. Using high-level (N >2) categorical variables in the LASSO model. The LASSO model interprets N-1 dummy variables as its own separate variable, which may exclude certain levels. To deal with this issue, we dropped the variables with high levels. However by doing so, we might have dropped a statistically significant variable. In future research, maybe by using another regression model, including those categorical variables with more than 2 levels, we can improve our model’s performance. 
+
+2. Another problem involves LASSO's biased estimators. In the future, if we want to generate an inference model, we can apply post-lasso. This is done by fiting a regular least squares model to the variables selected by LASSO. 
+
+
+## **References**
+Schlimmer, Jeffrey C. (1987). “Automobile Data Set.” Machine Learning Repository,  https://archive.ics.uci.edu/ml/datasets/Automobile 
+
+Balce, Andım. (2016). Factors Affecting Prices In An Used Car E-Market. Journal of Internet Applications and Management. 7. 5-20. 10.5505/iuyd.2016.30974. 
+
+Erdem, Cumhur & Şentürk, İsmail. (2009). A Hedonic Analysis of Used Car Prices in Turkey. International Journal of Economic Perspectives. 3. 141-149. 
+
