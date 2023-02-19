@@ -1,12 +1,9 @@
 ---
-title: "Untitled"
-author: "Ning Wang (20552618)"
+title: "Predicting Car Prices Based on Certain Characteristics"
+author: "Group 07: Harbor Zhang, Jiaying Liao, Ning Wang, Xiwen Wei"
 date: "2023-02-19"
 output: html_document
 ---
-
-## Predicting Car Prices Based on Certain Characteristics
-Group 36: Henry Zhang, Moira Renata, Ning Wang, Paige Wills, Xinrui Wang
 
 ## **Introduction**
 
@@ -52,6 +49,9 @@ In this section, we load the data into our notebook and perform data cleaning to
 
 ```{r}
 library(tidyverse)
+```
+
+```{r}
 library(leaps)
 ```
 
