@@ -18,16 +18,16 @@ First, clone this repo in your terminal, navigate to the root of this project. M
 
 Then, build this image by 
 ```
-docker build -t your-image-name . -f Dockerfile
+docker build -t dsci310-project . -f Dockerfile
 ```
 After installing the packages in Dockerfile. You can run this on localhost:8787 by
 
 ```
-docker run -p 8787:8787 -e PASSWORD=12345 -v "your\path\to\the\project:/project" your-image-name
+docker run -p 8787:8787 -e PASSWORD=12345 -v "your\path\to\the\project:/project" dsci310-project
 ```
 OR
 ```
-docker run -p 8787:8787 -e PASSWORD=12345 -v $(pwd):/project your-image-name
+docker run -p 8787:8787 -e PASSWORD=12345 -v $(pwd):/project dsci310-project
 ```
 
 Open localhost:8787 on your browser. You can see the project on /project.
