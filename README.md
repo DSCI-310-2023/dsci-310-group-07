@@ -4,11 +4,13 @@ Authors: Group 07: Harbor Zhang, Jiaying Liao, Ning Wang, Xiwen Wei
 
 ## About
 
-# TODO
+In this project, we attempty to build a regression model to predict the car price given several charateristics of the car. The model will be selected using Lasso and Ridge regularizations. We also used 10-fold cross-validation to evaluate the performance of candidate models. The final model was selected by Lasso regularization and it includes idth, curb-weight, and horsepower as its variables. And the mean squared prediction error of this model is $65.43.
+
+The data we used was from the The Automobile Data Set that was created by Jeffrey C. Schlimmer in 1985. The data were collected from <https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.data>..
 
 ## Report
 
-The analysis report can be found [here](analysis/dsci310_milestone1.rmd).
+The analysis report can be found [here (Rmarkdown)](analysis/dsci310_milestone1.rmd) and [here (ipynb, to see the tables and graphs)](analysis/dsci310_milestone1.ipynb).
 
 ## Usage
 
