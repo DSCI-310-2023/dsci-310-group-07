@@ -1,37 +1,43 @@
-# Team work contract
+# Predicting Car Prices Based on Certain Characteristics
 
-## What are our team goals for this project?
-- Get a good mark on the project.
-- Work together remotely via Zoom.
-- Have good communication with each other.
-- Learn how to collaborate well and support fellow team members.
+Authors: Henry Zhang, Moira Renata, Ning Wang, Paige Wills, Xinrui Wang
 
-## What do we want to accomplish?
-- Deliver a good project with high quality of work
-- Enjoy the teamwork.
-- What skills do we want to develop or refine?
-- R Programming skills.
-- Python programming skills.
-- Skills on making reproducible and trustworthy workflows.
-- Data analysis skills.
-- Statistical modeling skills
-- To be more detailed, we want to gain more literacy and confidence in generating samples and developing conclusions based off these samples (i.e. Use the correct models/tests for the research question + Be able to ascertain the confidence intervals + learn how to determine if findings are statistically significant) and just become more comfortable working with data in general (data manipulation/cleaning), learning how to optimize the data - gain as much useful info as possible from the limited data we have.
-## Expectations
-- Everyone works hard/ contributes as much as they can.
-- Reply to messages in a timely manner.
-- Communicate if you’re busy/can’t make it to certain meetings.
-- Be courteous and patient with each other.
-- Provide constructive feedback.
-- Finish the assigned individual parts at least one day before the final deadline.
+## About
 
-## Policies & Procedures
-- What rules can we agree on to help us meet our goals and expectations?
-- Everyone participates and actively discusses.
-- Communicate frequently in group chat or in class.
-- Ask questions when unsure about any concepts or when stuck
-- Make sure you understand the data, the research question and the reasoning behind the code
-## Consequences:
-- How will we address non-performance regarding these goals, expectations, policies and procedures?
-- Communicate with the member first, identify any underlying issues that are causing problems, then offer help.
-- Reasonable distribution of tasks so that everyone can participate.
-- Keep in touch, monitor each other and help each other.
+# TODO
+
+## Report
+
+The analysis report can be found [here](dsci310_milestone1.rmd).
+
+## Usage
+
+We use a Docker container image to make the computational environment for this project reproducible.
+
+First, clone this repo in your terminal, navigate to the root of this project. Make sure your working directory contains [this Dockerfile](Dockerfile).
+
+Then, build this image by 
+```
+docker build -t your-image-name . -f Dockerfile
+```
+After installing the packages in Dockerfile. You can run this on localhost:8787 by
+
+```
+docker run -p 8787:8787 -e PASSWORD=12345 -v "your\path\to\the\project:/project" your-image-name
+```
+OR
+```
+docker run -p 8787:8787 -e PASSWORD=12345 -v $(pwd):/project your-image-name
+```
+
+Open localhost:8787 on your browser. You can see the project on /project.
+
+## Dependencies:
+
+R version 4.1.3 and R packages listed in [Dockerfile](Dockerfile).
+
+## License Information
+
+This project is offered under 
+the [Attribution 4.0 International (CC BY 4.0) License](https://creativecommons.org/licenses/by/4.0/).
+The software provided in this project is offered under the [MIT open source license](https://opensource.org/licenses/MIT). See [the license file](LICENSE.md) for more information. 
