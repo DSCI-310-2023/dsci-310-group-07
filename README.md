@@ -23,11 +23,11 @@ docker build -t dsci310-project . -f Dockerfile
 After installing the packages in Dockerfile. You can run this on localhost:8787 by
 
 ```
-docker run -p 8787:8787 -e PASSWORD=12345 -v "your\path\to\the\project:/project" dsci310-project
+docker run --rm -p 8787:8787 -e PASSWORD=12345 -v "your\path\to\the\project:/project" dsci310-project
 ```
 OR
 ```
-docker run -p 8787:8787 -e PASSWORD=12345 -v $(pwd):/project dsci310-project
+docker run --rm -p 8787:8787 -e PASSWORD=12345 -v $(pwd):/project dsci310-project
 ```
 
 Open localhost:8787 on your browser. You can see the project on /project.
