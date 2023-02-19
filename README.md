@@ -1,6 +1,6 @@
 # Predicting Car Prices Based on Certain Characteristics
 
-Authors: Henry Zhang, Moira Renata, Ning Wang, Paige Wills, Xinrui Wang
+Authors: Group 07: Harbor Zhang, Jiaying Liao, Ning Wang, Xiwen Wei
 
 ## About
 
