@@ -1,6 +1,6 @@
 # Predicting Car Prices Based on Certain Characteristics
 
-Authors: Harbor Zhang, Jiaying Liao, Ning Wang, Xiwen Wei
+Authors: Haobo(Harbor) Zhang, Jiaying Liao, Ning Wang, Xiwen Wei
 
 ## About
 
