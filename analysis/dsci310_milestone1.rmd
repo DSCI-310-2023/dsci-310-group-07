@@ -1,8 +1,10 @@
 ---
 title: "Predicting Car Prices Based on Certain Characteristics"
-author: "Group 07: Harbor Zhang, Jiaying Liao, Ning Wang, Xiwen Wei"
-date: "2023-02-19"
-output: html_document
+author: 'Group 07: Harbor Zhang, Jiaying Liao, Ning Wang, Xiwen Wei'
+date: '2023-02-19'
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ## **Introduction**
@@ -494,3 +496,4 @@ Balce, Andım. (2016). Factors Affecting Prices In An Used Car E-Market. Journal
 
 Erdem, Cumhur & Şentürk, İsmail. (2009). A Hedonic Analysis of Used Car Prices in Turkey. International Journal of Economic Perspectives. 3. 141-149. 
 
+Armstrong, M. (2022). Most Important Factors When Buying a Car [Digital image]. Retrieved February 20, 2023, from https://www.statista.com/chart/13075/most-important-factors-when-buying-a-car/
