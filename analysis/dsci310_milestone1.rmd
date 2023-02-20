@@ -7,6 +7,8 @@ output:
   pdf_document: default
 ---
 
+# project_authors: "Group 36: Henry Zhang, Moira Renata, Ning Wang, Paige Wills, Xinrui Wang in Stat301"
+
 ## **Introduction**
 
 Over the past few decades, we have seen a rapid increase in demand for the car industry. The high market price of both brand new and used cars have created a large economic impact all over the world. Based on previous studies, it was found that there are multiple factors affecting  the final price of a car (Balce, 2016) and that while most factors do have a positive contribution or effect to the final price, there are still some factors that create a negative effect (Erdem and Senturk, 2009). 
