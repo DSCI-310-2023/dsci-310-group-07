@@ -1,10 +1,11 @@
 ---
 title: "Predicting Car Prices Based on Certain Characteristics"
-project_authors: "Group 36: Henry Zhang, Moira Renata, Ning Wang, Paige Wills, Xinrui Wang in Stat301"
 author: "Group 07: Harbor Zhang, Jiaying Liao, Ning Wang, Xiwen Wei"
 date: "2023-02-19"
 output: html_document
 ---
+
+# project_authors: "Group 36: Henry Zhang, Moira Renata, Ning Wang, Paige Wills, Xinrui Wang in Stat301"
 
 ## **Introduction**
 
