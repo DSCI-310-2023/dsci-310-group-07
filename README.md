@@ -10,13 +10,23 @@ The data we used was from the The Automobile Data Set that was created by Jeffre
 
 ## Report
 
-The analysis report can be found [here (Rmarkdown)](analysis/dsci310_milestone1.rmd) and [here (ipynb, to see the tables and graphs)](analysis/dsci310_milestone1.ipynb).
+The analysis report can be found [here (Rmarkdown)](analysis/dsci310_milestone1.rmd).
 
 ## Usage
 
 We use a Docker container image to make the computational environment for this project reproducible.
 
-First, clone this repo in your terminal, navigate to the root of this project. Make sure your working directory contains [this Dockerfile](Dockerfile).
+First, clone this repo in your terminal by
+```
+git clone https://github.com/wxw1026/dsci-310-group-07.git
+```
+
+Navigate to the root of this project by
+```
+cd dsci-310-group-07
+```
+
+Make sure your working directory contains [this Dockerfile](Dockerfile).
 
 Then, build this image by 
 ```
@@ -25,18 +35,22 @@ docker build -t dsci310-project . -f Dockerfile
 After installing the packages in Dockerfile. You can run this on localhost:8787 by
 
 ```
-docker run --rm -p 8787:8787 -e PASSWORD=12345 -v "your\path\to\the\project:/project" dsci310-project
+docker run --rm -p 8787:8787 -e PASSWORD=12345 -v "your\path\to\the\project:/home/rstudio/project" dsci310-project
 ```
 OR
 ```
-docker run --rm -p 8787:8787 -e PASSWORD=12345 -v $(pwd):/project dsci310-project
+docker run --rm -p 8787:8787 -e PASSWORD=12345 -v /$(pwd):/home/rstudio/project dsci310-project
 ```
 
-Open localhost:8787 on your browser. You can see the project on /project.
+Open localhost:8787 on your browser. You can see the project on `/home/rstudio/project`.
 
 ## Dependencies
 
-R version 4.1.3 and R packages listed in [Dockerfile](Dockerfile).
+R version 4.1.3 and R packages as follows:
+    - remotes:2.4.2
+    - glmnet:4.1-4
+    - leaps:3.1
+    - tidyverse:1.3.1
 
 ## License Information
 
