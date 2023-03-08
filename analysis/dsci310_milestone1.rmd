@@ -7,7 +7,7 @@ output:
   pdf_document: default
 ---
 
-# project_authors: "Group 36: Henry Zhang, Moira Renata, Ning Wang, Paige Wills, Xinrui Wang in Stat301"
+Project Authors (Original): STAT 301 Group 36: Henry Zhang, Moira Renata, Ning Wang, Paige Wills, Xinrui Wang
 
 ## **Introduction**
 
@@ -153,7 +153,15 @@ It would be beneficial to visualize the pairwise correlation coefficients of our
 Firstly, we want to calculate the coefficient of determination of all of our predicted variables.
 
 ```{r}
-#print out the R^2 (coefficient of determination) of all the variables
+str(na.omit(automobile))
+summary(na.omit(automobile))
+summary(automobile$`engine-location`)
+```
+
+
+```{r}
+#print out the R^2 (coefficient of determination) of all the variables 
+# TODO
 r_sqr<-c()
 for (x in 1:25){
      r_sqr<-c(r_sqr,summary(lm(unlist(automobile[,26])~unlist(automobile[,x])))$r.squared)
