@@ -9,4 +9,5 @@ RUN Rscript -e "install.packages('remotes', repos = 'http://cran.us.r-project.or
 RUN Rscript -e "remotes::install_version('glmnet','4.1-4')"
 RUN Rscript -e "remotes::install_version('leaps','3.1')"
 RUN Rscript -e "remotes::install_version('tidyverse','1.3.1')"
+RUN Rscript -e "remotes::install_version('testthat')"
 
