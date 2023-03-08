@@ -4,6 +4,6 @@
 ## take the given dataset, remove the last column and the missing values.
 
 processdata <- function(dataset) {
-  df = dataset[,-length(dataset)] %>%
+  dataset = dataset[,-length(dataset)] %>%
     na.omit(dataset)
 }
