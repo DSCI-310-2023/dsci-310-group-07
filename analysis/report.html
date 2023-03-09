@@ -533,45 +533,11 @@ bottom and top of the piston’s stroke.</td>
 </div>
 <div id="preliminary-analysis" class="section level2">
 <h2><strong>Preliminary Analysis</strong></h2>
-<p>In this section, we load the data into our notebook and perform data
-cleaning to obtain tidy data.</p>
+<p>In this section, we load and clean the data. * the last column
+<code>?</code> with all NAs are removed.</p>
 <pre class="r"><code># Labelling all the columns
-names&lt;-c(&quot;symboling&quot;,&quot;normalized-losses&quot;,&quot;make&quot;,&quot;fuel-type&quot;,&quot;aspiration&quot;,
-         &quot;num-of-doors&quot;,&quot;body-style&quot;,&quot;drive-wheels&quot;,&quot;engine-location&quot;,
-        &quot;wheel-base&quot;,&quot;length&quot;,&quot;width&quot;,&quot;height&quot;,&quot;curb-weight&quot;,&quot;engine-type&quot;,
-        &quot;num-of-cylinders&quot;,&quot;engine-size&quot;,&quot;fuel-system&quot;,&quot;bore&quot;,&quot;stroke&quot;,
-        &quot;compression-ratio&quot;,&quot;horsepower&quot;,&quot;peak-rpm&quot;,&quot;city-mpg&quot;,&quot;highway-mpg&quot;,&quot;price&quot;)
-
-# Reading the data from the web 
-df&lt;-read_csv(&quot;https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.data&quot;,
-            col_names=names,col_types = cols(
-                symboling = col_factor(),
-                `normalized-losses`= col_double(),
-                make = col_factor(),
-                `fuel-type`= col_factor(),
-                aspiration = col_factor(),
-                `num-of-doors`= col_factor(),
-                `body-style` = col_factor(),
-                `drive-wheels` = col_factor(),
-                `engine-location` = col_factor(),
-                `wheel-base` = col_double(),
-                length = col_double(),
-                width = col_double(),
-                `curb-weight` = col_double(),
-                `engine-type` = col_factor(),
-                `num-of-cylinders` = col_factor(),
-                `engine-size` = col_double(),
-                `fuel-system` = col_factor(),
-                bore = col_double(),
-                stroke = col_double(),
-                `compression-ratio` = col_double(),
-                horsepower = col_double(),
-                `peak-rpm` = col_double(),
-                `city-mpg` = col_double(),
-                `highway-mpg` = col_double(),
-                price = col_double()
-                 ))%&gt;%replace(&quot;?&quot;,NA)
-head(df) %&gt;% kable(digits = 3)</code></pre>
+automobile &lt;- get_automobile()
+head(automobile) %&gt;% kable(digits = 3)</code></pre>
 <table style="width:100%;">
 <colgroup>
 <col width="3%" />
@@ -600,7 +566,6 @@ head(df) %&gt;% kable(digits = 3)</code></pre>
 <col width="3%" />
 <col width="4%" />
 <col width="2%" />
-<col width="1%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -630,7 +595,6 @@ head(df) %&gt;% kable(digits = 3)</code></pre>
 <th align="right">city-mpg</th>
 <th align="right">highway-mpg</th>
 <th align="right">price</th>
-<th align="left">?</th>
 </tr>
 </thead>
 <tbody>
@@ -661,7 +625,6 @@ head(df) %&gt;% kable(digits = 3)</code></pre>
 <td align="right">21</td>
 <td align="right">27</td>
 <td align="right">13495</td>
-<td align="left">NA</td>
 </tr>
 <tr class="even">
 <td align="left">3</td>
@@ -690,7 +653,6 @@ head(df) %&gt;% kable(digits = 3)</code></pre>
 <td align="right">21</td>
 <td align="right">27</td>
 <td align="right">16500</td>
-<td align="left">NA</td>
 </tr>
 <tr class="odd">
 <td align="left">1</td>
@@ -719,7 +681,6 @@ head(df) %&gt;% kable(digits = 3)</code></pre>
 <td align="right">19</td>
 <td align="right">26</td>
 <td align="right">16500</td>
-<td align="left">NA</td>
 </tr>
 <tr class="even">
 <td align="left">2</td>
@@ -748,7 +709,6 @@ head(df) %&gt;% kable(digits = 3)</code></pre>
 <td align="right">24</td>
 <td align="right">30</td>
 <td align="right">13950</td>
-<td align="left">NA</td>
 </tr>
 <tr class="odd">
 <td align="left">2</td>
@@ -777,7 +737,6 @@ head(df) %&gt;% kable(digits = 3)</code></pre>
 <td align="right">18</td>
 <td align="right">22</td>
 <td align="right">17450</td>
-<td align="left">NA</td>
 </tr>
 <tr class="even">
 <td align="left">2</td>
@@ -806,120 +765,286 @@ head(df) %&gt;% kable(digits = 3)</code></pre>
 <td align="right">19</td>
 <td align="right">25</td>
 <td align="right">15250</td>
-<td align="left">NA</td>
 </tr>
 </tbody>
 </table>
-<div id="tidying-our-data" class="section level4">
-<h4><strong>Tidying our Data</strong></h4>
-<p>From the dataframe above, we noticed that there are some NA values,
-and that the last column <code>?</code> can be removed as it does not
-represent anything. Other than that, each row represents an observation,
-each column is a variable, and each cell is a value, which means there
-is not a lot of data tidying to do. We will first check the number of NA
-values in each column, the number of levels in columns that are
-categorical variables, and the summary statistics of each variable.</p>
-<p>From the dataframe above, we noticed that there are some NA values,
-and that the last column <code>?</code> can be removed as it does not
-represent anything. Other than that, each row represents an observation,
-each column is a variable, and each cell is a value, which means there
-is not a lot of data tidying to do. We will first check the number of NA
-values in each column, the number of levels in columns that are
-categorical variables, and the summary statistics of each variable.</p>
+<p>From the dataframe above, we noticed that there are some NA values.
+Each row represents an observation, each column is a variable, and each
+cell is a value, which means there is not a lot of data tidying to do.
+We will first check the number of NA values in each column, the number
+of levels in columns that are categorical variables, and the summary
+statistics of each variable.</p>
 <pre class="r"><code># Checking the summary of results of each column
-sum_df &lt;- summary(df)
-sum_df</code></pre>
-<pre><code>##  symboling normalized-losses         make      fuel-type   aspiration 
-##  3 :27     Min.   : 65       toyota    : 32   gas   :185   std  :168  
-##  1 :54     1st Qu.: 94       nissan    : 18   diesel: 20   turbo: 37  
-##  2 :32     Median :115       mazda     : 17                           
-##  0 :67     Mean   :122       honda     : 13                           
-##  -1:22     3rd Qu.:150       mitsubishi: 13                           
-##  -2: 3     Max.   :256       subaru    : 12                           
-##            NA&#39;s   :41        (Other)   :100                           
-##  num-of-doors       body-style drive-wheels engine-location   wheel-base    
-##  two : 89     convertible: 6   rwd: 76      front:202       Min.   : 86.60  
-##  four:114     hatchback  :70   fwd:120      rear :  3       1st Qu.: 94.50  
-##  ?   :  2     sedan      :96   4wd:  9                      Median : 97.00  
-##               wagon      :25                                Mean   : 98.76  
-##               hardtop    : 8                                3rd Qu.:102.40  
-##                                                             Max.   :120.90  
-##                                                                             
-##      length          width           height       curb-weight   engine-type
-##  Min.   :141.1   Min.   :60.30   Min.   :47.80   Min.   :1488   dohc : 12  
-##  1st Qu.:166.3   1st Qu.:64.10   1st Qu.:52.00   1st Qu.:2145   ohcv : 13  
-##  Median :173.2   Median :65.50   Median :54.10   Median :2414   ohc  :148  
-##  Mean   :174.0   Mean   :65.91   Mean   :53.72   Mean   :2556   l    : 12  
-##  3rd Qu.:183.1   3rd Qu.:66.90   3rd Qu.:55.50   3rd Qu.:2935   rotor:  4  
-##  Max.   :208.1   Max.   :72.30   Max.   :59.80   Max.   :4066   ohcf : 15  
-##                                                                 dohcv:  1  
-##  num-of-cylinders  engine-size     fuel-system      bore          stroke     
-##  four  :159       Min.   : 61.0   mpfi   :94   Min.   :2.54   Min.   :2.070  
-##  six   : 24       1st Qu.: 97.0   2bbl   :66   1st Qu.:3.15   1st Qu.:3.110  
-##  five  : 11       Median :120.0   idi    :20   Median :3.31   Median :3.290  
-##  three :  1       Mean   :126.9   1bbl   :11   Mean   :3.33   Mean   :3.255  
-##  twelve:  1       3rd Qu.:141.0   spdi   : 9   3rd Qu.:3.59   3rd Qu.:3.410  
-##  two   :  4       Max.   :326.0   4bbl   : 3   Max.   :3.94   Max.   :4.170  
-##  eight :  5                       (Other): 2   NA&#39;s   :4      NA&#39;s   :4      
-##  compression-ratio   horsepower       peak-rpm       city-mpg    
-##  Min.   : 7.00     Min.   : 48.0   Min.   :4150   Min.   :13.00  
-##  1st Qu.: 8.60     1st Qu.: 70.0   1st Qu.:4800   1st Qu.:19.00  
-##  Median : 9.00     Median : 95.0   Median :5200   Median :24.00  
-##  Mean   :10.14     Mean   :104.3   Mean   :5125   Mean   :25.22  
-##  3rd Qu.: 9.40     3rd Qu.:116.0   3rd Qu.:5500   3rd Qu.:30.00  
-##  Max.   :23.00     Max.   :288.0   Max.   :6600   Max.   :49.00  
-##                    NA&#39;s   :2       NA&#39;s   :2                     
-##   highway-mpg        price          ?          
-##  Min.   :16.00   Min.   : 5118   Mode:logical  
-##  1st Qu.:25.00   1st Qu.: 7775   NA&#39;s:205      
-##  Median :30.00   Median :10295                 
-##  Mean   :30.75   Mean   :13207                 
-##  3rd Qu.:34.00   3rd Qu.:16500                 
-##  Max.   :54.00   Max.   :45400                 
-##                  NA&#39;s   :4</code></pre>
-<p>Based on the above summary statistics, we noticed that there are some
-variables that contain NA values, and that the last column does not
-contain data.</p>
-<pre class="r"><code>#########previous function
-#Remove the last column
-#automobile&lt;-df[,-27]
-#Check that the last column is now the response variable
-#colnames(automobile[,26])
-#number of rows in the dataframe
-#nrow(automobile)
-#number of rows in the dataframe after NAs are removed
-#nrow(na.omit(automobile))
-################################after change
-
-##process df using processdata function and name it automobile
-automobile&lt;-processdata(df)
-#number of rows in the dataframe
-nrow(automobile)</code></pre>
-<pre><code>## [1] 205</code></pre>
-<pre class="r"><code>#Check that the last column is now the response variable
-colnames(automobile[,26])</code></pre>
-<pre><code>## [1] &quot;price&quot;</code></pre>
-<p>From above, we can see that there are 45 rows that contain NA values;
-this is calculated by 205-160.</p>
-<pre class="r"><code>#print our tidy dataset
-head(automobile)</code></pre>
-<pre><code>## # A tibble: 6 × 26
-##   symbol…¹ norma…² make  fuel-…³ aspir…⁴ num-o…⁵ body-…⁶ drive…⁷ engin…⁸ wheel…⁹
-##   &lt;fct&gt;      &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt;   &lt;fct&gt;   &lt;fct&gt;   &lt;fct&gt;   &lt;fct&gt;   &lt;fct&gt;     &lt;dbl&gt;
-## 1 3             NA alfa… gas     std     two     conver… rwd     front      88.6
-## 2 3             NA alfa… gas     std     two     conver… rwd     front      88.6
-## 3 1             NA alfa… gas     std     two     hatchb… rwd     front      94.5
-## 4 2            164 audi  gas     std     four    sedan   fwd     front      99.8
-## 5 2            164 audi  gas     std     four    sedan   4wd     front      99.4
-## 6 2             NA audi  gas     std     two     sedan   fwd     front      99.8
-## # … with 16 more variables: length &lt;dbl&gt;, width &lt;dbl&gt;, height &lt;dbl&gt;,
-## #   `curb-weight` &lt;dbl&gt;, `engine-type` &lt;fct&gt;, `num-of-cylinders` &lt;fct&gt;,
-## #   `engine-size` &lt;dbl&gt;, `fuel-system` &lt;fct&gt;, bore &lt;dbl&gt;, stroke &lt;dbl&gt;,
-## #   `compression-ratio` &lt;dbl&gt;, horsepower &lt;dbl&gt;, `peak-rpm` &lt;dbl&gt;,
-## #   `city-mpg` &lt;dbl&gt;, `highway-mpg` &lt;dbl&gt;, price &lt;dbl&gt;, and abbreviated
-## #   variable names ¹​symboling, ²​`normalized-losses`, ³​`fuel-type`, ⁴​aspiration,
-## #   ⁵​`num-of-doors`, ⁶​`body-style`, ⁷​`drive-wheels`, ⁸​`engine-location`, …</code></pre>
-</div>
+summary(automobile) %&gt;% kable(digit = 4)</code></pre>
+<table>
+<colgroup>
+<col width="0%" />
+<col width="2%" />
+<col width="4%" />
+<col width="4%" />
+<col width="2%" />
+<col width="2%" />
+<col width="3%" />
+<col width="4%" />
+<col width="3%" />
+<col width="4%" />
+<col width="4%" />
+<col width="3%" />
+<col width="3%" />
+<col width="3%" />
+<col width="3%" />
+<col width="3%" />
+<col width="4%" />
+<col width="3%" />
+<col width="3%" />
+<col width="3%" />
+<col width="3%" />
+<col width="4%" />
+<col width="3%" />
+<col width="3%" />
+<col width="3%" />
+<col width="3%" />
+<col width="3%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">symboling</th>
+<th align="left">normalized-losses</th>
+<th align="left">make</th>
+<th align="left">fuel-type</th>
+<th align="left">aspiration</th>
+<th align="left">num-of-doors</th>
+<th align="left">body-style</th>
+<th align="left">drive-wheels</th>
+<th align="left">engine-location</th>
+<th align="left">wheel-base</th>
+<th align="left">length</th>
+<th align="left">width</th>
+<th align="left">height</th>
+<th align="left">curb-weight</th>
+<th align="left">engine-type</th>
+<th align="left">num-of-cylinders</th>
+<th align="left">engine-size</th>
+<th align="left">fuel-system</th>
+<th align="left">bore</th>
+<th align="left">stroke</th>
+<th align="left">compression-ratio</th>
+<th align="left">horsepower</th>
+<th align="left">peak-rpm</th>
+<th align="left">city-mpg</th>
+<th align="left">highway-mpg</th>
+<th align="left">price</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">3 :27</td>
+<td align="left">Min. : 65</td>
+<td align="left">toyota : 32</td>
+<td align="left">gas :185</td>
+<td align="left">std :168</td>
+<td align="left">two : 89</td>
+<td align="left">convertible: 6</td>
+<td align="left">rwd: 76</td>
+<td align="left">front:202</td>
+<td align="left">Min. : 86.60</td>
+<td align="left">Min. :141.1</td>
+<td align="left">Min. :60.30</td>
+<td align="left">Min. :47.80</td>
+<td align="left">Min. :1488</td>
+<td align="left">dohc : 12</td>
+<td align="left">four :159</td>
+<td align="left">Min. : 61.0</td>
+<td align="left">mpfi :94</td>
+<td align="left">Min. :2.54</td>
+<td align="left">Min. :2.070</td>
+<td align="left">Min. : 7.00</td>
+<td align="left">Min. : 48.0</td>
+<td align="left">Min. :4150</td>
+<td align="left">Min. :13.00</td>
+<td align="left">Min. :16.00</td>
+<td align="left">Min. : 5118</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">1 :54</td>
+<td align="left">1st Qu.: 94</td>
+<td align="left">nissan : 18</td>
+<td align="left">diesel: 20</td>
+<td align="left">turbo: 37</td>
+<td align="left">four:114</td>
+<td align="left">hatchback :70</td>
+<td align="left">fwd:120</td>
+<td align="left">rear : 3</td>
+<td align="left">1st Qu.: 94.50</td>
+<td align="left">1st Qu.:166.3</td>
+<td align="left">1st Qu.:64.10</td>
+<td align="left">1st Qu.:52.00</td>
+<td align="left">1st Qu.:2145</td>
+<td align="left">ohcv : 13</td>
+<td align="left">six : 24</td>
+<td align="left">1st Qu.: 97.0</td>
+<td align="left">2bbl :66</td>
+<td align="left">1st Qu.:3.15</td>
+<td align="left">1st Qu.:3.110</td>
+<td align="left">1st Qu.: 8.60</td>
+<td align="left">1st Qu.: 70.0</td>
+<td align="left">1st Qu.:4800</td>
+<td align="left">1st Qu.:19.00</td>
+<td align="left">1st Qu.:25.00</td>
+<td align="left">1st Qu.: 7775</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">2 :32</td>
+<td align="left">Median :115</td>
+<td align="left">mazda : 17</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">? : 2</td>
+<td align="left">sedan :96</td>
+<td align="left">4wd: 9</td>
+<td align="left">NA</td>
+<td align="left">Median : 97.00</td>
+<td align="left">Median :173.2</td>
+<td align="left">Median :65.50</td>
+<td align="left">Median :54.10</td>
+<td align="left">Median :2414</td>
+<td align="left">ohc :148</td>
+<td align="left">five : 11</td>
+<td align="left">Median :120.0</td>
+<td align="left">idi :20</td>
+<td align="left">Median :3.31</td>
+<td align="left">Median :3.290</td>
+<td align="left">Median : 9.00</td>
+<td align="left">Median : 95.0</td>
+<td align="left">Median :5200</td>
+<td align="left">Median :24.00</td>
+<td align="left">Median :30.00</td>
+<td align="left">Median :10295</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">0 :67</td>
+<td align="left">Mean :122</td>
+<td align="left">honda : 13</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">wagon :25</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">Mean : 98.76</td>
+<td align="left">Mean :174.0</td>
+<td align="left">Mean :65.91</td>
+<td align="left">Mean :53.72</td>
+<td align="left">Mean :2556</td>
+<td align="left">l : 12</td>
+<td align="left">three : 1</td>
+<td align="left">Mean :126.9</td>
+<td align="left">1bbl :11</td>
+<td align="left">Mean :3.33</td>
+<td align="left">Mean :3.255</td>
+<td align="left">Mean :10.14</td>
+<td align="left">Mean :104.3</td>
+<td align="left">Mean :5125</td>
+<td align="left">Mean :25.22</td>
+<td align="left">Mean :30.75</td>
+<td align="left">Mean :13207</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">-1:22</td>
+<td align="left">3rd Qu.:150</td>
+<td align="left">mitsubishi: 13</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">hardtop : 8</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">3rd Qu.:102.40</td>
+<td align="left">3rd Qu.:183.1</td>
+<td align="left">3rd Qu.:66.90</td>
+<td align="left">3rd Qu.:55.50</td>
+<td align="left">3rd Qu.:2935</td>
+<td align="left">rotor: 4</td>
+<td align="left">twelve: 1</td>
+<td align="left">3rd Qu.:141.0</td>
+<td align="left">spdi : 9</td>
+<td align="left">3rd Qu.:3.59</td>
+<td align="left">3rd Qu.:3.410</td>
+<td align="left">3rd Qu.: 9.40</td>
+<td align="left">3rd Qu.:116.0</td>
+<td align="left">3rd Qu.:5500</td>
+<td align="left">3rd Qu.:30.00</td>
+<td align="left">3rd Qu.:34.00</td>
+<td align="left">3rd Qu.:16500</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">-2: 3</td>
+<td align="left">Max. :256</td>
+<td align="left">subaru : 12</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">Max. :120.90</td>
+<td align="left">Max. :208.1</td>
+<td align="left">Max. :72.30</td>
+<td align="left">Max. :59.80</td>
+<td align="left">Max. :4066</td>
+<td align="left">ohcf : 15</td>
+<td align="left">two : 4</td>
+<td align="left">Max. :326.0</td>
+<td align="left">4bbl : 3</td>
+<td align="left">Max. :3.94</td>
+<td align="left">Max. :4.170</td>
+<td align="left">Max. :23.00</td>
+<td align="left">Max. :288.0</td>
+<td align="left">Max. :6600</td>
+<td align="left">Max. :49.00</td>
+<td align="left">Max. :54.00</td>
+<td align="left">Max. :45400</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">NA</td>
+<td align="left">NA’s :41</td>
+<td align="left">(Other) :100</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">dohcv: 1</td>
+<td align="left">eight : 5</td>
+<td align="left">NA</td>
+<td align="left">(Other): 2</td>
+<td align="left">NA’s :4</td>
+<td align="left">NA’s :4</td>
+<td align="left">NA</td>
+<td align="left">NA’s :2</td>
+<td align="left">NA’s :2</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA’s :4</td>
+</tr>
+</tbody>
+</table>
+<p>There are 45 rows that contain NA values. And the number of rows that
+have complete observations are 160.</p>
 <div id="exploratory-data-analysis" class="section level4">
 <h4><strong>Exploratory Data Analysis</strong></h4>
 <p>Next, we will perform EDA to better understand the variables that we
@@ -931,7 +1056,7 @@ correlation heatmap. However, since our data contains mulitple
 categorical variables with a large number of levels, this is not
 possible to do at this point. Therefore, our EDA is limited to checking
 the Coefficient of Determination of all the predictor variables and
-visualizing the realitionship of the top 8 predictor variables based on
+visualizing the relationship of the top 8 predictor variables based on
 their R^2 value.</p>
 <p>Firstly, we want to calculate the coefficient of determination of all
 of our predicted variables.</p>
@@ -943,20 +1068,53 @@ for (x in 1:25){
 
  }</code></pre>
 <pre class="r"><code>#removes the price variable (response) since we are not calculating the R^2 of it.  
-names&lt;-colnames(automobile[,-26])
+names&lt;-colnames(automobile[,-ncol(automobile)])
 #create a summary table of the predictor variables with the top 8 highest R^2 values
 df_sqr&lt;-cbind(r_sqr,names)%&gt;%as.data.frame()
 df_sqr$r_sqr&lt;-as.numeric(df_sqr$r_sqr)
-head(df_sqr%&gt;%arrange(desc(df_sqr$r_sqr)),8)</code></pre>
-<pre><code>##       r_sqr            names
-## 1 0.7958658             make
-## 2 0.7609686      engine-size
-## 3 0.6962476      curb-weight
-## 4 0.6569639       horsepower
-## 5 0.6295320 num-of-cylinders
-## 6 0.5643996            width
-## 7 0.4965912      highway-mpg
-## 8 0.4769676           length</code></pre>
+kable(top8 &lt;- head(df_sqr%&gt;%arrange(desc(df_sqr$r_sqr)),8),digits = 4)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">r_sqr</th>
+<th align="left">names</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.7959</td>
+<td align="left">make</td>
+</tr>
+<tr class="even">
+<td align="right">0.7610</td>
+<td align="left">engine-size</td>
+</tr>
+<tr class="odd">
+<td align="right">0.6962</td>
+<td align="left">curb-weight</td>
+</tr>
+<tr class="even">
+<td align="right">0.6570</td>
+<td align="left">horsepower</td>
+</tr>
+<tr class="odd">
+<td align="right">0.6295</td>
+<td align="left">num-of-cylinders</td>
+</tr>
+<tr class="even">
+<td align="right">0.5644</td>
+<td align="left">width</td>
+</tr>
+<tr class="odd">
+<td align="right">0.4966</td>
+<td align="left">highway-mpg</td>
+</tr>
+<tr class="even">
+<td align="right">0.4770</td>
+<td align="left">length</td>
+</tr>
+</tbody>
+</table>
 <p>Based on the summary table, the variable that has the highest R^2
 value is <code>make</code> with a value of 0.796. This can be
 interpreted as 79.6% of the variation observed in <code>price</code> is
@@ -969,8 +1127,7 @@ variable and the car price. For the categorical variables, we created a
 bar graph to compare the count of each category in a variable. Analysis
 of the plots created are written after the code.</p>
 <pre class="r"><code>#a list of the top  8 variables with the highest coefficient of determination
-nms &lt;-head(df_sqr%&gt;%arrange(desc(df_sqr$r_sqr)),8)%&gt;%select(names)%&gt;%pull()
-nms</code></pre>
+(nms &lt;- pull(top8,names))</code></pre>
 <pre><code>## [1] &quot;make&quot;             &quot;engine-size&quot;      &quot;curb-weight&quot;      &quot;horsepower&quot;      
 ## [5] &quot;num-of-cylinders&quot; &quot;width&quot;            &quot;highway-mpg&quot;      &quot;length&quot;</code></pre>
 <pre class="r"><code>options(repr.plot.height = 3, repr.plot.width = 7)
@@ -1234,38 +1391,7 @@ variables listed. We call them: 1. <code>training_df_sub</code> 2.
 <code>testing_df_sub</code></p>
 <pre class="r"><code>drops &lt;- c(&quot;symboling&quot;,&quot;make&quot;,&quot;body-style&quot;,&quot;drive-wheels&quot;,&quot;engine-type&quot;,&quot;num-of-cylinders&quot;,&quot;fuel-system&quot;)
 training_df_sub&lt;-training_df_at[,!(names(training_df_at) %in% drops)]
-testing_df_sub&lt;-testing_df_at[,!(names(testing_df_at) %in% drops)]
-
-head(training_df_sub)</code></pre>
-<pre><code>## # A tibble: 6 × 18
-##   normaliz…¹ fuel-…² aspir…³ num-o…⁴ wheel…⁵ length width height curb-…⁶ engin…⁷
-##        &lt;dbl&gt; &lt;fct&gt;   &lt;fct&gt;   &lt;fct&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-## 1         95 gas     turbo   four      109.    189.  68.9   55.5    3062     141
-## 2        118 gas     turbo   two        93.7   157.  63.8   50.8    2128      98
-## 3        161 gas     std     two        93.7   157.  64.4   50.8    1918      92
-## 4         91 diesel  std     four       95.7   166.  64.4   53      2275     110
-## 5        115 gas     std     four       98.8   178.  66.5   55.5    2425     122
-## 6         95 diesel  turbo   four      109.    189.  68.9   55.5    3217     145
-## # … with 8 more variables: bore &lt;dbl&gt;, stroke &lt;dbl&gt;, `compression-ratio` &lt;dbl&gt;,
-## #   horsepower &lt;dbl&gt;, `peak-rpm` &lt;dbl&gt;, `city-mpg` &lt;dbl&gt;, `highway-mpg` &lt;dbl&gt;,
-## #   price &lt;dbl&gt;, and abbreviated variable names ¹​`normalized-losses`,
-## #   ²​`fuel-type`, ³​aspiration, ⁴​`num-of-doors`, ⁵​`wheel-base`, ⁶​`curb-weight`,
-## #   ⁷​`engine-size`</code></pre>
-<pre class="r"><code>head(testing_df_sub)</code></pre>
-<pre><code>## # A tibble: 6 × 18
-##   normaliz…¹ fuel-…² aspir…³ num-o…⁴ wheel…⁵ length width height curb-…⁶ engin…⁷
-##        &lt;dbl&gt; &lt;fct&gt;   &lt;fct&gt;   &lt;fct&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-## 1        164 gas     std     four       99.8   177.  66.2   54.3    2337     109
-## 2        164 gas     std     four       99.4   177.  66.4   54.3    2824     136
-## 3        158 gas     std     four      106.    193.  71.4   55.7    2844     136
-## 4        121 gas     std     two        88.4   141.  60.3   53.2    1488      61
-## 5         98 gas     std     two        94.5   156.  63.6   52      1874      90
-## 6         81 gas     std     four       94.5   159.  63.6   52      1909      90
-## # … with 8 more variables: bore &lt;dbl&gt;, stroke &lt;dbl&gt;, `compression-ratio` &lt;dbl&gt;,
-## #   horsepower &lt;dbl&gt;, `peak-rpm` &lt;dbl&gt;, `city-mpg` &lt;dbl&gt;, `highway-mpg` &lt;dbl&gt;,
-## #   price &lt;dbl&gt;, and abbreviated variable names ¹​`normalized-losses`,
-## #   ²​`fuel-type`, ³​aspiration, ⁴​`num-of-doors`, ⁵​`wheel-base`, ⁶​`curb-weight`,
-## #   ⁷​`engine-size`</code></pre>
+testing_df_sub&lt;-testing_df_at[,!(names(testing_df_at) %in% drops)]</code></pre>
 <p>This code prepares the dataset(s) for <code>glmnet()</code> which
 only takes matrices (hence <code>model.matrix</code>). The
 <code>glmnet()</code> function has an argument <code>object</code>,
