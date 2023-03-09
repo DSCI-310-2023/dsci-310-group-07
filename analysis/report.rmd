@@ -15,7 +15,13 @@ library(leaps)
 library(tidyverse)
 library(here)
 library(knitr) # TODO: add this to Dockerfile
+# Source data
+source(here("R/01-write_data.R"))
+
+# Source functions
 source(here("R/processdata.R"))
+source(here("R/02-read_data.R"))
+
 ```
 
 
@@ -27,7 +33,7 @@ Therefore, in this project, we hope to create a model that allows us to predict 
 
 ## **Description**
 
-The sample we use is from the The Automobile Data Set that was created by Jeffrey C. Schlimmer in 1985. The author created a data set that consists of 26 columns with 205 rows, where each row refers to one car sample. Out of the 25 columns predictor variables, there are 9  categorical variables and 16 numerical variables. Our response variable is the 26th column, which represents the price of a car in USD($). 
+The sample we use is from the The Automobile Data Set that was created by Jeffrey C. Schlimmer in 1985. The author created a data set that consists of 26 columns with 205 rows, where each row refers to one car sample. Out of the 25 columns predictor variables, there are 9 categorical variables and 16 numerical variables. Our response variable is the 26th column, which represents the price of a car in USD($). 
 
 Variable|Type|Description|
 |-|-|-|
@@ -59,79 +65,25 @@ Variable|Type|Description|
 |price|Numerical|Price of car in USD ($)|
 
 ## **Preliminary Analysis**
-In this section, we load the data into our notebook and perform data cleaning to obtain tidy data.
-
+In this section, we load and clean the data. Note that the last column `?` with all values are is removed.
 
 
 ```{r read data, message=FALSE, warning=FALSE}
 # Labelling all the columns
-names<-c("symboling","normalized-losses","make","fuel-type","aspiration",
-         "num-of-doors","body-style","drive-wheels","engine-location",
-        "wheel-base","length","width","height","curb-weight","engine-type",
-        "num-of-cylinders","engine-size","fuel-system","bore","stroke",
-        "compression-ratio","horsepower","peak-rpm","city-mpg","highway-mpg","price")
-
-# Reading the data from the web 
-df<-read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.data",
-            col_names=names,col_types = cols(
-                symboling = col_factor(),
-                `normalized-losses`= col_double(),
-                make = col_factor(),
-                `fuel-type`= col_factor(),
-                aspiration = col_factor(),
-                `num-of-doors`= col_factor(),
-                `body-style` = col_factor(),
-                `drive-wheels` = col_factor(),
-                `engine-location` = col_factor(),
-                `wheel-base` = col_double(),
-                length = col_double(),
-                width = col_double(),
-                `curb-weight` = col_double(),
-                `engine-type` = col_factor(),
-                `num-of-cylinders` = col_factor(),
-                `engine-size` = col_double(),
-                `fuel-system` = col_factor(),
-                bore = col_double(),
-                stroke = col_double(),
-                `compression-ratio` = col_double(),
-                horsepower = col_double(),
-                `peak-rpm` = col_double(),
-                `city-mpg` = col_double(),
-                `highway-mpg` = col_double(),
-                price = col_double()
-                 ))%>%replace("?",NA)
-head(df) %>% kable(digits = 3)
+automobile <- get_automobile()
+head(automobile) %>% kable(digits = 3)
 ```
-#### **Tidying our Data**
 
-From the dataframe above, we noticed that there are some NA values, and that the last column `?` can be removed as it does not represent anything. Other than that, each row represents an observation, each column is a variable, and each cell is a value, which means there is not a lot of data tidying to do. We will first check the number of NA values in each column, the number of levels in columns that are categorical variables, and the summary statistics of each variable.
 
-From the dataframe above, we noticed that there are some NA values, and that the last column `?` can be removed as it does not represent anything. Other than that, each row represents an observation, each column is a variable, and each cell is a value, which means there is not a lot of data tidying to do. We will first check the number of NA values in each column, the number of levels in columns that are categorical variables, and the summary statistics of each variable.
+From the dataframe above, we noticed that there are some NA values. Each row represents an observation, each column is a variable, and each cell is a value, which means there is not a lot of data tidying to do. We will first check the number of NA values in each column, the number of levels in columns that are categorical variables, and the summary statistics of each variable.
 
-```{r data summary, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r data summary, message=FALSE, warning=FALSE}
 # Checking the summary of results of each column
-sum_df <- summary(df)
-sum_df %>% kable(digit = 4)
+summary(automobile) %>% kable(digit = 4)
 ```
 
-Based on the above summary statistics, we noticed that there are some variables that contain NA values, and that the last column does not contain data. 
+There are `r sum(!complete.cases(automobile))` rows that contain NA values. And the number of rows that have complete observations are `r sum(complete.cases(automobile))`.
 
-```{r remove unkown col, message=FALSE, warning=FALSE}
-
-##process df using processdata function and name it automobile
-automobile<-processdata(df)
-#number of rows in the dataframe
-nrow(automobile)
-#Check that the last column is now the response variable
-colnames(automobile[,ncol(automobile)])
-```
-
-From above, we can see that there are 45 rows that contain NA values; this is calculated by 205-160.
-
-```{r print tidy data, message=FALSE, warning=FALSE}
-#print our tidy dataset
-head(automobile)
-```
 
 #### **Exploratory Data Analysis**
 
@@ -153,13 +105,16 @@ for (x in 1:25){
  }
 ```
 
+
+
 ```{r}
 #removes the price variable (response) since we are not calculating the R^2 of it.  
-names<-colnames(automobile[,-26])
+names<-colnames(automobile[,-ncol(automobile)])
 #create a summary table of the predictor variables with the top 8 highest R^2 values
 df_sqr<-cbind(r_sqr,names)%>%as.data.frame()
 df_sqr$r_sqr<-as.numeric(df_sqr$r_sqr)
-head(df_sqr%>%arrange(desc(df_sqr$r_sqr)),8)
+kable(top8 <- head(df_sqr%>%arrange(desc(df_sqr$r_sqr)),8),digits = 4)
+
 ```
 
 Based on the summary table, the variable that has the highest R^2 value is `make` with a value of 0.796. This can be interpreted as 79.6% of the variation observed in `price` is explained by the model with `make` as the explanatory variable. 
@@ -168,8 +123,7 @@ Then, we created plots for the top 8 predictor variables. For the numerical vari
 
 ```{r}
 #a list of the top  8 variables with the highest coefficient of determination
-nms <-head(df_sqr%>%arrange(desc(df_sqr$r_sqr)),8)%>%select(names)%>%pull()
-nms
+(nms <- pull(top8,names))
 ```
 
 ```{r}
@@ -291,12 +245,11 @@ We then create new training and testing datasets that excludes the variables lis
 2. `testing_df_sub`
 
 ```{r}
+
 drops <- c("symboling","make","body-style","drive-wheels","engine-type","num-of-cylinders","fuel-system")
 training_df_sub<-training_df_at[,!(names(training_df_at) %in% drops)]
 testing_df_sub<-testing_df_at[,!(names(testing_df_at) %in% drops)]
 
-head(training_df_sub)
-head(testing_df_sub)
 ```
 
 This code prepares the dataset(s) for `glmnet()` which only takes matrices (hence `model.matrix`). The `glmnet()` function has an argument `object`, which is the formula of the model and therefore needs clear x and y variables, explaining why the training and testing datasets are split into subsets of x and y. 

@@ -1,9 +1,8 @@
 # author: Haobo (Harbor) Zhang
 # date: 2023-03-07
 
-## take the given dataset, remove the last column (and the missing values).
+## take the given dataset, remove the last column.
 
 processdata <- function(dataset) {
-  dataset = dataset[,-length(dataset)] #%>%
-    # na.omit(dataset)
+  dataset[,-length(dataset)]
 }
