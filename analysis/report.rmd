@@ -16,6 +16,8 @@ library(tidyverse)
 library(here)
 library(knitr) # TODO: add this to Dockerfile
 source(here("R/processdata.R"))
+source(here("R/showR2.R"))
+source(here("R/plotAll.R"))
 ```
 
 
