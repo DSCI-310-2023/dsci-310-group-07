@@ -51,6 +51,8 @@ R version 4.1.3 and R packages as follows:
  * glmnet:4.1-4
  * leaps:3.1
  * tidyverse:1.3.1
+ * testthat:3.1.3
+ * here:1.0.1
     
 
 ## License Information
