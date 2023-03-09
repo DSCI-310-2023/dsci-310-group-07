@@ -14,6 +14,7 @@ Project Authors (Original): STAT 301 Group 36: Henry Zhang, Moira Renata, Ning W
 library(leaps)
 library(tidyverse)
 library(here)
+library(knitr) # TODO: add this to Dockerfile
 source(here("R/processdata.R"))
 ```
 
@@ -62,7 +63,7 @@ In this section, we load the data into our notebook and perform data cleaning to
 
 
 
-```{r read data}
+```{r read data, message=FALSE, warning=FALSE}
 # Labelling all the columns
 names<-c("symboling","normalized-losses","make","fuel-type","aspiration",
          "num-of-doors","body-style","drive-wheels","engine-location",
@@ -99,7 +100,7 @@ df<-read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/autos/im
                 `highway-mpg` = col_double(),
                 price = col_double()
                  ))%>%replace("?",NA)
-head(df)
+head(df) %>% kable(digits = 3)
 ```
 #### **Tidying our Data**
 
@@ -107,37 +108,27 @@ From the dataframe above, we noticed that there are some NA values, and that the
 
 From the dataframe above, we noticed that there are some NA values, and that the last column `?` can be removed as it does not represent anything. Other than that, each row represents an observation, each column is a variable, and each cell is a value, which means there is not a lot of data tidying to do. We will first check the number of NA values in each column, the number of levels in columns that are categorical variables, and the summary statistics of each variable.
 
-```{r data summary}
+```{r data summary, message=FALSE, warning=FALSE, paged.print=FALSE}
 # Checking the summary of results of each column
 sum_df <- summary(df)
-sum_df
+sum_df %>% kable(digit = 4)
 ```
 
 Based on the above summary statistics, we noticed that there are some variables that contain NA values, and that the last column does not contain data. 
 
-```{r}
-#########previous function
-#Remove the last column
-#automobile<-df[,-27]
-#Check that the last column is now the response variable
-#colnames(automobile[,26])
-#number of rows in the dataframe
-#nrow(automobile)
-#number of rows in the dataframe after NAs are removed
-#nrow(na.omit(automobile))
-################################after change
+```{r remove unkown col, message=FALSE, warning=FALSE}
 
 ##process df using processdata function and name it automobile
 automobile<-processdata(df)
 #number of rows in the dataframe
 nrow(automobile)
 #Check that the last column is now the response variable
-colnames(automobile[,26])
+colnames(automobile[,ncol(automobile)])
 ```
 
 From above, we can see that there are 45 rows that contain NA values; this is calculated by 205-160.
 
-```{r}
+```{r print tidy data, message=FALSE, warning=FALSE}
 #print our tidy dataset
 head(automobile)
 ```
@@ -146,7 +137,7 @@ head(automobile)
 
 Next, we will perform EDA to better understand the variables that we will be using in our analysis. 
 
-It would be beneficial to visualize the pairwise correlation coefficients of our dataset to check for multicollinearity. This can be done either by using the `ggpairs` function, or by creating a correlation heatmap. However, since our data contains mulitple categorical variables with a large number of levels, this is not possible to do at this point. Therefore, our EDA is limited to checking the Coefficient of Determination of all the predictor variables and visualizing the realitionship of the top 8 predictor variables based on their R^2 value. 
+It would be beneficial to visualize the pairwise correlation coefficients of our dataset to check for multicollinearity. This can be done either by using the `ggpairs` function, or by creating a correlation heatmap. However, since our data contains mulitple categorical variables with a large number of levels, this is not possible to do at this point. Therefore, our EDA is limited to checking the Coefficient of Determination of all the predictor variables and visualizing the relationship of the top 8 predictor variables based on their R^2 value. 
 
 Firstly, we want to calculate the coefficient of determination of all of our predicted variables.
 

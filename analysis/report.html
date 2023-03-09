@@ -570,28 +570,246 @@ df&lt;-read_csv(&quot;https://archive.ics.uci.edu/ml/machine-learning-databases/
                 `city-mpg` = col_double(),
                 `highway-mpg` = col_double(),
                 price = col_double()
-                 ))%&gt;%replace(&quot;?&quot;,NA)</code></pre>
-<pre><code>## Warning: One or more parsing issues, call `problems()` on your data frame for details,
-## e.g.:
-##   dat &lt;- vroom(...)
-##   problems(dat)</code></pre>
-<pre class="r"><code>head(df)</code></pre>
-<pre><code>## # A tibble: 6 × 27
-##   symbol…¹ norma…² make  fuel-…³ aspir…⁴ num-o…⁵ body-…⁶ drive…⁷ engin…⁸ wheel…⁹
-##   &lt;fct&gt;      &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt;   &lt;fct&gt;   &lt;fct&gt;   &lt;fct&gt;   &lt;fct&gt;   &lt;fct&gt;     &lt;dbl&gt;
-## 1 3             NA alfa… gas     std     two     conver… rwd     front      88.6
-## 2 3             NA alfa… gas     std     two     conver… rwd     front      88.6
-## 3 1             NA alfa… gas     std     two     hatchb… rwd     front      94.5
-## 4 2            164 audi  gas     std     four    sedan   fwd     front      99.8
-## 5 2            164 audi  gas     std     four    sedan   4wd     front      99.4
-## 6 2             NA audi  gas     std     two     sedan   fwd     front      99.8
-## # … with 17 more variables: length &lt;dbl&gt;, width &lt;dbl&gt;, height &lt;dbl&gt;,
-## #   `curb-weight` &lt;dbl&gt;, `engine-type` &lt;fct&gt;, `num-of-cylinders` &lt;fct&gt;,
-## #   `engine-size` &lt;dbl&gt;, `fuel-system` &lt;fct&gt;, bore &lt;dbl&gt;, stroke &lt;dbl&gt;,
-## #   `compression-ratio` &lt;dbl&gt;, horsepower &lt;dbl&gt;, `peak-rpm` &lt;dbl&gt;,
-## #   `city-mpg` &lt;dbl&gt;, `highway-mpg` &lt;dbl&gt;, price &lt;dbl&gt;, `?` &lt;lgl&gt;, and
-## #   abbreviated variable names ¹​symboling, ²​`normalized-losses`, ³​`fuel-type`,
-## #   ⁴​aspiration, ⁵​`num-of-doors`, ⁶​`body-style`, ⁷​`drive-wheels`, …</code></pre>
+                 ))%&gt;%replace(&quot;?&quot;,NA)
+head(df) %&gt;% kable(digits = 3)</code></pre>
+<table style="width:100%;">
+<colgroup>
+<col width="3%" />
+<col width="6%" />
+<col width="4%" />
+<col width="3%" />
+<col width="3%" />
+<col width="4%" />
+<col width="4%" />
+<col width="4%" />
+<col width="5%" />
+<col width="3%" />
+<col width="2%" />
+<col width="2%" />
+<col width="2%" />
+<col width="4%" />
+<col width="4%" />
+<col width="5%" />
+<col width="4%" />
+<col width="4%" />
+<col width="1%" />
+<col width="2%" />
+<col width="6%" />
+<col width="3%" />
+<col width="3%" />
+<col width="3%" />
+<col width="4%" />
+<col width="2%" />
+<col width="1%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">symboling</th>
+<th align="right">normalized-losses</th>
+<th align="left">make</th>
+<th align="left">fuel-type</th>
+<th align="left">aspiration</th>
+<th align="left">num-of-doors</th>
+<th align="left">body-style</th>
+<th align="left">drive-wheels</th>
+<th align="left">engine-location</th>
+<th align="right">wheel-base</th>
+<th align="right">length</th>
+<th align="right">width</th>
+<th align="right">height</th>
+<th align="right">curb-weight</th>
+<th align="left">engine-type</th>
+<th align="left">num-of-cylinders</th>
+<th align="right">engine-size</th>
+<th align="left">fuel-system</th>
+<th align="right">bore</th>
+<th align="right">stroke</th>
+<th align="right">compression-ratio</th>
+<th align="right">horsepower</th>
+<th align="right">peak-rpm</th>
+<th align="right">city-mpg</th>
+<th align="right">highway-mpg</th>
+<th align="right">price</th>
+<th align="left">?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">3</td>
+<td align="right">NA</td>
+<td align="left">alfa-romero</td>
+<td align="left">gas</td>
+<td align="left">std</td>
+<td align="left">two</td>
+<td align="left">convertible</td>
+<td align="left">rwd</td>
+<td align="left">front</td>
+<td align="right">88.6</td>
+<td align="right">168.8</td>
+<td align="right">64.1</td>
+<td align="right">48.8</td>
+<td align="right">2548</td>
+<td align="left">dohc</td>
+<td align="left">four</td>
+<td align="right">130</td>
+<td align="left">mpfi</td>
+<td align="right">3.47</td>
+<td align="right">2.68</td>
+<td align="right">9.0</td>
+<td align="right">111</td>
+<td align="right">5000</td>
+<td align="right">21</td>
+<td align="right">27</td>
+<td align="right">13495</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">3</td>
+<td align="right">NA</td>
+<td align="left">alfa-romero</td>
+<td align="left">gas</td>
+<td align="left">std</td>
+<td align="left">two</td>
+<td align="left">convertible</td>
+<td align="left">rwd</td>
+<td align="left">front</td>
+<td align="right">88.6</td>
+<td align="right">168.8</td>
+<td align="right">64.1</td>
+<td align="right">48.8</td>
+<td align="right">2548</td>
+<td align="left">dohc</td>
+<td align="left">four</td>
+<td align="right">130</td>
+<td align="left">mpfi</td>
+<td align="right">3.47</td>
+<td align="right">2.68</td>
+<td align="right">9.0</td>
+<td align="right">111</td>
+<td align="right">5000</td>
+<td align="right">21</td>
+<td align="right">27</td>
+<td align="right">16500</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">1</td>
+<td align="right">NA</td>
+<td align="left">alfa-romero</td>
+<td align="left">gas</td>
+<td align="left">std</td>
+<td align="left">two</td>
+<td align="left">hatchback</td>
+<td align="left">rwd</td>
+<td align="left">front</td>
+<td align="right">94.5</td>
+<td align="right">171.2</td>
+<td align="right">65.5</td>
+<td align="right">52.4</td>
+<td align="right">2823</td>
+<td align="left">ohcv</td>
+<td align="left">six</td>
+<td align="right">152</td>
+<td align="left">mpfi</td>
+<td align="right">2.68</td>
+<td align="right">3.47</td>
+<td align="right">9.0</td>
+<td align="right">154</td>
+<td align="right">5000</td>
+<td align="right">19</td>
+<td align="right">26</td>
+<td align="right">16500</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="right">164</td>
+<td align="left">audi</td>
+<td align="left">gas</td>
+<td align="left">std</td>
+<td align="left">four</td>
+<td align="left">sedan</td>
+<td align="left">fwd</td>
+<td align="left">front</td>
+<td align="right">99.8</td>
+<td align="right">176.6</td>
+<td align="right">66.2</td>
+<td align="right">54.3</td>
+<td align="right">2337</td>
+<td align="left">ohc</td>
+<td align="left">four</td>
+<td align="right">109</td>
+<td align="left">mpfi</td>
+<td align="right">3.19</td>
+<td align="right">3.40</td>
+<td align="right">10.0</td>
+<td align="right">102</td>
+<td align="right">5500</td>
+<td align="right">24</td>
+<td align="right">30</td>
+<td align="right">13950</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">2</td>
+<td align="right">164</td>
+<td align="left">audi</td>
+<td align="left">gas</td>
+<td align="left">std</td>
+<td align="left">four</td>
+<td align="left">sedan</td>
+<td align="left">4wd</td>
+<td align="left">front</td>
+<td align="right">99.4</td>
+<td align="right">176.6</td>
+<td align="right">66.4</td>
+<td align="right">54.3</td>
+<td align="right">2824</td>
+<td align="left">ohc</td>
+<td align="left">five</td>
+<td align="right">136</td>
+<td align="left">mpfi</td>
+<td align="right">3.19</td>
+<td align="right">3.40</td>
+<td align="right">8.0</td>
+<td align="right">115</td>
+<td align="right">5500</td>
+<td align="right">18</td>
+<td align="right">22</td>
+<td align="right">17450</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="right">NA</td>
+<td align="left">audi</td>
+<td align="left">gas</td>
+<td align="left">std</td>
+<td align="left">two</td>
+<td align="left">sedan</td>
+<td align="left">fwd</td>
+<td align="left">front</td>
+<td align="right">99.8</td>
+<td align="right">177.3</td>
+<td align="right">66.3</td>
+<td align="right">53.1</td>
+<td align="right">2507</td>
+<td align="left">ohc</td>
+<td align="left">five</td>
+<td align="right">136</td>
+<td align="left">mpfi</td>
+<td align="right">3.19</td>
+<td align="right">3.40</td>
+<td align="right">8.5</td>
+<td align="right">110</td>
+<td align="right">5500</td>
+<td align="right">19</td>
+<td align="right">25</td>
+<td align="right">15250</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
 <div id="tidying-our-data" class="section level4">
 <h4><strong>Tidying our Data</strong></h4>
 <p>From the dataframe above, we noticed that there are some NA values,
