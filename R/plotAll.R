@@ -1,4 +1,5 @@
 plotAll <- function(data, nms) {
+  options(repr.plot.height = 3, repr.plot.width = 7)
   
   for (x in 1:25){
     if (colnames(data[,x]) %in% nms){

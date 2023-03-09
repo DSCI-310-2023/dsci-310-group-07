@@ -10,16 +10,18 @@ output:
 Project Authors (Original): STAT 301 Group 36: Henry Zhang, Moira Renata, Ning Wang, Paige Wills, Xinrui Wang
 
 ```{r setup, message = FALSE, warning=FALSE, include=FALSE}
+# Libraries
 library(leaps)
 library(tidyverse)
 library(here)
 library(knitr) # TODO: add this to Dockerfile
+
 # Source data
 source(here("R/01-write_data.R"))
+source(here("R/02-read_data.R"))
 
 # Source functions
 source(here("R/processdata.R"))
-source(here("R/02-read_data.R"))
 source(here("R/showR2.R"))
 source(here("R/plotAll.R"))
 
@@ -71,7 +73,6 @@ In this section, we load and clean the data. Note that the last column `?` with 
 
 ```{r read data, message=FALSE, warning=FALSE}
 # Labelling all the columns
-automobile <- get_automobile()
 head(automobile) %>% kable(digits = 3)
 ```
 
@@ -97,49 +98,18 @@ Firstly, we want to calculate the coefficient of determination of all of our pre
 
 
 ```{r, warning=FALSE}
-# create a summary table of the predictor variables with the top 8 highest R^2 values
-
-
-
-
-```{r}
-#removes the price variable (response) since we are not calculating the R^2 of it.  
-#names<-colnames(automobile[,-ncol(automobile)])
-#create a summary table of the predictor variables with the top 8 highest R^2 values
-#df_sqr<-cbind(r_sqr,names)%>%as.data.frame()
-#df_sqr$r_sqr<-as.numeric(df_sqr$r_sqr)
-#kable(top8 <- head(df_sqr%>%arrange(desc(df_sqr$r_sqr)),8),digits = 4)
-
-showR2(automobile, 8)
-
+top8 <- showR2(automobile, 8)
+top8 %>% kable(digits = 4)
 ```
 
 Based on the summary table, the variable that has the highest R^2 value is `make` with a value of 0.796. This can be interpreted as 79.6% of the variation observed in `price` is explained by the model with `make` as the explanatory variable. 
 
 Then, we created plots for the top 8 predictor variables. For the numerical variables, we created both a histogram to see the distribution, and a scatterplot to see the relationship between the variable and the car price. For the categorical variables, we created a bar graph to compare the count of each category in a variable. Analysis of the plots created are written after the code. 
 
-```{r}
 
-#a list of the top  8 variables with the highest coefficient of determination
-#(nms <- pull(top8,names))
-
-# a list of the top  8 variables with the highest coefficient of determination
-nms <- showR2(automobile, 8)%>%select(names)%>%pull()
-nms
-
-```
-
-```{r}
-#| message=FALSE,
-#| warning=FALSE
-
-options(repr.plot.height = 3, repr.plot.width = 7)
-
+```{r message=FALSE, warning=FALSE}
+nms <- pull(top8,names)
 plotAll(automobile, nms)
-
-oldw <- getOption("warn")
-
-options(warn = -1)
 ```
 
 Analysis on the plots:
