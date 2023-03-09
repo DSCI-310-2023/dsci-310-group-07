@@ -9,8 +9,7 @@ output:
 
 Project Authors (Original): STAT 301 Group 36: Henry Zhang, Moira Renata, Ning Wang, Paige Wills, Xinrui Wang
 
-```{r setup,message = FALSE,warning=FALSE,include=FALSE}
-
+```{r setup, message = FALSE, warning=FALSE, include=FALSE}
 library(leaps)
 library(tidyverse)
 library(here)
@@ -145,23 +144,10 @@ Firstly, we want to calculate the coefficient of determination of all of our pre
 
 
 
-```{r}
-#print out the R^2 (coefficient of determination) of all the variables 
-# 
-r_sqr<-c()
-for (x in 1:25){
-     r_sqr<-c(r_sqr,summary(lm(unlist(automobile[,26])~unlist(automobile[,x])))$r.squared)
+```{r, warning=FALSE}
+# create a summary table of the predictor variables with the top 8 highest R^2 values
 
- }
-```
-
-```{r}
-#removes the price variable (response) since we are not calculating the R^2 of it.  
-names<-colnames(automobile[,-26])
-#create a summary table of the predictor variables with the top 8 highest R^2 values
-df_sqr<-cbind(r_sqr,names)%>%as.data.frame()
-df_sqr$r_sqr<-as.numeric(df_sqr$r_sqr)
-head(df_sqr%>%arrange(desc(df_sqr$r_sqr)),8)
+showR2(automobile, 8)
 ```
 
 Based on the summary table, the variable that has the highest R^2 value is `make` with a value of 0.796. This can be interpreted as 79.6% of the variation observed in `price` is explained by the model with `make` as the explanatory variable. 
@@ -169,42 +155,18 @@ Based on the summary table, the variable that has the highest R^2 value is `make
 Then, we created plots for the top 8 predictor variables. For the numerical variables, we created both a histogram to see the distribution, and a scatterplot to see the relationship between the variable and the car price. For the categorical variables, we created a bar graph to compare the count of each category in a variable. Analysis of the plots created are written after the code. 
 
 ```{r}
-#a list of the top  8 variables with the highest coefficient of determination
-nms <-head(df_sqr%>%arrange(desc(df_sqr$r_sqr)),8)%>%select(names)%>%pull()
+# a list of the top  8 variables with the highest coefficient of determination
+nms <- showR2(automobile, 8)%>%select(names)%>%pull()
 nms
 ```
 
 ```{r}
-options(repr.plot.height = 3, repr.plot.width = 7)
-for (x in 1:25){
-    if (colnames(automobile[,x]) %in% nms){
-    
-    if (typeof(unlist(automobile[,x]))=="double"){
-         print(automobile %>%
-         ggplot() +
-         geom_histogram(aes(x = unlist(automobile[,x])), bins = 30)+
-              xlab(colnames(automobile[,x])))
-        
-         print(automobile %>% 
-         ggplot(aes(x = unlist(automobile[,x]),y=unlist(automobile[,26]))) +
-         geom_point()+
-         geom_smooth(method=lm,formula=y~x,se=FALSE)+
-              xlab(colnames(automobile[,x]))+
-              ylab("Car price (USD)"))}
-        
-    else{
-        print(automobile %>%
-            ggplot(aes(x=unlist(automobile[,x]))) +
-            geom_bar(stat="count",bins=30)+
-            xlab(colnames(automobile[,x])) +
-            theme(axis.text.x = element_text(angle = 40, hjust = 1)))
-    
-    }
+#| message=FALSE,
+#| warning=FALSE
 
-}
-      
-    
-    }
+options(repr.plot.height = 3, repr.plot.width = 7)
+
+plotAll(automobile, nms)
 
 oldw <- getOption("warn")
 
