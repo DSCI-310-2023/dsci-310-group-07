@@ -47,10 +47,11 @@ Open localhost:8787 on your browser. You can see the project on `/home/rstudio/p
 ## Dependencies
 
 R version 4.1.3 and R packages as follows:
-    - remotes:2.4.2
-    - glmnet:4.1-4
-    - leaps:3.1
-    - tidyverse:1.3.1
+ * remotes:2.4.2
+ * glmnet:4.1-4
+ * leaps:3.1
+ * tidyverse:1.3.1
+    
 
 ## License Information
 
