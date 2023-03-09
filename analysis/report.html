@@ -535,19 +535,6 @@ bottom and top of the piston’s stroke.</td>
 <h2><strong>Preliminary Analysis</strong></h2>
 <p>In this section, we load the data into our notebook and perform data
 cleaning to obtain tidy data.</p>
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-## ✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
-## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
-## ✔ tidyr   1.2.1      ✔ stringr 1.5.0 
-## ✔ readr   2.1.3      ✔ forcats 0.5.2 
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>library(leaps)</code></pre>
-<pre class="r"><code>library(here)</code></pre>
-<pre><code>## here() starts at C:/Users/Julia Liao/Desktop/dsci310/group-project</code></pre>
-<pre class="r"><code>source(here(&quot;R/processdata.R&quot;))</code></pre>
 <pre class="r"><code># Labelling all the columns
 names&lt;-c(&quot;symboling&quot;,&quot;normalized-losses&quot;,&quot;make&quot;,&quot;fuel-type&quot;,&quot;aspiration&quot;,
          &quot;num-of-doors&quot;,&quot;body-style&quot;,&quot;drive-wheels&quot;,&quot;engine-location&quot;,
@@ -730,90 +717,8 @@ visualizing the realitionship of the top 8 predictor variables based on
 their R^2 value.</p>
 <p>Firstly, we want to calculate the coefficient of determination of all
 of our predicted variables.</p>
-<pre class="r"><code>str(na.omit(automobile))</code></pre>
-<pre><code>## tibble [160 × 26] (S3: tbl_df/tbl/data.frame)
-##  $ symboling        : Factor w/ 6 levels &quot;3&quot;,&quot;1&quot;,&quot;2&quot;,&quot;0&quot;,..: 3 3 2 2 3 4 4 4 3 2 ...
-##  $ normalized-losses: num [1:160] 164 164 158 158 192 192 188 188 121 98 ...
-##  $ make             : Factor w/ 22 levels &quot;alfa-romero&quot;,..: 2 2 2 2 3 3 3 3 4 4 ...
-##  $ fuel-type        : Factor w/ 2 levels &quot;gas&quot;,&quot;diesel&quot;: 1 1 1 1 1 1 1 1 1 1 ...
-##  $ aspiration       : Factor w/ 2 levels &quot;std&quot;,&quot;turbo&quot;: 1 1 1 2 1 1 1 1 1 1 ...
-##  $ num-of-doors     : Factor w/ 3 levels &quot;two&quot;,&quot;four&quot;,&quot;?&quot;: 2 2 2 2 1 2 1 2 1 1 ...
-##  $ body-style       : Factor w/ 5 levels &quot;convertible&quot;,..: 3 3 3 3 3 3 3 3 2 2 ...
-##  $ drive-wheels     : Factor w/ 3 levels &quot;rwd&quot;,&quot;fwd&quot;,&quot;4wd&quot;: 2 3 2 2 1 1 1 1 2 2 ...
-##  $ engine-location  : Factor w/ 2 levels &quot;front&quot;,&quot;rear&quot;: 1 1 1 1 1 1 1 1 1 1 ...
-##  $ wheel-base       : num [1:160] 99.8 99.4 105.8 105.8 101.2 ...
-##  $ length           : num [1:160] 177 177 193 193 177 ...
-##  $ width            : num [1:160] 66.2 66.4 71.4 71.4 64.8 64.8 64.8 64.8 60.3 63.6 ...
-##  $ height           : num [1:160] 54.3 54.3 55.7 55.9 54.3 54.3 54.3 54.3 53.2 52 ...
-##  $ curb-weight      : num [1:160] 2337 2824 2844 3086 2395 ...
-##  $ engine-type      : Factor w/ 7 levels &quot;dohc&quot;,&quot;ohcv&quot;,..: 3 3 3 3 3 3 3 3 4 3 ...
-##  $ num-of-cylinders : Factor w/ 7 levels &quot;four&quot;,&quot;six&quot;,&quot;five&quot;,..: 1 3 3 3 1 1 2 2 4 1 ...
-##  $ engine-size      : num [1:160] 109 136 136 131 108 108 164 164 61 90 ...
-##  $ fuel-system      : Factor w/ 8 levels &quot;mpfi&quot;,&quot;2bbl&quot;,..: 1 1 1 1 1 1 1 1 2 2 ...
-##  $ bore             : num [1:160] 3.19 3.19 3.19 3.13 3.5 3.5 3.31 3.31 2.91 3.03 ...
-##  $ stroke           : num [1:160] 3.4 3.4 3.4 3.4 2.8 2.8 3.19 3.19 3.03 3.11 ...
-##  $ compression-ratio: num [1:160] 10 8 8.5 8.3 8.8 8.8 9 9 9.5 9.6 ...
-##  $ horsepower       : num [1:160] 102 115 110 140 101 101 121 121 48 70 ...
-##  $ peak-rpm         : num [1:160] 5500 5500 5500 5500 5800 5800 4250 4250 5100 5400 ...
-##  $ city-mpg         : num [1:160] 24 18 19 17 23 23 21 21 47 38 ...
-##  $ highway-mpg      : num [1:160] 30 22 25 20 29 29 28 28 53 43 ...
-##  $ price            : num [1:160] 13950 17450 17710 23875 16430 ...
-##  - attr(*, &quot;na.action&quot;)= &#39;omit&#39; Named int [1:45] 1 2 3 6 8 10 15 16 17 18 ...
-##   ..- attr(*, &quot;names&quot;)= chr [1:45] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;6&quot; ...</code></pre>
-<pre class="r"><code>summary(na.omit(automobile))</code></pre>
-<pre><code>##  symboling normalized-losses      make     fuel-type   aspiration  num-of-doors
-##  3 :13     Min.   : 65.0     toyota :31   gas   :145   std  :132   two :64     
-##  1 :47     1st Qu.: 94.0     nissan :18   diesel: 15   turbo: 28   four:95     
-##  2 :29     Median :114.0     honda  :13                            ?   : 1     
-##  0 :48     Mean   :121.3     subaru :12                                        
-##  -1:20     3rd Qu.:148.0     mazda  :11                                        
-##  -2: 3     Max.   :256.0     volvo  :11                                        
-##                              (Other):64                                        
-##        body-style drive-wheels engine-location   wheel-base         length     
-##  convertible: 2   rwd: 46      front:160       Min.   : 86.60   Min.   :141.1  
-##  hatchback  :56   fwd:106      rear :  0       1st Qu.: 94.50   1st Qu.:165.5  
-##  sedan      :80   4wd:  8                      Median : 96.90   Median :172.2  
-##  wagon      :17                                Mean   : 98.24   Mean   :172.3  
-##  hardtop    : 5                                3rd Qu.:100.60   3rd Qu.:177.8  
-##                                                Max.   :115.60   Max.   :202.6  
-##                                                                                
-##      width          height       curb-weight   engine-type num-of-cylinders
-##  Min.   :60.3   Min.   :49.40   Min.   :1488   dohc :  8   four  :137      
-##  1st Qu.:64.0   1st Qu.:52.00   1st Qu.:2073   ohcv :  8   six   : 14      
-##  Median :65.4   Median :54.10   Median :2338   ohc  :124   five  :  7      
-##  Mean   :65.6   Mean   :53.88   Mean   :2459   l    :  8   three :  1      
-##  3rd Qu.:66.5   3rd Qu.:55.50   3rd Qu.:2809   rotor:  0   twelve:  0      
-##  Max.   :71.7   Max.   :59.80   Max.   :4066   ohcf : 12   two   :  0      
-##                                                dohcv:  0   eight :  1      
-##   engine-size     fuel-system      bore           stroke      compression-ratio
-##  Min.   : 61.0   mpfi   :65   Min.   :2.540   Min.   :2.070   Min.   : 7.00    
-##  1st Qu.: 97.0   2bbl   :63   1st Qu.:3.050   1st Qu.:3.107   1st Qu.: 8.70    
-##  Median :110.0   idi    :15   Median :3.270   Median :3.270   Median : 9.00    
-##  Mean   :119.1   1bbl   :11   Mean   :3.298   Mean   :3.237   Mean   :10.15    
-##  3rd Qu.:134.5   spdi   : 5   3rd Qu.:3.550   3rd Qu.:3.410   3rd Qu.: 9.40    
-##  Max.   :258.0   mfi    : 1   Max.   :3.940   Max.   :4.170   Max.   :23.00    
-##                  (Other): 0                                                    
-##    horsepower        peak-rpm       city-mpg      highway-mpg   
-##  Min.   : 48.00   Min.   :4150   Min.   :15.00   Min.   :18.00  
-##  1st Qu.: 69.00   1st Qu.:4800   1st Qu.:23.00   1st Qu.:28.00  
-##  Median : 88.00   Median :5200   Median :26.00   Median :32.00  
-##  Mean   : 95.88   Mean   :5116   Mean   :26.51   Mean   :32.07  
-##  3rd Qu.:114.00   3rd Qu.:5500   3rd Qu.:31.00   3rd Qu.:37.00  
-##  Max.   :200.00   Max.   :6600   Max.   :49.00   Max.   :54.00  
-##                                                                 
-##      price      
-##  Min.   : 5118  
-##  1st Qu.: 7384  
-##  Median : 9164  
-##  Mean   :11428  
-##  3rd Qu.:14559  
-##  Max.   :35056  
-## </code></pre>
-<pre class="r"><code>summary(automobile$`engine-location`)</code></pre>
-<pre><code>## front  rear 
-##   202     3</code></pre>
 <pre class="r"><code>#print out the R^2 (coefficient of determination) of all the variables 
-# TODO
+# 
 r_sqr&lt;-c()
 for (x in 1:25){
      r_sqr&lt;-c(r_sqr,summary(lm(unlist(automobile[,26])~unlist(automobile[,x])))$r.squared)

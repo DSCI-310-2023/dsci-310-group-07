@@ -9,6 +9,15 @@ output:
 
 Project Authors (Original): STAT 301 Group 36: Henry Zhang, Moira Renata, Ning Wang, Paige Wills, Xinrui Wang
 
+```{r setup,message = FALSE,warning=FALSE,include=FALSE}
+
+library(leaps)
+library(tidyverse)
+library(here)
+source(here("R/processdata.R"))
+```
+
+
 ## **Introduction**
 
 Over the past few decades, we have seen a rapid increase in demand for the car industry. The high market price of both brand new and used cars have created a large economic impact all over the world. Based on previous studies, it was found that there are multiple factors affecting  the final price of a car (Balce, 2016) and that while most factors do have a positive contribution or effect to the final price, there are still some factors that create a negative effect (Erdem and Senturk, 2009). 
@@ -51,20 +60,9 @@ Variable|Type|Description|
 ## **Preliminary Analysis**
 In this section, we load the data into our notebook and perform data cleaning to obtain tidy data.
 
-```{r}
-library(tidyverse)
-```
 
-```{r}
-library(leaps)
-```
 
-```{r}
-library(here)
-source(here("R/processdata.R"))
-```
-
-```{r}
+```{r read data}
 # Labelling all the columns
 names<-c("symboling","normalized-losses","make","fuel-type","aspiration",
          "num-of-doors","body-style","drive-wheels","engine-location",
@@ -109,7 +107,7 @@ From the dataframe above, we noticed that there are some NA values, and that the
 
 From the dataframe above, we noticed that there are some NA values, and that the last column `?` can be removed as it does not represent anything. Other than that, each row represents an observation, each column is a variable, and each cell is a value, which means there is not a lot of data tidying to do. We will first check the number of NA values in each column, the number of levels in columns that are categorical variables, and the summary statistics of each variable.
 
-```{r}
+```{r data summary}
 # Checking the summary of results of each column
 sum_df <- summary(df)
 sum_df
@@ -152,16 +150,11 @@ It would be beneficial to visualize the pairwise correlation coefficients of our
 
 Firstly, we want to calculate the coefficient of determination of all of our predicted variables.
 
-```{r}
-str(na.omit(automobile))
-summary(na.omit(automobile))
-summary(automobile$`engine-location`)
-```
 
 
 ```{r}
 #print out the R^2 (coefficient of determination) of all the variables 
-# TODO
+# 
 r_sqr<-c()
 for (x in 1:25){
      r_sqr<-c(r_sqr,summary(lm(unlist(automobile[,26])~unlist(automobile[,x])))$r.squared)
