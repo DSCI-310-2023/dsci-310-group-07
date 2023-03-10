@@ -53,6 +53,7 @@ R version 4.1.3 and R packages as follows:
  * tidyverse:1.3.1
  * testthat:3.1.3
  * here:1.0.1
+ * knitr:1.42
     
 
 ## License Information
