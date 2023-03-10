@@ -11,4 +11,4 @@ RUN Rscript -e "remotes::install_version('leaps','3.1')"
 RUN Rscript -e "remotes::install_version('tidyverse','1.3.1')"
 RUN Rscript -e "remotes::install_version('testthat','3.1.3')"
 RUN Rscript -e "remotes::install_version('here','1.0.1')"
-
+RUN Rscript -e "remotes::install_version('knitr','1.42')"
