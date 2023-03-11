@@ -35,10 +35,6 @@ docker build -t dsci310-project . -f Dockerfile
 After installing the packages in Dockerfile. You can run this on localhost:8787 by
 
 ```
-docker run --rm -p 8787:8787 -e PASSWORD=12345 -v "your\path\to\the\project:/home/rstudio/project" dsci310-project
-```
-OR
-```
 docker run --rm -p 8787:8787 -e PASSWORD=12345 -v /$(pwd):/home/rstudio/project dsci310-project
 ```
 
@@ -53,7 +49,7 @@ R version 4.1.3 and R packages as follows:
  * tidyverse:1.3.1
  * testthat:3.1.3
  * here:1.0.1
- * knitr:1.42
+ * knitr:1.38
     
 
 ## License Information
