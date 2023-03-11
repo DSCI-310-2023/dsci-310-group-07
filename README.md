@@ -10,7 +10,7 @@ The data we used was from the The Automobile Data Set that was created by Jeffre
 
 ## Report
 
-The analysis report can be found [here (Rmarkdown)](analysis/dsci310_milestone1.rmd).
+The analysis report can be found [here](analysis/report.rmd).
 
 ## Usage
 
