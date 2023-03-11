@@ -1,3 +1,6 @@
+# author: Xiwen Wei
+# date: 2023-03-10
+
 plotAll <- function(data, nms) {
   options(repr.plot.height = 3, repr.plot.width = 7)
   

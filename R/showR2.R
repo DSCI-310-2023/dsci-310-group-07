@@ -1,3 +1,10 @@
+# author: Xiwen Wei
+# date: 2023-03-10
+library(testthat)
+
+source(here("R/01-write_data.R"))
+source(here("R/02-read_data.R"))
+
 showR2 <- function(data, n) {
   
   #print out the R^2 (coefficient of determination) of all the variables
@@ -16,3 +23,7 @@ showR2 <- function(data, n) {
   head(df_sqr%>%arrange(desc(df_sqr$r_sqr)),n)
   
 }
+
+
+expect_equal(nrow(showR2(automobile,8)), 8)
+expect_equal(length(showR2(automobile,8)), 2)
