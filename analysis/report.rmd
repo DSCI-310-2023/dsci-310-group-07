@@ -1,26 +1,30 @@
 ---
 title: "Predicting Car Prices Based on Certain Characteristics"
-author: 'Group 07: Harbor Zhang, Jiaying Liao, Ning Wang, Xiwen Wei'
-date: '2023-02-19'
+author: 'DSCI310 Group 07: Harbor Zhang, Jiaying Liao, Ning Wang, Xiwen Wei'
+date: "`r Sys.Date()`"
 output:
   html_document: default
   pdf_document: default
 ---
 
-Project Authors (Original): STAT 301 Group 36: Henry Zhang, Moira Renata, Ning Wang, Paige Wills, Xinrui Wang
+Original Project Authors: Henry Zhang, Moira Renata, Ning Wang, Paige Wills, Xinrui Wang in STAT 301 Group 36.
 
 ```{r setup, message = FALSE, warning=FALSE, include=FALSE}
 # Libraries
 library(leaps)
 library(tidyverse)
 library(here)
-library(knitr) # TODO: add this to Dockerfile
+library(knitr)
+library(kableExtra)
+library(MASS)
+library(glmnet)
 
-# Source data
+# Source of data
 source(here("R/01-write_data.R"))
 source(here("R/02-read_data.R"))
 
-# Source functions
+# Source of functions
+source(here("R/generate_tiny_dat.R"))
 source(here("R/processdata.R"))
 source(here("R/showR2.R"))
 source(here("R/plotAll.R"))
@@ -72,18 +76,35 @@ Variable|Type|Description|
 In this section, we load and clean the data. Note that the last column `?` with all values are is removed.
 
 
-```{r read data, message=FALSE, warning=FALSE}
-# Labelling all the columns
-head(automobile) %>% kable(digits = 3)
+```{r read data, echo=FALSE, message=FALSE, warning=FALSE}
+head(automobile[,1:13]) %>% 
+  kable(digits = 3,
+        format = "simple",
+        caption = "Row 1 to 6, Column 1 to 13 in Automobile Dataset") %>%
+  kable_styling(bootstrap_options = c("striped",
+                                      "hover",
+                                      "condensed"))
+head(automobile[,14:26]) %>% 
+  kable(digits = 3,
+        format = "simple",
+        caption = "Row 1 to 6, Column 14 to 26 in Automobile Dataset") %>%
+  kable_styling(bootstrap_options = c("striped",
+                                      "hover",
+                                      "condensed"))
 ```
 
 
 From the dataframe above, we noticed that there are some NA values. Each row represents an observation, each column is a variable, and each cell is a value, which means there is not a lot of data tidying to do. We will first check the number of NA values in each column, the number of levels in columns that are categorical variables, and the summary statistics of each variable.
 
-```{r data summary, message=FALSE, warning=FALSE}
+```{r data summary, echo=FALSE, message=FALSE, warning=FALSE}
 # Checking the summary of results of each column
-summary(automobile) %>% kable(digit = 4)
+options(knitr.kable.NA = '')
+summary(automobile) %>% t() %>%
+  kable(digit = 4) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
+
+
 
 There are `r sum(!complete.cases(automobile))` rows that contain NA values. And the number of rows that have complete observations are `r sum(complete.cases(automobile))`.
 
@@ -98,17 +119,30 @@ Firstly, we want to calculate the coefficient of determination of all of our pre
 
 
 
-```{r, warning=FALSE}
+```{r top 8 variables, message=FALSE, warning=FALSE}
 top8 <- showR2(automobile, 8)
-top8 %>% kable(digits = 4)
 ```
+
+
+```{r print top8, echo=FALSE, message=FALSE, warning=FALSE}
+top8 %>%
+  kable(digits = 4, col.names = c("R^2", "Variable")) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = F,
+    position = "center"
+  )
+```
+
 
 Based on the summary table, the variable that has the highest R^2 value is `make` with a value of 0.796. This can be interpreted as 79.6% of the variation observed in `price` is explained by the model with `make` as the explanatory variable. 
 
 Then, we created plots for the top 8 predictor variables. For the numerical variables, we created both a histogram to see the distribution, and a scatterplot to see the relationship between the variable and the car price. For the categorical variables, we created a bar graph to compare the count of each category in a variable. Analysis of the plots created are written after the code. 
 
 
-```{r message=FALSE, warning=FALSE}
+
+
+```{r top 8 plot, message=FALSE, warning=FALSE}
 nms <- pull(top8,names)
 plotAll(automobile, nms)
 ```
@@ -126,15 +160,14 @@ Analysis on the plots:
 
 ## **Methods**
 
-```{r}
+```{r remove duplicates, message=FALSE, warning=FALSE}
 #removes duplicate elements in the dataframe after omitting the NA values. 
 sapply(lapply(na.omit(automobile), unique), length)
-
 ```
 
 Since lm will automatically omit the NA values in data, we check the number of unique values if NA is removed. We notice that after we omit NA, the levels of engine-location appears to be 1. This will cause contrasts since we need a categorical variables to be factors with 2 or more levels. Thus we need to remove `engine-location`.
 
-```{r}
+```{r level of num-of-doors, message=FALSE, warning=FALSE}
 levels(automobile$`num-of-doors`)
 ```
 
@@ -142,7 +175,7 @@ We also check the levels in `num-of-doors` and realize that one of the levels is
 
 First the data is prepared. The variable `num-of-doors` needs to be converted to characters and have `?`s removed and the variable `engine-location` is dropped. Them, the dataset is split into two data sets - training and testing using a 70-30% basis and the ID variables are removed.
 
-```{r}
+```{r split into train and test, message=FALSE, warning=FALSE}
 tst<-get_tr_tst(automobile)
 training_df<-get_tr_tst(automobile,"basic")[[1]]
 testing_df<-get_tr_tst(automobile,"basic")[[2]] 
@@ -152,18 +185,16 @@ testing_df_at<-get_tr_tst(automobile,"at")[[2]]
 
 A full model is created using `lm()` with `price` as our response variable and **all input variables** as our predictor variables, using training data. A stepwise model is created using forward selection because we have more predictor variables (p) than observations (n). A backward selection and stepwise selection will not work. 
 
-** note: We have more than 25 predictors since a lot of our predictor variables are categorical data with many levels. 
+*Note*: We have more than 25 predictors since a lot of our predictor variables are categorical data with many levels. 
 
 
-```{r}
-library(MASS)
-
-full_mod<-lm(price ~.,data=training_df)
-step_mod_fs <- stepAIC(full_mod, direction = "forward")
-
-summary(step_mod_fs)
+```{r stepAIC, message=FALSE, warning=FALSE}
+lm(price ~.,data=training_df) %>%
+  stepAIC(direction = "forward") %>%
+  summary()
 
 ```
+
 
 Based on the summary we found in `sum_df` (above), we noticed that the variables:`symboling`, `make`, `body-style`, `drive-wheels`, `engine-type`, `num-of-cylinders`, and `fuel-system` have more than 2 levels. Since the shrinkage methods we are planning to use to perform model selection (LASSO and Ridge) is not possible when there are more than 2 levels in a categorical variable, the variables listed above are all dropped because of their high levels.
 
@@ -171,17 +202,14 @@ We then create new training and testing datasets that excludes the variables lis
 1. `training_df_sub`
 2. `testing_df_sub`
 
-```{r}
-
+```{r train/test sub, message=FALSE, warning=FALSE}
 training_df_sub<-get_tr_tst(automobile,"sub")[[1]]
 testing_df_sub<-get_tr_tst(automobile,"sub")[[2]] 
-
 ```
 
 This code prepares the dataset(s) for `glmnet()` which only takes matrices (hence `model.matrix`). The `glmnet()` function has an argument `object`, which is the formula of the model and therefore needs clear x and y variables, explaining why the training and testing datasets are split into subsets of x and y. 
 
-```{r}
-library(glmnet)
+```{r train/test matrix, message=FALSE, warning=FALSE}
 
 x_train_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="training")[[1]]
 y_train_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="training")[[2]]
@@ -196,7 +224,7 @@ Then the plot function will be used to visualise the MSE of different lambdas.
 
 `lasso_mod` provides the  $\hat{\lambda}_{\text{min}}$  for LASSO (explained below) and `lasso_mod_1se` provides the $\hat{\lambda}_{\text{1SE}}$ for LASSO (explained below).
 
-```{r}
+```{r lasso, message=FALSE, warning=FALSE}
 get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="plot")
 lasso_mods<-get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="modeling")
 lasso_mod<-lasso_mods[[1]]
@@ -208,7 +236,7 @@ The plot shows the estimated testMSE on the y-axis for a grid of values of ${\la
 A similar method is followed for Ridge, except `alpha = 0`. 
 `ridge_mod` provides the  $\hat{\lambda}_{\text{min}}$ for Ridge and `ridge_mod_1se` provides the  $\hat{\lambda}_{\text{1SE}}$ value for Ridge (explained above).
 
-```{r}
+```{r ridge, message=FALSE, warning=FALSE}
 get_model_plot(x_train_mat,y_train_mat,model="ridge",ask="plot")
 ridge_mods<-get_model_plot(x_train_mat,y_train_mat,model="ridge",ask="modeling")
 ridge_mod<-ridge_mods[[1]]
@@ -228,10 +256,12 @@ After creating the 5 models, we will then obtain the out-of-sample predictions f
 
 Finally, we are able to compute the RMSE (root mean squared error) to evaluate the predicted models, which is clearly summarised in the tibble below.
 
-```{r}
+```{r cross-validation, message=FALSE, warning=FALSE}
 lasso_cv<-get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="modeling")[[3]]
 ridge_cv<-get_model_plot(x_train_mat,y_train_mat,model="ridge",ask="modeling")[[3]]
-get_er_cv(training_df_at,training_df_sub,kfolds=10,lasso_cv,ridge_cv)
+get_er_cv(training_df_at,training_df_sub,kfolds=10,lasso_cv,ridge_cv) %>% 
+  kable(digits = 3) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F, position = "center")
 
 ```
 
@@ -240,7 +270,6 @@ Through the 10 fold cross validation error (root mean squared error), we see tha
 
 ```{r}
 preds<-predict(lasso_mod_1se,x_test_mat)
-
 sqrt(mean(y_test_mat-preds)^2)
 ```
 
@@ -252,10 +281,11 @@ coef_mat<-coef(lasso_mod_1se)
 
 summs <- summary(coef_mat)
 
-vars_df<-data.frame(kept_variables = rownames(coef_mat)[summs$i],
-           coefficient = summs$x)
-
-vars_df
+data.frame(kept_variables = rownames(coef_mat)[summs$i],
+           coefficient = summs$x) %>%
+  kable(digits = 3) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+                full_width = F,position = "center")
 ```
 
  Taking a look at the coefficients of our model, we noticed that the LASSO model had selected only three variables, which are `width`, `curb-weight`, and `horsepower`, while all the coefficients of other input variables were reduced to 0.
@@ -276,6 +306,7 @@ We hope that this fitted LASSO model will allow users to predict the price of a 
 
 ### Further Questions and Improvements
 There are two main problems that need to be improved:
+
 1. Using high-level (N >2) categorical variables in the LASSO model. The LASSO model interprets N-1 dummy variables as its own separate variable, which may exclude certain levels. To deal with this issue, we dropped the variables with high levels. However by doing so, we might have dropped a statistically significant variable. In future research, maybe by using another regression model, including those categorical variables with more than 2 levels, we can improve our model’s performance. 
 
 2. Another problem involves LASSO's biased estimators. In the future, if we want to generate an inference model, we can apply post-lasso. This is done by fiting a regular least squares model to the variables selected by LASSO. 
