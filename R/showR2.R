@@ -1,9 +1,5 @@
 # author: Xiwen Wei
 # date: 2023-03-10
-library(testthat)
-
-source(here("R/01-write_data.R"))
-source(here("R/02-read_data.R"))
 
 showR2 <- function(data, n) {
   
@@ -25,5 +21,3 @@ showR2 <- function(data, n) {
 }
 
 
-expect_equal(nrow(showR2(automobile,8)), 8)
-expect_equal(length(showR2(automobile,8)), 2)
