@@ -1,6 +1,6 @@
 # author: Jiaying Liao
 # date: 2023-03-08
-
+library(tidyverse)
 source(here("R/processdata.R"))
 
 automobile <- read_csv(
@@ -30,8 +30,7 @@ automobile <- read_csv(
     `peak-rpm` = col_double(),
     `city-mpg` = col_double(),
     `highway-mpg` = col_double(),
-    price = col_double(),
-    `?`=col_factor()
+    price = col_double()
   )
 ) %>%
   processdata()
