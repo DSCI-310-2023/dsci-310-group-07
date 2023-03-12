@@ -1,0 +1,520 @@
+0:kable(row.names = c("variable", "number of unique values"))
+0:#removes duplicate elements in the dataframe after omitting the NA values.
+0:sapply(lapply(na.omit(automobile), unique), length) %>%
+0:as_tibble()
+0:#removes duplicate elements in the dataframe after omitting the NA values.
+0:sapply(lapply(na.omit(automobile), unique), length)
+0:#removes duplicate elements in the dataframe after omitting the NA values.
+0:sapply(lapply(na.omit(automobile), unique), length) %>%
+0:typeof()
+0:#removes duplicate elements in the dataframe after omitting the NA values.
+0:sapply(lapply(na.omit(automobile), unique), length)
+0:tst<-get_tr_tst(automobile)
+0:training_df<-get_tr_tst(automobile,"basic")[[1]]
+0:testing_df<-get_tr_tst(automobile,"basic")[[2]]
+0:training_df_at<-get_tr_tst(automobile,"at")[[1]]
+0:testing_df_at<-get_tr_tst(automobile,"at")[[2]]
+0:options(knitr.kable.NA = '')
+0:library(MASS)
+0:full_mod<-lm(price ~.,data=training_df)
+0:step_mod_fs <- stepAIC(full_mod, direction = "forward")
+0:summary(step_mod_fs) %>% kable()
+0:library(kableExtra)
+0:library(MASS)
+0:options(knitr.kable.NA = '')
+0:library(MASS)
+0:full_mod<-lm(price ~.,data=training_df)
+0:step_mod_fs <- stepAIC(full_mod, direction = "forward")
+0:# summary(step_mod_fs)
+0:kable(summary(step_mod_fs), format = "html") %>%
+0:kable_styling()
+0:options(knitr.kable.NA = '')
+0:library(MASS)
+0:full_mod<-lm(price ~.,data=training_df)
+0:step_mod_fs <- stepAIC(full_mod, direction = "forward")
+0:# summary(step_mod_fs)
+0:kable(summary(step_mod_fs)$table, format = "html") %>%
+0:kable_styling()
+0:options(knitr.kable.NA = '')
+0:library(MASS)
+0:full_mod<-lm(price ~.,data=training_df)
+0:step_mod_fs <- stepAIC(full_mod, direction = "forward")
+0:# summary(step_mod_fs)
+0:kable(summary(step_mod_fs)$table)
+0:options(knitr.kable.NA = '')
+0:library(MASS)
+0:full_mod<-lm(price ~.,data=training_df)
+0:step_mod_fs <- stepAIC(full_mod, direction = "forward")
+0:# summary(step_mod_fs)
+0:kable(summary(step_mod_fs)$table) %>%
+0:kable_styling()
+0:options(knitr.kable.NA = '')
+0:library(MASS)
+0:full_mod<-lm(price ~.,data=training_df)
+0:step_mod_fs <- stepAIC(full_mod, direction = "forward")
+0:# summary(step_mod_fs)
+0:(summary(step_mod_fs)$table)
+0:options(knitr.kable.NA = '')
+0:library(MASS)
+0:full_mod<-lm(price ~.,data=training_df)
+0:step_mod_fs <- stepAIC(full_mod, direction = "forward")
+0:# summary(step_mod_fs)
+0:summary(step_mod_fs)$table
+0:options(knitr.kable.NA = '')
+0:library(MASS)
+0:full_mod<-lm(price ~.,data=training_df)
+0:step_mod_fs <- stepAIC(full_mod, direction = "forward")
+0:# summary(step_mod_fs)
+0:summary(step_mod_fs)
+0:library(glmnet)
+0:training_df_sub<-get_tr_tst(automobile,"sub")[[1]]
+0:testing_df_sub<-get_tr_tst(automobile,"sub")[[2]]
+0:lasso_cv<-get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="modeling")[[3]]
+0:# Libraries
+0:library(leaps)
+0:library(tidyverse)
+0:library(here)
+0:library(knitr)
+0:library(kableExtra)
+0:library(MASS)
+0:library(glmnet)
+0:# Source of data
+0:source(here("R/01-write_data.R"))
+0:source(here("R/02-read_data.R"))
+0:# Source of functions
+0:source(here("R/generate_tiny_dat.R"))
+0:source(here("R/processdata.R"))
+0:source(here("R/showR2.R"))
+0:source(here("R/plotAll.R"))
+0:source(here("R/get_tr_tst.R"))
+0:# Labelling all the columns
+0:head(automobile) %>% kable(digits = 3)
+0:# Checking the summary of results of each column
+0:options(knitr.kable.NA = '')
+0:summary(automobile) %>% kable(digit = 4)
+0:top8 <- showR2(automobile, 8)
+0:top8 %>% kable(digits = 4, col.names = c("R^2","Variable"))
+0:nms <- pull(top8,names)
+0:plotAll(automobile, nms)
+0:#removes duplicate elements in the dataframe after omitting the NA values.
+0:sapply(lapply(na.omit(automobile), unique), length)
+0:levels(automobile$`num-of-doors`)
+0:tst<-get_tr_tst(automobile)
+0:training_df<-get_tr_tst(automobile,"basic")[[1]]
+0:testing_df<-get_tr_tst(automobile,"basic")[[2]]
+0:training_df_at<-get_tr_tst(automobile,"at")[[1]]
+0:testing_df_at<-get_tr_tst(automobile,"at")[[2]]
+0:options(knitr.kable.NA = '')
+0:library(MASS)
+0:full_mod<-lm(price ~.,data=training_df)
+0:step_mod_fs <- stepAIC(full_mod, direction = "forward")
+0:# summary(step_mod_fs)
+0:summary(step_mod_fs)
+0:training_df_sub<-get_tr_tst(automobile,"sub")[[1]]
+0:testing_df_sub<-get_tr_tst(automobile,"sub")[[2]]
+0:x_train_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="training")[[1]]
+0:y_train_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="training")[[2]]
+0:x_test_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="testing")[[1]]
+0:y_test_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="testing")[[2]]
+0:get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="plot")
+0:lasso_mods<-get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="modeling")
+0:lasso_mod<-lasso_mods[[1]]
+0:lasso_mod_1se<-lasso_mods[[2]]
+0:get_model_plot(x_train_mat,y_train_mat,model="ridge",ask="plot")
+0:ridge_mods<-get_model_plot(x_train_mat,y_train_mat,model="ridge",ask="modeling")
+0:ridge_mod<-ridge_mods[[1]]
+0:ridge_mod_1se<-ridge_mods[[2]]
+0:lasso_cv<-get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="modeling")[[3]]
+0:ridge_cv<-get_model_plot(x_train_mat,y_train_mat,model="ridge",ask="modeling")[[3]]
+0:get_er_cv(training_df_at,training_df_sub,kfolds=10,lasso_cv,ridge_cv) %>% kable()
+0:get_er_cv(training_df_at,training_df_sub,kfolds=10,lasso_cv,ridge_cv) %>% kable(digits = 3)
+0:# Labelling all the columns
+0:head(automobile) %>% kable(digits = 3,full_width = T)
+0:?kable
+0:# Labelling all the columns
+0:head(automobile) %>% kable(digits = 3,full_width = F)
+0:# Labelling all the columns
+0:head(automobile) %>% kable(digits = 3,format = "pipe")
+0:# Labelling all the columns
+0:head(automobile) %>% kable(digits = 3,format = "html")
+0:# Labelling all the columns
+0:head(automobile) %>% kable(digits = 3,format = "simple")
+0:# Labelling all the columns
+0:head(automobile[,1:10]) %>% kable(digits = 3,format = "simple")
+0:# Labelling all the columns
+0:ncol(automobile)
+0:# Labelling all the columns
+0:# ncol(automobile)
+0:head(automobile[,1:13]) %>% kable(digits = 3,format = "simple")
+0:head(automobile[,14:26]) %>% kable(digits = 3,format = "simple")
+0:head(automobile) %>%
+0:kable(digits = 3,format = "simple") %>%
+0:invisible()
+0:summary(automobile) %>% t() %>%
+0:kable(digit = 4)
+0:# Checking the summary of results of each column
+0:options(knitr.kable.NA = '')
+0:summary(automobile) %>% t() %>%
+0:kable(digit = 4) %>%
+0:kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+0:head(automobile[,1:13]) %>%
+0:kable(digits = 3,
+0:format = "simple",
+0:caption = "Row 1 to 6, Column 1 to 13 in Automobile Dataset") %>%
+0:kable_styling(bootstrap_options = c("striped",
+0:"hover",
+0:"condensed"))
+0:head(automobile[,14:26]) %>%
+0:kable(digits = 3,
+0:format = "simple",
+0:caption = "Row 1 to 6, Column 14 to 26 in Automobile Dataset") %>%
+0:kable_styling(bootstrap_options = c("striped",
+0:"hover",
+0:"condensed"))
+0:top8 <- showR2(automobile, 8)
+0:top8 %>%
+0:kable(digits = 4, col.names = c("R^2","Variable")) %>%
+0:kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+0:top8 <- showR2(automobile, 8)
+0:top8 %>%
+0:kable(digits = 4, col.names = c("R^2", "Variable")) %>%
+0:kable_styling(
+0:bootstrap_options = c("striped", "hover", "condensed"),
+0:full_width = F,
+0:position = "float_right"
+0:)
+0:coef(step_mod_fs)
+0:options(knitr.kable.NA = '')
+0:full_mod<-lm(price ~.,data=training_df)
+0:step_mod_fs <- stepAIC(full_mod, direction = "forward")
+0:# summary(step_mod_fs)
+0:coef(step_mod_fs) %>% kable()
+0:# summary(step_mod_fs)
+0:step_mod_fs$anova
+0:coef(step_mod_fs)
+0:# summary(step_mod_fs)
+0:step_mod_fs$coefficients
+0:# summary(step_mod_fs)
+0:step_mod_fs$effects
+0:# summary(step_mod_fs)
+0:step_mod_fs$rank
+0:# summary(step_mod_fs)
+0:step_mod_fs$assign
+0:# summary(step_mod_fs)
+0:step_mod_fs$qr
+0:# summary(step_mod_fs)
+0:step_mod_fs$df.residual
+0:# summary(step_mod_fs)
+0:step_mod_fs$contrasts
+0:# summary(step_mod_fs)
+0:step_mod_fs$xlevels
+0:# summary(step_mod_fs)
+0:step_mod_fs$model
+0:# summary(step_mod_fs)
+0:step_mod_fs$terms
+0:# summary(step_mod_fs)
+0:step_mod_fs$anova
+0:options(knitr.kable.NA = '')
+0:full_mod<-lm(price ~.,data=training_df)
+0:step_mod_fs <- stepAIC(full_mod, direction = "forward")
+0:# summary(step_mod_fs)
+0:coef(step_mod_fs) %>%
+0:kable(digits = 3) %>%
+0:kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+0:# options(knitr.kable.NA = '')
+0:full_mod<-lm(price ~.,data=training_df)
+0:step_mod_fs <- stepAIC(full_mod, direction = "forward")
+0:# summary(step_mod_fs)
+0:coef(step_mod_fs) %>%
+0:kable(digits = 3) %>%
+0:kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+0:coef(step_mod_fs) %>%
+0:kable(digits = 3) %>%
+0:kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+0:full_width = F, position = "left")
+0:coef(step_mod_fs) %>%
+0:kable(digits = 3,
+0:col.names = "Variable","Estimate") %>%
+0:kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+0:full_width = F, position = "left")
+0:coef(step_mod_fs) %>%
+0:kable(digits = 3,
+0:col.names = c("Variable","Estimate")) %>%
+0:kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+0:full_width = F, position = "left")
+0:coef(step_mod_fs) %>%
+0:kable(digits = 3,
+0:col.names = c("Estimate")) %>%
+0:kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+0:full_width = F, position = "left")
+0:lasso_cv<-get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="modeling")[[3]]
+0:ridge_cv<-get_model_plot(x_train_mat,y_train_mat,model="ridge",ask="modeling")[[3]]
+0:get_er_cv(training_df_at,training_df_sub,kfolds=10,lasso_cv,ridge_cv) %>%
+0:kable(digits = 3) %>%
+0:kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F, position = "left")
+0:?v
+0:?kable_styling
+0:coef(step_mod_fs) %>%
+0:kable(digits = 3,
+0:col.names = c("Estimate")) %>%
+0:kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+0:full_width = F, position = "center")
+0:nrow(coef(step_mod_fs))
+0:typeof(coef(step_mod_fs))
+0:length(coef(step_mod_fs))
+0:coef(step_mod_fs)[1:2]
+0:coef(step_mod_fs)[2:6]
+0:coef(step_mod_fs)[1:54] %>%
+0:kable(digits = 3,
+0:col.names = c("Estimate")) %>%
+0:kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+0:full_width = F, position = "center")
+0:top8 %>%
+0:kable(digits = 4, col.names = c("R^2", "Variable")) %>%
+0:kable_styling(
+0:bootstrap_options = c("striped", "hover", "condensed"),
+0:full_width = F,
+0:position = "center"
+0:)
+0:top8 <- showR2(automobile, 8)
+0:top8 %>%
+0:kable(digits = 4, col.names = c("R^2", "Variable")) %>%
+0:kable_styling(
+0:bootstrap_options = c("striped", "hover", "condensed"),
+0:full_width = F,
+0:position = "center"
+0:)
+0:full_mod<-lm(price ~.,data=training_df)
+0:step_mod_fs <- stepAIC(full_mod, direction = "forward")
+0:summary(step_mod_fs)
+0:full_mod<-lm(price ~.,data=training_df)
+0:stepAIC(full_mod, direction = "forward") %>%
+0:summary()
+0:# full_mod<-lm(price ~.,data=training_df)
+0:# stepAIC(full_mod, direction = "forward") %>%
+0:#   summary()
+0:lm(price ~.,data=training_df) %>%
+0:stepAIC(direction = "forward") %>%
+0:summary()
+0:full_mod_AIC<-lm(price ~.,data=training_df) %>%
+0:stepAIC(full_mod, direction = "forward")
+0:full_mod_AIC
+0:full_mod_AIC<-lm(price ~.,data=training_df) %>%
+0:stepAIC(full_mod, direction = "forward")
+0:coef(full_mod_AIC)
+0:coef(full_mod_AIC) %>%typeof()
+0:coef(full_mod_AIC) %>% as.data.frame()
+0:full_mod_AIC<-lm(price ~.,data=training_df) %>%
+0:stepAIC(full_mod, direction = "forward")
+0:AICcoef <- coef(full_mod_AIC) %>% as.data.frame()
+0:rows_with_na <- which(is.na(AICcoef[2]))
+0:full_mod_AIC<-lm(price ~.,data=training_df) %>%
+0:stepAIC(full_mod, direction = "forward")
+0:AICcoef <- coef(full_mod_AIC) %>% as.data.frame()
+0:rows_with_na <- which(is.na(AICcoef[,2]))
+0:dim(AICcoef)
+0:full_mod_AIC<-lm(price ~.,data=training_df) %>%
+0:stepAIC(full_mod, direction = "forward")
+0:AICcoef <- coef(full_mod_AIC) %>% as.data.frame()
+0:rows_with_na <- which(is.na(AICcoef))
+0:rownames(AICcoef)[rows_with_na]
+0:full_mod_AIC<-lm(price ~.,data=training_df) %>%
+0:stepAIC(direction = "forward")
+0:summary(full_mod_AIC) %>% as.data.frame()
+0:full_mod_AIC<-lm(price ~.,data=training_df) %>%
+0:stepAIC(direction = "forward")
+0:summary(full_mod_AIC)
+0:full_mod_AIC<-lm(price ~.,data=training_df) %>%
+0:stepAIC(direction = "forward") %>%
+0:summary()
+0:lm(price ~.,data=training_df) %>%
+0:stepAIC(direction = "forward") %>%
+0:summary()
+0:lm(price ~.,data=training_df) %>%
+0:stepAIC(direction = "forward") %>%
+0:invisible() %>%
+0:summary()
+0:lm(price ~.,data=training_df) %>%
+0:stepAIC(direction = "forward") %>%
+0:summary()
+0:# Libraries
+0:library(leaps)
+0:library(tidyverse)
+0:library(here)
+0:library(knitr)
+0:library(kableExtra)
+0:library(MASS)
+0:library(glmnet)
+0:# Source of data
+0:source(here("R/01-write_data.R"))
+0:source(here("R/02-read_data.R"))
+0:# Source of functions
+0:source(here("R/generate_tiny_dat.R"))
+0:source(here("R/processdata.R"))
+0:source(here("R/showR2.R"))
+0:source(here("R/plotAll.R"))
+0:source(here("R/get_tr_tst.R"))
+0:# Libraries
+0:library(leaps)
+0:library(tidyverse)
+0:library(here)
+0:library(knitr)
+0:library(kableExtra)
+0:library(MASS)
+0:library(glmnet)
+0:# Source of data
+0:source(here("R/01-write_data.R"))
+0:source(here("R/02-read_data.R"))
+0:# Source of functions
+0:source(here("R/generate_tiny_dat.R"))
+0:source(here("R/processdata.R"))
+0:source(here("R/showR2.R"))
+0:source(here("R/plotAll.R"))
+0:# source(here("R/get_tr_tst.R"))
+0:generate_tiny_dat(automobile)
+0:generate_tiny_dat(automobile)
+0:# Libraries
+0:library(leaps)
+0:library(tidyverse)
+0:library(here)
+0:library(knitr)
+0:library(kableExtra)
+0:library(MASS)
+0:library(glmnet)
+0:# Source of data
+0:source(here("R/01-write_data.R"))
+0:source(here("R/02-read_data.R"))
+0:# Source of functions
+0:source(here("R/generate_tiny_dat.R"))
+0:source(here("R/processdata.R"))
+0:source(here("R/showR2.R"))
+0:source(here("R/plotAll.R"))
+0:# source(here("R/get_tr_tst.R"))
+0:generate_tiny_dat(automobile)
+0:library(testthat)
+0:library(here)
+0:source(here("R/get_model.R"))
+0:source(here("R/01-write_data.R"))
+0:source(here("R/01-write_data.R"))
+0:source(here("R/02-read_data.R"))
+0:problem(automobile)
+0:problems(automobile)
+0:problems(automobile)
+0:source(here("R/02-read_data.R"))
+0:dat <- vroom(automobile)
+0:vroom::problems(automobile)
+0:automobile <- read_csv(
+0:here("data/automobile.csv"),
+0:col_types = cols(
+0:symboling = col_factor(),
+0:`normalized-losses` = col_double(),
+0:make = col_factor(),
+0:`fuel-type` = col_factor(),
+0:aspiration = col_factor(),
+0:`num-of-doors` = col_factor(),
+0:`body-style` = col_factor(),
+0:`drive-wheels` = col_factor(),
+0:`engine-location` = col_factor(),
+0:`wheel-base` = col_double(),
+0:length = col_double(),
+0:width = col_double(),
+0:`curb-weight` = col_double(),
+0:`engine-type` = col_factor(),
+0:`num-of-cylinders` = col_factor(),
+0:`engine-size` = col_double(),
+0:`fuel-system` = col_factor(),
+0:bore = col_double(),
+0:stroke = col_double(),
+0:`compression-ratio` = col_double(),
+0:horsepower = col_double(),
+0:`peak-rpm` = col_double(),
+0:`city-mpg` = col_double(),
+0:`highway-mpg` = col_double(),
+0:price = col_double(),
+0:`?`=col_factor()
+0:)
+0:) %>%
+0:processdata()
+0:problems(automobile)
+0:?replace
+0:df<-read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.data",
+0:col_names=names) #%>%
+0:View(df)
+0:names<-c("symboling","normalized-losses","make","fuel-type","aspiration",
+0:"num-of-doors","body-style","drive-wheels","engine-location",
+0:"wheel-base","length","width","height","curb-weight","engine-type",
+0:"num-of-cylinders","engine-size","fuel-system","bore","stroke",
+0:"compression-ratio","horsepower","peak-rpm","city-mpg","highway-mpg","price")
+0:df<-read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.data",
+0:col_names=names) #%>%
+0:df<-read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.data",
+0:col_names=names) %>%
+0:replace("?",NA)
+0:df<-read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.data",
+0:col_names=names) #%>%
+0:df<-read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.data",
+0:col_names=names) #%>%
+0:replace(df, df == "?",NA)
+0:df<-read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.data",
+0:col_names=names) #%>%
+0:typeof(df$`normalized-losses`)
+0:df<-read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.data",
+0:col_names=names) #%>%
+0:my_data <- data.frame(x = c(1, 2, 3, 4, 5), y = c("a", "b", "?", "d", "?"))
+0:my_data <- replace(my_data, my_data == "?", NA)
+0:View(my_data)
+0:rm(df)
+0:df<-read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.data",
+0:col_names=names)
+0:View(df)
+0:df <- replace(df, df == "?", NA)
+0:write_csv(df, here("data/automobile.csv"))
+0:rm(df)
+0:rm(names)
+0:source(here("R/01-write_data.R"))
+0:source(here("R/02-read_data.R"))
+0:source(here("R/02-read_data.R"))
+0:View(automobile)
+0:# Libraries
+0:library(leaps)
+0:library(tidyverse)
+0:library(here)
+0:library(knitr)
+0:library(kableExtra)
+0:library(MASS)
+0:library(glmnet)
+0:# Source of data
+0:source(here("R/01-write_data.R"))
+0:source(here("R/02-read_data.R"))
+0:# Source of functions
+0:source(here("R/generate_tiny_dat.R"))
+0:source(here("R/processdata.R"))
+0:source(here("R/showR2.R"))
+0:source(here("R/plotAll.R"))
+0:source(here("R/get_model.R"))
+0:# Libraries
+0:library(leaps)
+0:library(tidyverse)
+0:library(here)
+0:library(knitr)
+0:library(kableExtra)
+0:library(MASS)
+0:library(glmnet)
+0:# Source of data
+0:source(here("R/01-write_data.R"))
+0:source(here("R/02-read_data.R"))
+0:# Source of functions
+0:source(here("R/generate_tiny_dat.R"))
+0:source(here("R/processdata.R"))
+0:source(here("R/showR2.R"))
+0:source(here("R/plotAll.R"))
+0:source(here("R/get_model.R"))
+0:View(automobile)
+1678646184926:library(remotes)
+1678646241764:install_github("rstudio/ggcheck@0.0.4")
+1678646248364:install_github("rstudio/ggcheck@0.0.3")
+1678646255767:install_github("rstudio/ggcheck")
+1678646658921:library(ggcheck)
+1678646667231:remove.packages("ggcheck")
+1678646684535:install_version("rstudio/ggcheck","0.0.4")
+1678646696301:install_version("ggcheck","0.0.4")

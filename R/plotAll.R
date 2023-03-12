@@ -11,6 +11,7 @@
 #' 
 #' @param data A dataframe
 #' @param nms The names of our predictor variables
+#' @param to_print whether to print or not
 #'
 #' @return All the plots
 #'
