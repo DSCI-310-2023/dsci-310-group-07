@@ -7,6 +7,8 @@ library(testthat)
 library(here)
 
 source(here("R/processdata.R"))
+source(here("R/01-write_data.R"))
+source(here("R/02-read_data.R"))
 
-expect_equal(colnames(processdata(df)[,26]),"price")
-expect_equal(nrow(processdata(df)[,26]),205)
+expect_equal(colnames(processdata(automobile)[,25]),"highway-mpg")
+expect_equal(nrow(processdata(automobile)[,25]),205)
