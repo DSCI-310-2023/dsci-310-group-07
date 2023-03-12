@@ -6,16 +6,10 @@
 ##remove ID variables
 
 ##get testing set and training set with out id
-##at training set is get_tr_tst(automobile,"at")[1]
-##at testing set is get_tr_tst(automobile,"at")[2]
 
 ##get testing set and training set with id
-##training set is get_tr_tst(automobile,"basic")[1]
-##testing set is get_tr_tst(automobile,"basic")[2] 
 
 ##get testing set and training set for ridge and lasso model
-##training set is get_tr_tst(automobile,"sub")[1]
-##testing set is get_tr_tst(automobile,"sub")[2] 
 
 library(glmnet)
 
@@ -81,10 +75,6 @@ get_tr_tst<-function(automobile,set="at"){
 ###Purpose:
 ##get training and testing matrix for x,y for lasso and ridge models
 ##split training and test in to x matrix and y matrix
-## x_train_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="training")[[1]]
-## y_train_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="training")[[2]]
-## x_test_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="testing")[[1]]
-## y_test_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="testing")[[2]]
 
 
 get_trm_tsm<-function(training_df_sub,testing_df_sub,set="training"){
@@ -111,43 +101,47 @@ get_trm_tsm<-function(training_df_sub,testing_df_sub,set="training"){
 }
 
 
-
+###purpose:
+## get models or plots for lasso or ridge
 get_model_plot <- function(x_train_mat, y_train_mat, model = "lasso", ask = "modeling") {
   set.seed(123)
   if (model == "lasso") {
     lasso_cv <- cv.glmnet(x = x_train_mat, y = y_train_mat, alpha = 1, nfolds = 10)
     if (ask == "plot") {
       plot(lasso_cv, main = "MSE of LASSO estimated by CV for different lambdas\n\n")
+    } 
+    else if (ask == "modeling") {
+      lasso_mod <- glmnet(x = x_train_mat, y = y_train_mat, alpha = 1, lambda = lasso_cv$lambda.min)
+      lasso_mod_1se <- glmnet(x = x_train_mat, y = y_train_mat, alpha = 1, lambda = lasso_cv$lambda.1se)
+      return(list(lasso_mod, lasso_mod_1se, lasso_cv))
+    } 
+    else {
+      warning("ask should be modeling or plot")
     }
-    
-    lasso_mod <- glmnet(x = x_train_mat, y = y_train_mat, alpha = 1, lambda = lasso_cv$lambda.min)
-    lasso_mod_1se <- glmnet(x = x_train_mat, y = y_train_mat, alpha = 1, lambda = lasso_cv$lambda.1se)
-    
-    if (ask == "modeling") {
-      return(list(lasso_mod, lasso_mod_1se,lasso_cv))
-    }
-  }
-  
+  } 
   else if (model == "ridge") {
     ridge_cv <- cv.glmnet(x = x_train_mat, y = y_train_mat, alpha = 0, nfolds = 10)
     if (ask == "plot") {
       plot(ridge_cv, main = "MSE of Ridge estimated by CV for different lambdas\n\n")
+    } 
+    else if (ask == "modeling") {
+      ridge_mod <- glmnet(x = x_train_mat, y = y_train_mat, alpha = 0, lambda = ridge_cv$lambda.min)
+      ridge_mod_1se <- glmnet(x = x_train_mat, y = y_train_mat, alpha = 0, lambda = ridge_cv$lambda.1se)
+      return(list(ridge_mod, ridge_mod_1se, ridge_cv))
+    } 
+    else {
+      warning("ask should be modeling or plot")
     }
-    
-    ridge_mod <- glmnet(x = x_train_mat, y = y_train_mat, alpha = 0, lambda = ridge_cv$lambda.min)
-    ridge_mod_1se <- glmnet(x = x_train_mat, y = y_train_mat, alpha = 0, lambda = ridge_cv$lambda.1se)
-    
-    if (ask == "modeling") {
-      return(list(ridge_mod, ridge_mod_1se,ridge_cv))
-    }
-  }
-  
+  } 
   else {
     warning("model should be lasso or ridge")
   }
 }
 
 
+###purpose:
+## get rmse for the lasso minimum rmse, ridge minimum rmse, lasso 1se rmse,
+## ridge 1se rmse and ols rmse
 get_er_cv<-function(training_df_at,training_df_sub,kfolds=10,lasso_cv,ridge_cv){
   set.seed(123)
   
