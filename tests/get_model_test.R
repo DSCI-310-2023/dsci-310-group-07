@@ -53,13 +53,13 @@ testing_df_at<-get_tr_tst(df,"at")[[2]]
 
 
 expect_equal(ncol(get_trm_tsm(training_df_sub,testing_df_sub,set="training")[[1]]),
-             18)
+             19)
 
 expect_equal(ncol(get_trm_tsm(training_df_sub,testing_df_sub,set="training")[[2]]),
              NULL)
 
 expect_equal(ncol(get_trm_tsm(training_df_sub,testing_df_sub,set="testing")[[1]]),
-             18)
+             19)
 
 expect_equal(ncol(get_trm_tsm(training_df_sub,testing_df_sub,set="testing")[[2]]),
              NULL)
