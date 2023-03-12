@@ -5,14 +5,20 @@
 ##split data into training and testing
 ##remove ID variables
 
-##get testing set and training set with out id
-
-##get testing set and training set with id
-
-##get testing set and training set for ridge and lasso model
-
 library(glmnet)
 
+#' Take the full dataset into traning or testing set
+#'    
+#' @param automobile the automobile dataframe
+#' @param set decide the type of dataset.
+#'            If "at", all columns except ID;
+#'            if "basic", all columns;
+#'            if "sub", columns except ID or categorical variables with more than 2 levels
+#' 
+#' @return a list of training dataframes or testing dataframes with or without id
+#' 
+#' @examples
+#' get_tr_tst(dat)
 get_tr_tst<-function(automobile,set="at"){
   set.seed(123)
   
@@ -72,11 +78,18 @@ get_tr_tst<-function(automobile,set="at"){
   
 }
 
-###Purpose:
-##get training and testing matrix for x,y for lasso and ridge models
-##split training and test in to x matrix and y matrix
 
 
+#' Get training and testing matrix x,y for lasso and ridge models
+#'    
+#' @param training_df_sub the training set without ID or categorical variables with more than 2 levels
+#' @param testing_df_sub the concise testing set without ID or categorical variables with more than 2 levels
+#' @param set whether the desired output is training or testing matrices
+#' 
+#' @return a list of matrices (x and y) for training or testing
+#' 
+#' @examples
+#' get_trm_tsm(training_df_sub, testing_df_sub, "testing")
 get_trm_tsm<-function(training_df_sub,testing_df_sub,set="training"){
   
   #training matrix
@@ -101,8 +114,17 @@ get_trm_tsm<-function(training_df_sub,testing_df_sub,set="training"){
 }
 
 
-###purpose:
-## get models or plots for lasso or ridge
+#' Get models or plots for lasso or ridge
+#'    
+#' @param x_train_mat training matrix x (explanatory variables)
+#' @param y_train_mat training matrix y (response variable)
+#' @param model whether it is ridge or lasso
+#' @param ask whether it is for plot or the model
+#' 
+#' @return a ridge/lasso model/plot depends on the input
+#' 
+#' @examples
+#' get_model_plot(x_train_mat, y_train_mat, "lasso", "plot")
 get_model_plot <- function(x_train_mat, y_train_mat, model = "lasso", ask = "modeling") {
   set.seed(123)
   if (model == "lasso") {
@@ -138,10 +160,18 @@ get_model_plot <- function(x_train_mat, y_train_mat, model = "lasso", ask = "mod
   }
 }
 
-
-###purpose:
-## get rmse for the lasso minimum rmse, ridge minimum rmse, lasso 1se rmse,
-## ridge 1se rmse and ols rmse
+#' Get rmse for the lasso minimum rmse, ridge minimum rmse, lasso 1se rmse, ridge 1se rmse and ols rmse
+#'    
+#' @param training_df_at full traning dataset except ID
+#' @param training_df_sub training dataset without catergorical variables with more than 2 levels
+#' @param kfolds number of folds in cross-validataion, 10 by defult
+#' @param lasso_cv lasso regression model
+#' @param ridge_cv ridge regression model
+#' 
+#' @return a table of rmse for different models 
+#' 
+#' @examples
+#' get_er_cv(training_df_at, training_df_sub, 10,lasso_cv,ridge_cv)
 get_er_cv<-function(training_df_at,training_df_sub,kfolds=10,lasso_cv,ridge_cv){
   set.seed(123)
   
