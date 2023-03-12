@@ -30,7 +30,8 @@ automobile <- read_csv(
     `peak-rpm` = col_double(),
     `city-mpg` = col_double(),
     `highway-mpg` = col_double(),
-    price = col_double()
+    price = col_double(),
+    `?`=col_factor()
   )
 ) %>%
   processdata()

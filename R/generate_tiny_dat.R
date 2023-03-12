@@ -15,6 +15,8 @@
 #' @examples
 #' generate_tiny_dat(dataset)
 
+library(tidyverse)
+#' using %>% from tidyverse
 generate_tiny_dat <- function(dat) {
   dat <- dat %>% na.omit()
   if (nrow(dat <= 20)) {
