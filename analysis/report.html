@@ -11,7 +11,7 @@
 
 <meta name="author" content="DSCI310 Group 07: Harbor Zhang, Jiaying Liao, Ning Wang, Xiwen Wei" />
 
-<meta name="date" content="2023-03-10" />
+<meta name="date" content="2023-03-11" />
 
 <title>Predicting Car Prices Based on Certain Characteristics</title>
 
@@ -578,7 +578,7 @@ display: none;
 Characteristics</h1>
 <h4 class="author">DSCI310 Group 07: Harbor Zhang, Jiaying Liao, Ning
 Wang, Xiwen Wei</h4>
-<h4 class="date">2023-03-10</h4>
+<h4 class="date">2023-03-11</h4>
 
 </div>
 
@@ -757,8 +757,8 @@ bottom and top of the piston’s stroke.</td>
 </div>
 <div id="preliminary-analysis" class="section level2">
 <h2><strong>Preliminary Analysis</strong></h2>
-<p>In this section, we load and clean the data. Note that the last
-column <code>?</code> with all values are is removed.</p>
+<p>In this section, we load and clean the data. Note that the all
+<code>?</code> are replaced with <code>NA</code>.</p>
 <table>
 <caption>Row 1 to 6, Column 1 to 13 in Automobile Dataset</caption>
 <thead>
@@ -872,7 +872,7 @@ column <code>?</code> with all values are is removed.</p>
 </tbody>
 </table>
 <table>
-<caption>Row 1 to 6, Column 14 to 26 in Automobile Dataset</caption>
+<caption>Row 1 to 6, Column 14 to 25 in Automobile Dataset</caption>
 <thead>
 <tr class="header">
 <th align="right">curb-weight</th>
@@ -1141,7 +1141,7 @@ two : 89
 four:114
 </td>
 <td style="text-align:left;">
-? : 2
+NA’s: 2
 </td>
 <td style="text-align:left;">
 </td>
@@ -1654,8 +1654,8 @@ NA’s :4
 </tr>
 </tbody>
 </table>
-<p>There are 45 rows that contain NA values. And the number of rows that
-have complete observations are 160.</p>
+<p>There are 46 rows that contain NA values. And the number of rows that
+have complete observations are 159.</p>
 <div id="exploratory-data-analysis" class="section level4">
 <h4><strong>Exploratory Data Analysis</strong></h4>
 <p>Next, we will perform EDA to better understand the variables that we
@@ -1799,7 +1799,7 @@ sapply(lapply(na.omit(automobile), unique), length)</code></pre>
 <pre><code>##         symboling normalized-losses              make         fuel-type 
 ##                 6                51                18                 2 
 ##        aspiration      num-of-doors        body-style      drive-wheels 
-##                 2                 3                 5                 3 
+##                 2                 2                 5                 3 
 ##   engine-location        wheel-base            length             width 
 ##                 1                40                56                33 
 ##            height       curb-weight       engine-type  num-of-cylinders 
@@ -1809,17 +1809,12 @@ sapply(lapply(na.omit(automobile), unique), length)</code></pre>
 ## compression-ratio        horsepower          peak-rpm          city-mpg 
 ##                29                48                20                25 
 ##       highway-mpg             price 
-##                28               146</code></pre>
+##                28               145</code></pre>
 <p>Since lm will automatically omit the NA values in data, we check the
 number of unique values if NA is removed. We notice that after we omit
 NA, the levels of engine-location appears to be 1. This will cause
 contrasts since we need a categorical variables to be factors with 2 or
 more levels. Thus we need to remove <code>engine-location</code>.</p>
-<pre class="r"><code>levels(automobile$`num-of-doors`)</code></pre>
-<pre><code>## [1] &quot;two&quot;  &quot;four&quot; &quot;?&quot;</code></pre>
-<p>We also check the levels in <code>num-of-doors</code> and realize
-that one of the levels is <code>?</code>, which also appears to be an NA
-value. Thus, we need to remove it.</p>
 <p>First the data is prepared. The variable <code>num-of-doors</code>
 needs to be converted to characters and have <code>?</code>s removed and
 the variable <code>engine-location</code> is dropped. Them, the dataset

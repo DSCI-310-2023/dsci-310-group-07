@@ -28,7 +28,7 @@ source(here("R/generate_tiny_dat.R"))
 source(here("R/processdata.R"))
 source(here("R/showR2.R"))
 source(here("R/plotAll.R"))
-# source(here("R/get_tr_tst.R"))
+source(here("R/get_model.R"))
 
 ```
 
@@ -73,7 +73,7 @@ Variable|Type|Description|
 |price|Numerical|Price of car in USD ($)|
 
 ## **Preliminary Analysis**
-In this section, we load and clean the data. Note that the last column `?` with all values are is removed.
+In this section, we load and clean the data. Note that the all `?` are replaced with `NA`.
 
 
 ```{r read data, echo=FALSE, message=FALSE, warning=FALSE}
@@ -87,7 +87,7 @@ head(automobile[,1:13]) %>%
 head(automobile[,14:26]) %>% 
   kable(digits = 3,
         format = "simple",
-        caption = "Row 1 to 6, Column 14 to 26 in Automobile Dataset") %>%
+        caption = "Row 1 to 6, Column 14 to 25 in Automobile Dataset") %>%
   kable_styling(bootstrap_options = c("striped",
                                       "hover",
                                       "condensed"))
@@ -165,12 +165,6 @@ sapply(lapply(na.omit(automobile), unique), length)
 ```
 
 Since lm will automatically omit the NA values in data, we check the number of unique values if NA is removed. We notice that after we omit NA, the levels of engine-location appears to be 1. This will cause contrasts since we need a categorical variables to be factors with 2 or more levels. Thus we need to remove `engine-location`.
-
-```{r level of num-of-doors, message=FALSE, warning=FALSE}
-levels(automobile$`num-of-doors`)
-```
-
-We also check the levels in `num-of-doors` and realize that one of the levels is `?`, which also appears to be an NA value. Thus, we need to remove it.
 
 First the data is prepared. The variable `num-of-doors` needs to be converted to characters and have `?`s removed and the variable `engine-location` is dropped. Them, the dataset is split into two data sets - training and testing using a 70-30% basis and the ID variables are removed.
 
