@@ -50,6 +50,7 @@ R version 4.1.3 and R packages as follows:
  * testthat:3.1.3
  * here:1.0.1
  * knitr:1.38
+ * ggcheck:0.0.4
     
 
 ## License Information
