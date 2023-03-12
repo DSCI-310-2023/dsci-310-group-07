@@ -19,7 +19,7 @@ library(tidyverse)
 #' using %>% from tidyverse
 generate_tiny_dat <- function(dat) {
   dat <- dat %>% na.omit()
-  if (nrow(dat <= 20)) {
+  if (nrow(dat) <= 20) {
     return(dat)
   } else {
     return(dat %>% head(20))
