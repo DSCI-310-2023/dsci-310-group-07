@@ -24,10 +24,13 @@ names <-
 plots <- plotAll(automobile,names,FALSE)
 
 # tests
-expect_equal(length(plots), 12)
-expect_true(uses_geoms(plots[[1]], 
-                       c("histogram"), 
-                       exact = FALSE))
-expect_true(uses_geoms(plots[[2]], 
-                       c("point", "smooth"), 
-                       exact = FALSE))
+test_that("The function doesn't produce the correct number of plots",
+          expect_equal(length(plots), 12))
+test_that("The output is not an histogram",
+          expect_true(uses_geoms(plots[[1]], 
+                                 c("histogram"), 
+                                 exact = FALSE)))
+test_that("The output is not an scatterplot with line",
+          expect_true(uses_geoms(plots[[2]], 
+                                 c("point", "smooth"), 
+                                 exact = FALSE)))
