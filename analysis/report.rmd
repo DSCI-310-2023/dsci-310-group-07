@@ -28,7 +28,7 @@ source(here("R/generate_tiny_dat.R"))
 source(here("R/processdata.R"))
 source(here("R/showR2.R"))
 source(here("R/plotAll.R"))
-source(here("R/get_tr_tst.R"))
+# source(here("R/get_tr_tst.R"))
 
 ```
 
