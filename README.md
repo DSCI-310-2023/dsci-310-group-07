@@ -40,7 +40,14 @@ docker run --rm -p 8787:8787 -e PASSWORD=12345 -v /$(pwd):/home/rstudio/project 
 
 Open localhost:8787 on your browser. You can see the project on `/home/rstudio/project`.
 
-On the bottom right panel, click into `project`, you will be able to see a folder `analysis`. Go to `analysis`, you can click on `report.html`, and select `View in Web Browser` to see the knitted html report. 
+On the bottom right panel, click into `project`, you will be able to see a folder `analysis`. 
+
+Go to `analysis`, you can click on `report.html`, and select `View in Web Browser` to see the knitted html report. 
+
+You can also run the report with the following steps:
+ * In `analysis`, click on `report.rmd`. 
+ * Now `report.rmd` can be seen on the top left panel. 
+ * Run each code chunck by clicking the green triangles. Make sure you run all the chuncks above the chunk you want to run, otherwise, there will be error.
 
 ## Dependencies
 
