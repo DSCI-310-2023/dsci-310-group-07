@@ -11,7 +11,7 @@
 
 <meta name="author" content="DSCI310 Group 07: Harbor Zhang, Jiaying Liao, Ning Wang, Xiwen Wei" />
 
-<meta name="date" content="2023-03-11" />
+<meta name="date" content="2023-03-21" />
 
 <title>Predicting Car Prices Based on Certain Characteristics</title>
 
@@ -578,7 +578,7 @@ display: none;
 Characteristics</h1>
 <h4 class="author">DSCI310 Group 07: Harbor Zhang, Jiaying Liao, Ning
 Wang, Xiwen Wei</h4>
-<h4 class="date">2023-03-11</h4>
+<h4 class="date">2023-03-21</h4>
 
 </div>
 
@@ -759,227 +759,595 @@ bottom and top of the piston’s stroke.</td>
 <h2><strong>Preliminary Analysis</strong></h2>
 <p>In this section, we load and clean the data. Note that the all
 <code>?</code> are replaced with <code>NA</code>.</p>
-<table>
-<caption>Row 1 to 6, Column 1 to 13 in Automobile Dataset</caption>
+<table class="table table-striped table-hover table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Row 1 to 6, Column 1 to 13 in Automobile Dataset
+</caption>
 <thead>
-<tr class="header">
-<th align="left">symboling</th>
-<th align="right">normalized-losses</th>
-<th align="left">make</th>
-<th align="left">fuel-type</th>
-<th align="left">aspiration</th>
-<th align="left">num-of-doors</th>
-<th align="left">body-style</th>
-<th align="left">drive-wheels</th>
-<th align="left">engine-location</th>
-<th align="right">wheel-base</th>
-<th align="right">length</th>
-<th align="right">width</th>
-<th align="right">height</th>
+<tr>
+<th style="text-align:left;">
+symboling
+</th>
+<th style="text-align:right;">
+normalized-losses
+</th>
+<th style="text-align:left;">
+make
+</th>
+<th style="text-align:left;">
+fuel-type
+</th>
+<th style="text-align:left;">
+aspiration
+</th>
+<th style="text-align:left;">
+num-of-doors
+</th>
+<th style="text-align:left;">
+body-style
+</th>
+<th style="text-align:left;">
+drive-wheels
+</th>
+<th style="text-align:left;">
+engine-location
+</th>
+<th style="text-align:right;">
+wheel-base
+</th>
+<th style="text-align:right;">
+length
+</th>
+<th style="text-align:right;">
+width
+</th>
+<th style="text-align:right;">
+height
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">3</td>
-<td align="right">NA</td>
-<td align="left">alfa-romero</td>
-<td align="left">gas</td>
-<td align="left">std</td>
-<td align="left">two</td>
-<td align="left">convertible</td>
-<td align="left">rwd</td>
-<td align="left">front</td>
-<td align="right">88.6</td>
-<td align="right">168.8</td>
-<td align="right">64.1</td>
-<td align="right">48.8</td>
+<tr>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+alfa-romero
+</td>
+<td style="text-align:left;">
+gas
+</td>
+<td style="text-align:left;">
+std
+</td>
+<td style="text-align:left;">
+two
+</td>
+<td style="text-align:left;">
+convertible
+</td>
+<td style="text-align:left;">
+rwd
+</td>
+<td style="text-align:left;">
+front
+</td>
+<td style="text-align:right;">
+88.6
+</td>
+<td style="text-align:right;">
+168.8
+</td>
+<td style="text-align:right;">
+64.1
+</td>
+<td style="text-align:right;">
+48.8
+</td>
 </tr>
-<tr class="even">
-<td align="left">3</td>
-<td align="right">NA</td>
-<td align="left">alfa-romero</td>
-<td align="left">gas</td>
-<td align="left">std</td>
-<td align="left">two</td>
-<td align="left">convertible</td>
-<td align="left">rwd</td>
-<td align="left">front</td>
-<td align="right">88.6</td>
-<td align="right">168.8</td>
-<td align="right">64.1</td>
-<td align="right">48.8</td>
+<tr>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+alfa-romero
+</td>
+<td style="text-align:left;">
+gas
+</td>
+<td style="text-align:left;">
+std
+</td>
+<td style="text-align:left;">
+two
+</td>
+<td style="text-align:left;">
+convertible
+</td>
+<td style="text-align:left;">
+rwd
+</td>
+<td style="text-align:left;">
+front
+</td>
+<td style="text-align:right;">
+88.6
+</td>
+<td style="text-align:right;">
+168.8
+</td>
+<td style="text-align:right;">
+64.1
+</td>
+<td style="text-align:right;">
+48.8
+</td>
 </tr>
-<tr class="odd">
-<td align="left">1</td>
-<td align="right">NA</td>
-<td align="left">alfa-romero</td>
-<td align="left">gas</td>
-<td align="left">std</td>
-<td align="left">two</td>
-<td align="left">hatchback</td>
-<td align="left">rwd</td>
-<td align="left">front</td>
-<td align="right">94.5</td>
-<td align="right">171.2</td>
-<td align="right">65.5</td>
-<td align="right">52.4</td>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+alfa-romero
+</td>
+<td style="text-align:left;">
+gas
+</td>
+<td style="text-align:left;">
+std
+</td>
+<td style="text-align:left;">
+two
+</td>
+<td style="text-align:left;">
+hatchback
+</td>
+<td style="text-align:left;">
+rwd
+</td>
+<td style="text-align:left;">
+front
+</td>
+<td style="text-align:right;">
+94.5
+</td>
+<td style="text-align:right;">
+171.2
+</td>
+<td style="text-align:right;">
+65.5
+</td>
+<td style="text-align:right;">
+52.4
+</td>
 </tr>
-<tr class="even">
-<td align="left">2</td>
-<td align="right">164</td>
-<td align="left">audi</td>
-<td align="left">gas</td>
-<td align="left">std</td>
-<td align="left">four</td>
-<td align="left">sedan</td>
-<td align="left">fwd</td>
-<td align="left">front</td>
-<td align="right">99.8</td>
-<td align="right">176.6</td>
-<td align="right">66.2</td>
-<td align="right">54.3</td>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+164
+</td>
+<td style="text-align:left;">
+audi
+</td>
+<td style="text-align:left;">
+gas
+</td>
+<td style="text-align:left;">
+std
+</td>
+<td style="text-align:left;">
+four
+</td>
+<td style="text-align:left;">
+sedan
+</td>
+<td style="text-align:left;">
+fwd
+</td>
+<td style="text-align:left;">
+front
+</td>
+<td style="text-align:right;">
+99.8
+</td>
+<td style="text-align:right;">
+176.6
+</td>
+<td style="text-align:right;">
+66.2
+</td>
+<td style="text-align:right;">
+54.3
+</td>
 </tr>
-<tr class="odd">
-<td align="left">2</td>
-<td align="right">164</td>
-<td align="left">audi</td>
-<td align="left">gas</td>
-<td align="left">std</td>
-<td align="left">four</td>
-<td align="left">sedan</td>
-<td align="left">4wd</td>
-<td align="left">front</td>
-<td align="right">99.4</td>
-<td align="right">176.6</td>
-<td align="right">66.4</td>
-<td align="right">54.3</td>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+164
+</td>
+<td style="text-align:left;">
+audi
+</td>
+<td style="text-align:left;">
+gas
+</td>
+<td style="text-align:left;">
+std
+</td>
+<td style="text-align:left;">
+four
+</td>
+<td style="text-align:left;">
+sedan
+</td>
+<td style="text-align:left;">
+4wd
+</td>
+<td style="text-align:left;">
+front
+</td>
+<td style="text-align:right;">
+99.4
+</td>
+<td style="text-align:right;">
+176.6
+</td>
+<td style="text-align:right;">
+66.4
+</td>
+<td style="text-align:right;">
+54.3
+</td>
 </tr>
-<tr class="even">
-<td align="left">2</td>
-<td align="right">NA</td>
-<td align="left">audi</td>
-<td align="left">gas</td>
-<td align="left">std</td>
-<td align="left">two</td>
-<td align="left">sedan</td>
-<td align="left">fwd</td>
-<td align="left">front</td>
-<td align="right">99.8</td>
-<td align="right">177.3</td>
-<td align="right">66.3</td>
-<td align="right">53.1</td>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+audi
+</td>
+<td style="text-align:left;">
+gas
+</td>
+<td style="text-align:left;">
+std
+</td>
+<td style="text-align:left;">
+two
+</td>
+<td style="text-align:left;">
+sedan
+</td>
+<td style="text-align:left;">
+fwd
+</td>
+<td style="text-align:left;">
+front
+</td>
+<td style="text-align:right;">
+99.8
+</td>
+<td style="text-align:right;">
+177.3
+</td>
+<td style="text-align:right;">
+66.3
+</td>
+<td style="text-align:right;">
+53.1
+</td>
 </tr>
 </tbody>
 </table>
-<table>
-<caption>Row 1 to 6, Column 14 to 25 in Automobile Dataset</caption>
+<table class="table table-striped table-hover table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Row 1 to 6, Column 14 to 26 in Automobile Dataset
+</caption>
 <thead>
-<tr class="header">
-<th align="right">curb-weight</th>
-<th align="left">engine-type</th>
-<th align="left">num-of-cylinders</th>
-<th align="right">engine-size</th>
-<th align="left">fuel-system</th>
-<th align="right">bore</th>
-<th align="right">stroke</th>
-<th align="right">compression-ratio</th>
-<th align="right">horsepower</th>
-<th align="right">peak-rpm</th>
-<th align="right">city-mpg</th>
-<th align="right">highway-mpg</th>
-<th align="right">price</th>
+<tr>
+<th style="text-align:right;">
+curb-weight
+</th>
+<th style="text-align:left;">
+engine-type
+</th>
+<th style="text-align:left;">
+num-of-cylinders
+</th>
+<th style="text-align:right;">
+engine-size
+</th>
+<th style="text-align:left;">
+fuel-system
+</th>
+<th style="text-align:right;">
+bore
+</th>
+<th style="text-align:right;">
+stroke
+</th>
+<th style="text-align:right;">
+compression-ratio
+</th>
+<th style="text-align:right;">
+horsepower
+</th>
+<th style="text-align:right;">
+peak-rpm
+</th>
+<th style="text-align:right;">
+city-mpg
+</th>
+<th style="text-align:right;">
+highway-mpg
+</th>
+<th style="text-align:right;">
+price
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="right">2548</td>
-<td align="left">dohc</td>
-<td align="left">four</td>
-<td align="right">130</td>
-<td align="left">mpfi</td>
-<td align="right">3.47</td>
-<td align="right">2.68</td>
-<td align="right">9.0</td>
-<td align="right">111</td>
-<td align="right">5000</td>
-<td align="right">21</td>
-<td align="right">27</td>
-<td align="right">13495</td>
+<tr>
+<td style="text-align:right;">
+2548
+</td>
+<td style="text-align:left;">
+dohc
+</td>
+<td style="text-align:left;">
+four
+</td>
+<td style="text-align:right;">
+130
+</td>
+<td style="text-align:left;">
+mpfi
+</td>
+<td style="text-align:right;">
+3.47
+</td>
+<td style="text-align:right;">
+2.68
+</td>
+<td style="text-align:right;">
+9.0
+</td>
+<td style="text-align:right;">
+111
+</td>
+<td style="text-align:right;">
+5000
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:right;">
+13495
+</td>
 </tr>
-<tr class="even">
-<td align="right">2548</td>
-<td align="left">dohc</td>
-<td align="left">four</td>
-<td align="right">130</td>
-<td align="left">mpfi</td>
-<td align="right">3.47</td>
-<td align="right">2.68</td>
-<td align="right">9.0</td>
-<td align="right">111</td>
-<td align="right">5000</td>
-<td align="right">21</td>
-<td align="right">27</td>
-<td align="right">16500</td>
+<tr>
+<td style="text-align:right;">
+2548
+</td>
+<td style="text-align:left;">
+dohc
+</td>
+<td style="text-align:left;">
+four
+</td>
+<td style="text-align:right;">
+130
+</td>
+<td style="text-align:left;">
+mpfi
+</td>
+<td style="text-align:right;">
+3.47
+</td>
+<td style="text-align:right;">
+2.68
+</td>
+<td style="text-align:right;">
+9.0
+</td>
+<td style="text-align:right;">
+111
+</td>
+<td style="text-align:right;">
+5000
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:right;">
+16500
+</td>
 </tr>
-<tr class="odd">
-<td align="right">2823</td>
-<td align="left">ohcv</td>
-<td align="left">six</td>
-<td align="right">152</td>
-<td align="left">mpfi</td>
-<td align="right">2.68</td>
-<td align="right">3.47</td>
-<td align="right">9.0</td>
-<td align="right">154</td>
-<td align="right">5000</td>
-<td align="right">19</td>
-<td align="right">26</td>
-<td align="right">16500</td>
+<tr>
+<td style="text-align:right;">
+2823
+</td>
+<td style="text-align:left;">
+ohcv
+</td>
+<td style="text-align:left;">
+six
+</td>
+<td style="text-align:right;">
+152
+</td>
+<td style="text-align:left;">
+mpfi
+</td>
+<td style="text-align:right;">
+2.68
+</td>
+<td style="text-align:right;">
+3.47
+</td>
+<td style="text-align:right;">
+9.0
+</td>
+<td style="text-align:right;">
+154
+</td>
+<td style="text-align:right;">
+5000
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+26
+</td>
+<td style="text-align:right;">
+16500
+</td>
 </tr>
-<tr class="even">
-<td align="right">2337</td>
-<td align="left">ohc</td>
-<td align="left">four</td>
-<td align="right">109</td>
-<td align="left">mpfi</td>
-<td align="right">3.19</td>
-<td align="right">3.40</td>
-<td align="right">10.0</td>
-<td align="right">102</td>
-<td align="right">5500</td>
-<td align="right">24</td>
-<td align="right">30</td>
-<td align="right">13950</td>
+<tr>
+<td style="text-align:right;">
+2337
+</td>
+<td style="text-align:left;">
+ohc
+</td>
+<td style="text-align:left;">
+four
+</td>
+<td style="text-align:right;">
+109
+</td>
+<td style="text-align:left;">
+mpfi
+</td>
+<td style="text-align:right;">
+3.19
+</td>
+<td style="text-align:right;">
+3.40
+</td>
+<td style="text-align:right;">
+10.0
+</td>
+<td style="text-align:right;">
+102
+</td>
+<td style="text-align:right;">
+5500
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+13950
+</td>
 </tr>
-<tr class="odd">
-<td align="right">2824</td>
-<td align="left">ohc</td>
-<td align="left">five</td>
-<td align="right">136</td>
-<td align="left">mpfi</td>
-<td align="right">3.19</td>
-<td align="right">3.40</td>
-<td align="right">8.0</td>
-<td align="right">115</td>
-<td align="right">5500</td>
-<td align="right">18</td>
-<td align="right">22</td>
-<td align="right">17450</td>
+<tr>
+<td style="text-align:right;">
+2824
+</td>
+<td style="text-align:left;">
+ohc
+</td>
+<td style="text-align:left;">
+five
+</td>
+<td style="text-align:right;">
+136
+</td>
+<td style="text-align:left;">
+mpfi
+</td>
+<td style="text-align:right;">
+3.19
+</td>
+<td style="text-align:right;">
+3.40
+</td>
+<td style="text-align:right;">
+8.0
+</td>
+<td style="text-align:right;">
+115
+</td>
+<td style="text-align:right;">
+5500
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:right;">
+17450
+</td>
 </tr>
-<tr class="even">
-<td align="right">2507</td>
-<td align="left">ohc</td>
-<td align="left">five</td>
-<td align="right">136</td>
-<td align="left">mpfi</td>
-<td align="right">3.19</td>
-<td align="right">3.40</td>
-<td align="right">8.5</td>
-<td align="right">110</td>
-<td align="right">5500</td>
-<td align="right">19</td>
-<td align="right">25</td>
-<td align="right">15250</td>
+<tr>
+<td style="text-align:right;">
+2507
+</td>
+<td style="text-align:left;">
+ohc
+</td>
+<td style="text-align:left;">
+five
+</td>
+<td style="text-align:right;">
+136
+</td>
+<td style="text-align:left;">
+mpfi
+</td>
+<td style="text-align:right;">
+3.19
+</td>
+<td style="text-align:right;">
+3.40
+</td>
+<td style="text-align:right;">
+8.5
+</td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:right;">
+5500
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+15250
+</td>
 </tr>
 </tbody>
 </table>
@@ -989,7 +1357,10 @@ cell is a value, which means there is not a lot of data tidying to do.
 We will first check the number of NA values in each column, the number
 of levels in columns that are categorical variables, and the summary
 statistics of each variable.</p>
-<table class="table table-striped table-hover table-condensed" style="margin-left: auto; margin-right: auto;">
+<table class="table table-striped table-hover table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Summary of Automobile
+</caption>
 <thead>
 <tr>
 <th style="text-align:left;">
@@ -1673,13 +2044,16 @@ their R^2 value.</p>
 of our predicted variables.</p>
 <pre class="r"><code>top8 &lt;- showR2(automobile, 8)</code></pre>
 <table class="table table-striped table-hover table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+The 8 variables with highest R^2
+</caption>
 <thead>
 <tr>
 <th style="text-align:right;">
 R^2
 </th>
 <th style="text-align:left;">
-Variable
+names
 </th>
 </tr>
 </thead>
@@ -2004,10 +2378,14 @@ evaluate the predicted models, which is clearly summarised in the tibble
 below.</p>
 <pre class="r"><code>lasso_cv&lt;-get_model_plot(x_train_mat,y_train_mat,model=&quot;lasso&quot;,ask=&quot;modeling&quot;)[[3]]
 ridge_cv&lt;-get_model_plot(x_train_mat,y_train_mat,model=&quot;ridge&quot;,ask=&quot;modeling&quot;)[[3]]
-get_er_cv(training_df_at,training_df_sub,kfolds=10,lasso_cv,ridge_cv) %&gt;% 
-  kable(digits = 3) %&gt;%
-  kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;condensed&quot;), full_width = F, position = &quot;center&quot;)</code></pre>
+
+get_er_cv(training_df_at,training_df_sub,kfolds=10,lasso_cv,ridge_cv) %&gt;%
+  make_kable(cap = &quot;Cross-Validation Result&quot;,
+             digit = 3)</code></pre>
 <table class="table table-striped table-hover table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Cross-Validation Result
+</caption>
 <thead>
 <tr>
 <th style="text-align:left;">
@@ -2077,10 +2455,12 @@ summs &lt;- summary(coef_mat)
 
 data.frame(kept_variables = rownames(coef_mat)[summs$i],
            coefficient = summs$x) %&gt;%
-  kable(digits = 3) %&gt;%
-  kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;, &quot;condensed&quot;),
-                full_width = F,position = &quot;center&quot;)</code></pre>
+  make_kable(cap = &quot;Kept variables&quot;,
+             digit = 3)</code></pre>
 <table class="table table-striped table-hover table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Kept variables
+</caption>
 <thead>
 <tr>
 <th style="text-align:left;">
