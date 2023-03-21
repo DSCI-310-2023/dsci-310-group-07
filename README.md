@@ -40,6 +40,8 @@ docker run --rm -p 8787:8787 -e PASSWORD=12345 -v /$(pwd):/home/rstudio/project 
 
 Open localhost:8787 on your browser. You can see the project on `/home/rstudio/project`.
 
+On the bottom right panel, click into `project`, you will be able to see a folder `analysis`. Go to `analysis`, you can click on `report.html`, and select `View in Web Browser` to see the knitted html report. 
+
 ## Dependencies
 
 R version 4.1.3 and R packages as follows:
