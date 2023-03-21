@@ -1,5 +1,10 @@
 # author: Jiaying Liao
 # date: 2023-03-08
+# last update: 2023-03-21
+
+#' Read the automobile dataset from csv and store as variable `automobile`
+#' Change the column types based on the values
+
 library(tidyverse)
 
 automobile <- read_csv(

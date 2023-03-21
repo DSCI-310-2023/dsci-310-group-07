@@ -1,5 +1,10 @@
 # author: Jiaying Liao
 # date: 2023-03-08
+# last update: 2023-03-21
+
+#' Read and write the dataset into automobile.csv
+#' Change the column names into more readable ones
+#' Replace all the "?" by NAs
 
 library(tidyverse)
 
