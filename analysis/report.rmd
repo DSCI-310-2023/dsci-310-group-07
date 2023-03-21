@@ -29,6 +29,7 @@ source(here("R/processdata.R"))
 source(here("R/showR2.R"))
 source(here("R/plotAll.R"))
 source(here("R/get_model.R"))
+source(here("R/make_kable.R"))
 
 ```
 
@@ -77,20 +78,15 @@ In this section, we load and clean the data. Note that the all `?` are replaced 
 
 
 ```{r read data, echo=FALSE, message=FALSE, warning=FALSE}
+
 head(automobile[,1:13]) %>% 
-  kable(digits = 3,
-        format = "simple",
-        caption = "Row 1 to 6, Column 1 to 13 in Automobile Dataset") %>%
-  kable_styling(bootstrap_options = c("striped",
-                                      "hover",
-                                      "condensed"))
+  make_kable(cap = "Row 1 to 6, Column 1 to 13 in Automobile Dataset",
+             digit = 3)
 head(automobile[,14:26]) %>% 
-  kable(digits = 3,
-        format = "simple",
-        caption = "Row 1 to 6, Column 14 to 25 in Automobile Dataset") %>%
-  kable_styling(bootstrap_options = c("striped",
-                                      "hover",
-                                      "condensed"))
+  make_kable(cap = "Row 1 to 6, Column 14 to 26 in Automobile Dataset",
+             digit = 3)
+
+
 ```
 
 
@@ -99,9 +95,10 @@ From the dataframe above, we noticed that there are some NA values. Each row rep
 ```{r data summary, echo=FALSE, message=FALSE, warning=FALSE}
 # Checking the summary of results of each column
 options(knitr.kable.NA = '')
-summary(automobile) %>% t() %>%
-  kable(digit = 4) %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+
+summary(automobile) %>% 
+  t() %>%
+  make_kable(cap = "Summary of Automobile",digit = 4)
 ```
 
 
@@ -125,13 +122,9 @@ top8 <- showR2(automobile, 8)
 
 
 ```{r print top8, echo=FALSE, message=FALSE, warning=FALSE}
+colnames(top8)[1] <- "R^2"
 top8 %>%
-  kable(digits = 4, col.names = c("R^2", "Variable")) %>%
-  kable_styling(
-    bootstrap_options = c("striped", "hover", "condensed"),
-    full_width = F,
-    position = "center"
-  )
+  make_kable(cap = "The 8 variables with highest R^2", digit = 4)
 ```
 
 Based on the summary table, the variable that has the highest R^2 value is `make` with a value of 0.796. This can be interpreted as 79.6% of the variation observed in `price` is explained by the model with `make` as the explanatory variable. 
@@ -252,9 +245,10 @@ Finally, we are able to compute the RMSE (root mean squared error) to evaluate t
 ```{r cross-validation, message=FALSE, warning=FALSE}
 lasso_cv<-get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="modeling")[[3]]
 ridge_cv<-get_model_plot(x_train_mat,y_train_mat,model="ridge",ask="modeling")[[3]]
-get_er_cv(training_df_at,training_df_sub,kfolds=10,lasso_cv,ridge_cv) %>% 
-  kable(digits = 3) %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F, position = "center")
+
+get_er_cv(training_df_at,training_df_sub,kfolds=10,lasso_cv,ridge_cv) %>%
+  make_kable(cap = "Cross-Validation Result",
+             digit = 3)
 
 ```
 
@@ -276,9 +270,8 @@ summs <- summary(coef_mat)
 
 data.frame(kept_variables = rownames(coef_mat)[summs$i],
            coefficient = summs$x) %>%
-  kable(digits = 3) %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
-                full_width = F,position = "center")
+  make_kable(cap = "Kept variables",
+             digit = 3)
 ```
 
  Taking a look at the coefficients of our model, we noticed that the LASSO model had selected only three variables, which are `width`, `curb-weight`, and `horsepower`, while all the coefficients of other input variables were reduced to 0.
