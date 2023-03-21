@@ -60,6 +60,9 @@ R version 4.1.3 and R packages as follows:
  * here:1.0.1
  * knitr:1.38
  * ggcheck:0.0.4
+ * kableExtra:1.3.4
+ * MASS:7.3-55
+ * glmnet:4.1-4
     
 
 ## License Information
