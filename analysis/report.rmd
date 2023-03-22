@@ -24,8 +24,6 @@ source(here("R/01-write_data.R"))
 source(here("R/02-read_data.R"))
 
 # Source of functions
-source(here("R/generate_tiny_dat.R"))
-source(here("R/processdata.R"))
 source(here("R/showR2.R"))
 source(here("R/plotAll.R"))
 source(here("R/get_model.R"))
@@ -82,6 +80,7 @@ In this section, we load and clean the data. Note that the all `?` are replaced 
 head(automobile[,1:13]) %>% 
   make_kable(cap = "Row 1 to 6, Column 1 to 13 in Automobile Dataset",
              digit = 3)
+
 head(automobile[,14:26]) %>% 
   make_kable(cap = "Row 1 to 6, Column 14 to 26 in Automobile Dataset",
              digit = 3)
