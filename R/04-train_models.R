@@ -31,18 +31,35 @@ x_test_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="testing")[[1]]
 y_test_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="testing")[[2]]
 
 # Lasso regression
-## plot 
-lasso_plot <- get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="plot")
 ## model
 lasso_mods<-get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="modeling")
 lasso_mod<-lasso_mods[[1]]
 lasso_mod_1se<-lasso_mods[[2]]
 
 # Ridge regression
-## plot
-ridge_plot <- get_model_plot(x_train_mat,y_train_mat,model="ridge",ask="plot")
 ## model
 ridge_mods<-get_model_plot(x_train_mat,y_train_mat,model="ridge",ask="modeling")
 ridge_mod<-ridge_mods[[1]]
 ridge_mod_1se<-ridge_mods[[2]]
 
+# Training result 
+lasso_cv<-get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="modeling")[[3]]
+ridge_cv<-get_model_plot(x_train_mat,y_train_mat,model="ridge",ask="modeling")[[3]]
+
+cv_result <- get_er_cv(training_df_at,training_df_sub,kfolds=10,lasso_cv,ridge_cv) %>%
+  make_kable(cap = "Cross-Validation Result",
+             digit = 3)
+
+# Prediction error of best model
+preds <- predict(lasso_mod_1se,x_test_mat)
+err <- sqrt(mean(y_test_mat-preds)^2)
+
+# Kept variables of the best model
+coef_mat<-coef(lasso_mod_1se)
+
+summs <- summary(coef_mat)
+
+kept <- data.frame(kept_variables = rownames(coef_mat)[summs$i],
+           coefficient = summs$x) %>%
+  make_kable(cap = "Kept variables",
+             digit = 3)
