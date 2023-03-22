@@ -2165,8 +2165,6 @@ relationship with <code>price</code>.</li>
 </div>
 <div id="methods" class="section level2">
 <h2><strong>Methods</strong></h2>
-<pre class="r"><code># The levels of all variables without NAs 
-levels_all</code></pre>
 <table class="table table-striped table-hover table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 Levels of all variables
@@ -2176,7 +2174,7 @@ Levels of all variables
 <th style="text-align:left;">
 </th>
 <th style="text-align:right;">
-num_level
+num_unique
 </th>
 <th style="text-align:left;">
 type
@@ -2472,124 +2470,24 @@ numeric
 </tr>
 </tbody>
 </table>
-<p>Since lm will automatically omit the NA values in data, we check the
-number of unique values if NA is removed. We notice that after we omit
-NA, the levels of engine-location appears to be 1. This will cause
-contrasts since we need a categorical variables to be factors with 2 or
-more levels. Thus we need to remove <code>engine-location</code>.</p>
-<p>First the data is prepared. The variable <code>num-of-doors</code>
-needs to be converted to characters and have <code>?</code>s removed and
-the variable <code>engine-location</code> is dropped. Them, the dataset
-is split into two data sets - training and testing using a 70-30% basis
-and the ID variables are removed.</p>
+<p>Based on the summary above, we noticed that the variables:symboling,
+make, body-style, drive-wheels, engine-type, num-of-cylinders,
+fuel-system have more than 2 levels. Since the shrinkage methods we are
+planning to use to perform model selection (LASSO and Ridge) is not
+possible when there are more than 2 levels in a categorical variable,
+the variables listed above are all dropped because of their high
+levels.</p>
+<p>Apart from that, after we omit NA, the levels of engine-location
+appears to be 1. This will cause contrasts since we need a categorical
+variables to be factors with 2 or more levels. Thus we need to remove
+<code>engine-location</code>.</p>
+<p>Then, the dataset is split into two data sets - training and testing
+using a 70-30% basis and the ID variables are removed.</p>
 <pre class="r"><code>tst&lt;-get_tr_tst(automobile)
 training_df&lt;-get_tr_tst(automobile,&quot;basic&quot;)[[1]]
 testing_df&lt;-get_tr_tst(automobile,&quot;basic&quot;)[[2]]
 training_df_at&lt;-get_tr_tst(automobile,&quot;at&quot;)[[1]]
 testing_df_at&lt;-get_tr_tst(automobile,&quot;at&quot;)[[2]]</code></pre>
-<p>A full model is created using <code>lm()</code> with
-<code>price</code> as our response variable and <strong>all input
-variables</strong> as our predictor variables, using training data. A
-stepwise model is created using forward selection because we have more
-predictor variables (p) than observations (n). A backward selection and
-stepwise selection will not work.</p>
-<p><em>Note</em>: We have more than 25 predictors since a lot of our
-predictor variables are categorical data with many levels.</p>
-<pre class="r"><code>lm(price ~.,data=training_df) %&gt;%
-  stepAIC(direction = &quot;forward&quot;) %&gt;%
-  summary()</code></pre>
-<pre><code>## Start:  AIC=1554.66
-## price ~ symboling + `normalized-losses` + make + `fuel-type` + 
-##     aspiration + `num-of-doors` + `body-style` + `drive-wheels` + 
-##     `wheel-base` + length + width + height + `curb-weight` + 
-##     `engine-type` + `num-of-cylinders` + `engine-size` + `fuel-system` + 
-##     bore + stroke + `compression-ratio` + horsepower + `peak-rpm` + 
-##     `city-mpg` + `highway-mpg` + ID</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = price ~ symboling + `normalized-losses` + make + 
-##     `fuel-type` + aspiration + `num-of-doors` + `body-style` + 
-##     `drive-wheels` + `wheel-base` + length + width + height + 
-##     `curb-weight` + `engine-type` + `num-of-cylinders` + `engine-size` + 
-##     `fuel-system` + bore + stroke + `compression-ratio` + horsepower + 
-##     `peak-rpm` + `city-mpg` + `highway-mpg` + ID, data = training_df)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -2232.38  -394.36   -19.53   379.66  2035.72 
-## 
-## Coefficients: (4 not defined because of singularities)
-##                          Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)             5.045e+04  2.337e+04   2.159 0.034878 *  
-## symboling1             -1.846e+03  8.190e+02  -2.254 0.027844 *  
-## symboling2             -1.139e+03  7.730e+02  -1.474 0.145716    
-## symboling0             -8.759e+02  8.910e+02  -0.983 0.329534    
-## symboling-1            -1.861e+03  1.490e+03  -1.249 0.216643    
-## symboling-2            -1.813e+03  1.629e+03  -1.113 0.269962    
-## `normalized-losses`    -7.565e+00  8.909e+00  -0.849 0.399195    
-## makebmw                -4.058e+03  3.249e+03  -1.249 0.216437    
-## makedodge              -1.547e+04  2.729e+03  -5.667 4.39e-07 ***
-## makehonda              -1.385e+04  3.072e+03  -4.510 3.07e-05 ***
-## makemazda              -1.725e+04  3.407e+03  -5.063 4.20e-06 ***
-## makemercedes-benz      -7.006e+03  3.203e+03  -2.187 0.032625 *  
-## makemitsubishi         -2.203e+04  4.064e+03  -5.419 1.12e-06 ***
-## makenissan             -2.144e+04  4.863e+03  -4.408 4.38e-05 ***
-## makepeugot             -2.934e+04  4.989e+03  -5.881 1.94e-07 ***
-## makeplymouth           -2.731e+04  5.811e+03  -4.700 1.57e-05 ***
-## makeporsche            -1.436e+04  6.218e+03  -2.310 0.024349 *  
-## makesaab               -2.166e+04  6.287e+03  -3.445 0.001047 ** 
-## makesubaru             -3.126e+04  7.284e+03  -4.291 6.57e-05 ***
-## maketoyota             -3.284e+04  7.740e+03  -4.243 7.76e-05 ***
-## makevolkswagen         -3.566e+04  8.961e+03  -3.979 0.000189 ***
-## makevolvo              -3.088e+04  8.841e+03  -3.493 0.000903 ***
-## `fuel-type`diesel       7.463e+03  5.938e+03   1.257 0.213741    
-## aspirationturbo         2.305e+03  6.509e+02   3.542 0.000776 ***
-## `num-of-doors`two      -4.855e+01  3.977e+02  -0.122 0.903262    
-## `body-style`hatchback  -4.126e+03  1.256e+03  -3.286 0.001702 ** 
-## `body-style`sedan      -3.813e+03  1.355e+03  -2.814 0.006606 ** 
-## `body-style`wagon      -4.655e+03  1.396e+03  -3.335 0.001469 ** 
-## `body-style`hardtop    -4.761e+03  1.395e+03  -3.412 0.001161 ** 
-## `drive-wheels`fwd      -1.690e+03  1.059e+03  -1.596 0.115663    
-## `drive-wheels`4wd      -2.591e+03  1.189e+03  -2.180 0.033196 *  
-## `wheel-base`            1.295e+02  1.318e+02   0.983 0.329642    
-## length                 -9.873e+01  4.939e+01  -1.999 0.050118 .  
-## width                  -4.771e+01  2.627e+02  -0.182 0.856483    
-## height                 -2.672e+02  2.019e+02  -1.324 0.190676    
-## `curb-weight`           8.719e+00  2.014e+00   4.330 5.75e-05 ***
-## `engine-type`ohcv      -1.516e+03  1.691e+03  -0.897 0.373445    
-## `engine-type`ohc       -3.527e+03  1.198e+03  -2.944 0.004600 ** 
-## `engine-type`l                 NA         NA      NA       NA    
-## `engine-type`ohcf              NA         NA      NA       NA    
-## `num-of-cylinders`six   1.138e+03  1.609e+03   0.707 0.482208    
-## `num-of-cylinders`five         NA         NA      NA       NA    
-## `engine-size`          -1.331e+01  2.318e+01  -0.574 0.568050    
-## `fuel-system`2bbl      -1.680e+02  5.462e+02  -0.308 0.759419    
-## `fuel-system`1bbl      -2.571e+03  9.821e+02  -2.618 0.011183 *  
-## `fuel-system`idi               NA         NA      NA       NA    
-## `fuel-system`spdi      -1.383e+03  9.577e+02  -1.444 0.154028    
-## bore                   -2.058e+03  1.869e+03  -1.101 0.275306    
-## stroke                  1.114e+03  1.787e+03   0.623 0.535438    
-## `compression-ratio`    -7.707e+02  4.442e+02  -1.735 0.087880 .  
-## horsepower             -6.510e+01  2.124e+01  -3.064 0.003266 ** 
-## `peak-rpm`             -1.964e-01  7.369e-01  -0.266 0.790784    
-## `city-mpg`             -1.327e+02  1.035e+02  -1.282 0.204776    
-## `highway-mpg`           1.258e+02  8.091e+01   1.555 0.125285    
-## ID                      1.694e+02  5.772e+01   2.935 0.004724 ** 
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 944.9 on 60 degrees of freedom
-## Multiple R-squared:  0.9824, Adjusted R-squared:  0.9677 
-## F-statistic: 66.88 on 50 and 60 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p>Based on the summary we found in <code>sum_df</code> (above), we
-noticed that the variables:<code>symboling</code>, <code>make</code>,
-<code>body-style</code>, <code>drive-wheels</code>,
-<code>engine-type</code>, <code>num-of-cylinders</code>, and
-<code>fuel-system</code> have more than 2 levels. Since the shrinkage
-methods we are planning to use to perform model selection (LASSO and
-Ridge) is not possible when there are more than 2 levels in a
-categorical variable, the variables listed above are all dropped because
-of their high levels.</p>
 <p>We then create new training and testing datasets that excludes the
 variables listed. We call them: 1. <code>training_df_sub</code> 2.
 <code>testing_df_sub</code></p>

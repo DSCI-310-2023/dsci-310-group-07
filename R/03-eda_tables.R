@@ -41,7 +41,16 @@ top8_output <- top8 %>%
 nms <- pull(top8,names)
 
 # Levels of all variables without na
-levels_all <- data.frame(#variable = colnames(automobile),
-                         num_level = sapply(lapply(na.omit(automobile), unique), length),
-                         type = sapply(automobile, class)) %>%
+levels_all <- data.frame(num_unique = sapply(lapply(na.omit(automobile), unique), length),
+                         type = sapply(automobile, class))  
+
+# The variables that are factors with more than 2 levels
+mul_lvl_fct <- data.frame(variable = colnames(automobile),
+                          levels_all) %>%
+  mutate(mul_lvl = ((type == "factor") & (num_unique > 2))) %>%
+  filter(mul_lvl) %>%
+  pull(variable)
+
+# kable for levels_all
+levels_kb <- levels_all %>%
   make_kable(cap = "Levels of all variables", digit = 1)
