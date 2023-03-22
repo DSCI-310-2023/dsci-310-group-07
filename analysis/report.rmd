@@ -23,6 +23,7 @@ library(glmnet)
 source(here("R/01-write_data.R"))
 source(here("R/02-read_data.R"))
 source(here("R/03-eda_tables.R"))
+source(here("R/04-train_models.R"))
 
 # Source of functions
 source(here("R/showR2.R"))
@@ -147,11 +148,11 @@ Apart from that, after we omit NA, the levels of engine-location appears to be 1
 Then, the data set is split into two data sets - training and testing using a 70-30% basis and the ID variables are removed.
 
 ```{r split into train and test, message=FALSE, warning=FALSE}
-tst<-get_tr_tst(automobile)
-training_df<-get_tr_tst(automobile,"basic")[[1]]
-testing_df<-get_tr_tst(automobile,"basic")[[2]]
-training_df_at<-get_tr_tst(automobile,"at")[[1]]
-testing_df_at<-get_tr_tst(automobile,"at")[[2]]
+# tst<-get_tr_tst(automobile)
+# training_df<-get_tr_tst(automobile,"basic")[[1]]
+# testing_df<-get_tr_tst(automobile,"basic")[[2]]
+# training_df_at<-get_tr_tst(automobile,"at")[[1]]
+# testing_df_at<-get_tr_tst(automobile,"at")[[2]]
 ```
 
 
@@ -161,18 +162,18 @@ We then create new training and testing datasets that excludes the variables lis
 2. `testing_df_sub`
 
 ```{r train/test sub, message=FALSE, warning=FALSE}
-training_df_sub<-get_tr_tst(automobile,"sub")[[1]]
-testing_df_sub<-get_tr_tst(automobile,"sub")[[2]] 
+# training_df_sub<-get_tr_tst(automobile,"sub")[[1]]
+# testing_df_sub<-get_tr_tst(automobile,"sub")[[2]] 
 ```
 
 This code prepares the dataset(s) for `glmnet()` which only takes matrices (hence `model.matrix`). The `glmnet()` function has an argument `object`, which is the formula of the model and therefore needs clear x and y variables, explaining why the training and testing datasets are split into subsets of x and y. 
 
 ```{r train/test matrix, message=FALSE, warning=FALSE}
 
-x_train_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="training")[[1]]
-y_train_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="training")[[2]]
-x_test_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="testing")[[1]]
-y_test_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="testing")[[2]]
+# x_train_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="training")[[1]]
+# y_train_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="training")[[2]]
+# x_test_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="testing")[[1]]
+# y_test_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="testing")[[2]]
 
 ```
 
@@ -183,10 +184,11 @@ Then the plot function will be used to visualise the MSE of different lambdas.
 `lasso_mod` provides the  $\hat{\lambda}_{\text{min}}$  for LASSO (explained below) and `lasso_mod_1se` provides the $\hat{\lambda}_{\text{1SE}}$ for LASSO (explained below).
 
 ```{r lasso, message=FALSE, warning=FALSE}
-get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="plot")
-lasso_mods<-get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="modeling")
-lasso_mod<-lasso_mods[[1]]
-lasso_mod_1se<-lasso_mods[[2]]
+# get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="plot")
+# lasso_mods<-get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="modeling")
+# lasso_mod<-lasso_mods[[1]]
+# lasso_mod_1se<-lasso_mods[[2]]
+lasso_plot
 ```
 
 The plot shows the estimated testMSE on the y-axis for a grid of values of ${\lambda}$ on the x-axis (on a natural log-scale). The two vertical dotted lines show us where lambda is minimized, in other words, how many variables are needed for the best model. The numbers on the top x-axis indicate the number of input variables whose estimated coefficients are different for 0 for different values of lambda. The error bars represent the variation across the different sets of the CV folds.  The left line shows $\hat{\lambda}_{\text{min}}$ - which is the minimum MSE in the grind and the right line represents $\hat{\lambda}_{\text{1SE}}$ - which is the largest values of lambda such that the corresponding MSE is still within 1 standard error of that of the minimum (more penalization at low cost). 
@@ -195,10 +197,11 @@ A similar method is followed for Ridge, except `alpha = 0`.
 `ridge_mod` provides the  $\hat{\lambda}_{\text{min}}$ for Ridge and `ridge_mod_1se` provides the  $\hat{\lambda}_{\text{1SE}}$ value for Ridge (explained above).
 
 ```{r ridge, message=FALSE, warning=FALSE}
-get_model_plot(x_train_mat,y_train_mat,model="ridge",ask="plot")
-ridge_mods<-get_model_plot(x_train_mat,y_train_mat,model="ridge",ask="modeling")
-ridge_mod<-ridge_mods[[1]]
-ridge_mod_1se<-ridge_mods[[2]]
+# get_model_plot(x_train_mat,y_train_mat,model="ridge",ask="plot")
+# ridge_mods<-get_model_plot(x_train_mat,y_train_mat,model="ridge",ask="modeling")
+# ridge_mod<-ridge_mods[[1]]
+# ridge_mod_1se<-ridge_mods[[2]]
+ridge_plot
 ```
 
 The plot for Ridge shows the estimated testMSE’s for each value of lambda, just like that of LASSO. However the main difference here is that the top x-axis is all the same value - 17. This is because the Ridge estimator never shrinks estimates to 0, unlike LASSO. The two vertical lines represent $\hat{\lambda}_{\text{min}}$ and  $\hat{\lambda}_{\text{1SE}}$ with the x and y axis being the same as LASSO.
