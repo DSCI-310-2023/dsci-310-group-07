@@ -38,7 +38,7 @@ After installing the packages in Dockerfile. You can run this on localhost:8787 
 docker run --rm -p 8787:8787 -e PASSWORD=12345 -v /$(pwd):/home/rstudio/project dsci310-project
 ```
 
-Open `localhost:8787/` on your browser. You will see a login page. The username is "rstudio" and the password is 12345
+Open `localhost:8787/` on your browser. You will see a login page. The username is `rstudio` and the password is `12345`
 
 After signing in, you can see the project on `/home/rstudio/project`.
 
