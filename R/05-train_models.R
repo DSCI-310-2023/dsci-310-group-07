@@ -9,7 +9,6 @@ library(tidyverse)
 library(here)
 
 source(here("R/get_model.R"))
-source(here("R/make_kable.R"))
 source(here("R/02-read_data.R"))
 
 # generate the traning and testing sets from `get_trt_test()` function
@@ -46,9 +45,7 @@ ridge_mod_1se<-ridge_mods[[2]]
 lasso_cv<-get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="modeling")[[3]]
 ridge_cv<-get_model_plot(x_train_mat,y_train_mat,model="ridge",ask="modeling")[[3]]
 
-cv_result <- get_er_cv(training_df_at,training_df_sub,kfolds=10,lasso_cv,ridge_cv) %>%
-  make_kable(cap = "Cross-Validation Result",
-             digit = 3)
+cv_result <- get_er_cv(training_df_at,training_df_sub,kfolds=10,lasso_cv,ridge_cv) 
 
 # Prediction error of best model
 preds <- predict(lasso_mod_1se,x_test_mat)
@@ -60,6 +57,4 @@ coef_mat<-coef(lasso_mod_1se)
 summs <- summary(coef_mat)
 
 kept <- data.frame(kept_variables = rownames(coef_mat)[summs$i],
-           coefficient = summs$x) %>%
-  make_kable(cap = "Kept variables",
-             digit = 3)
+           coefficient = summs$x) 
