@@ -9,21 +9,16 @@ library(kableExtra)
 #'
 #' Take a dataframe and return a Kable object with captions. The digits can be standardized.
 #'
-#' @param df a data.frame
-#' @param cap caption, which is a string
-#' @param digit the number of digit
+#' @param kb a kable
 #'
 #' @return a kable object with styling
 #'
 #' @examples
-#' make_kable(automobile, "Automobile Dataset", 3)
+#' make_kable(kable(automobile))
 
-make_kable <- function(df, cap, digit) {
-  df %>%
-    kable(digits = digit,
-          caption = cap) %>%
+make_kable <- function(kb) {
+  kb %>%
     kable_styling(bootstrap_options = c("striped","hover","condensed"),
                   full_width = F,
                   position = "center")
-  
 }

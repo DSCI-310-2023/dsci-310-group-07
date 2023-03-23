@@ -3,8 +3,11 @@ title: "Predicting Car Prices Based on Certain Characteristics"
 author: 'DSCI310 Group 07: Harbor Zhang, Jiaying Liao, Ning Wang, Xiwen Wei'
 date: "`r Sys.Date()`"
 output:
-  html_document: default
-  pdf_document: default
+  bookdown::pdf_document2:
+    default
+  bookdown::html_document2:
+    default
+bibliography: references.bib 
 ---
 
 Original Project Authors: Henry Zhang, Moira Renata, Ning Wang, Paige Wills, Xinrui Wang in STAT 301 Group 36.
@@ -23,26 +26,26 @@ library(glmnet)
 source(here("R/01-write_data.R"))
 source(here("R/02-read_data.R"))
 source(here("R/03-eda_tables.R"))
-source(here("R/04-train_models.R"))
+source(here("R/04-eda_plots.R"))
+source(here("R/05-train_models.R"))
 
 # Source of functions
 source(here("R/showR2.R"))
-source(here("R/plotAll.R"))
 source(here("R/get_model.R"))
 source(here("R/make_kable.R"))
 
 ```
 
 
-## **Introduction**
+# Introduction
 
-Over the past few decades, we have seen a rapid increase in demand for the car industry. The high market price of both brand new and used cars have created a large economic impact all over the world. Based on previous studies, it was found that there are multiple factors affecting  the final price of a car (Balce, 2016) and that while most factors do have a positive contribution or effect to the final price, there are still some factors that create a negative effect (Erdem and Senturk, 2009). 
+Over the past few decades, we have seen a rapid increase in demand for the car industry. The high market price of both brand new and used cars have created a large economic impact all over the world. Based on previous studies, it was found that there are multiple factors affecting the final price of a car [@iuyd377468] and that while most factors do have a positive contribution or effect to the final price, there are still some factors that create a negative effect [@Turkey]. Moreover, according to previous studies, the car price one of the most significant factor when people deciding whether to purchase a car[@armstrong2022car].
 
 Therefore, in this project, we hope to create a model that allows us to predict the final price of a car given its characteristics.
 
-## **Description**
+# Description
 
-The sample we use is from the The Automobile Data Set that was created by Jeffrey C. Schlimmer in 1985. The author created a data set that consists of 26 columns with 205 rows, where each row refers to one car sample. Out of the 25 columns predictor variables, there are 9 categorical variables and 16 numerical variables. Our response variable is the 26th column, which represents the price of a car in USD($). 
+The sample we use is from the the Automobile Data Set that was created by Jeffrey C. Schlimmer in 1987 [@auto]. The author created a data set that consists of 26 columns with 205 rows, where each row refers to one car sample. Out of the 25 columns predictor variables, there are 9 categorical variables and 16 numerical variables. Our response variable is the 26th column, which represents the price of a car in USD($). 
 
 Variable|Type|Description|
 |-|-|-|
@@ -73,31 +76,40 @@ Variable|Type|Description|
 |highway-mpg|Numerical|Mileage in the highway in miles per gallon|
 |price|Numerical|Price of car in USD ($)|
 
-## **Preliminary Analysis**
+# Preliminary Analysis
 In this section, we load and clean the data. Note that the all `?` are replaced with `NA`.
 
-
-```{r read data, echo=FALSE, message=FALSE, warning=FALSE}
+```{r left-tb, echo=FALSE, message=FALSE, warning=FALSE}
 # An overview of automobile dataset
-left_automobile
-right_automobile
+left_automobile %>% 
+  kable(caption = "Row 1 to 6, Column 1 to 13 in Automobile Dataset") %>%
+  make_kable()
 
 ```
 
+```{r right-tb, echo=FALSE}
+right_automobile %>%
+  kable(caption = "Row 1 to 6, Column 14 to 26 in Automobile Dataset") %>%
+  make_kable()
+```
 
-From the dataframe above, we noticed that there are some NA values. Each row represents an observation, each column is a variable, and each cell is a value, which means there is not a lot of data tidying to do. We will first check the number of NA values in each column, the number of levels in columns that are categorical variables, and the summary statistics of each variable.
 
-```{r data summary, echo=FALSE, message=FALSE, warning=FALSE}
+From tables \@ref(tab:left-tb) and \@ref(tab:right-tb), we noticed that there are some NA values. Each row represents an observation, each column is a variable, and each cell is a value, which means there is not a lot of data tidying to do. We will first check the number of NA values in each column, the number of levels in columns that are categorical variables, and the summary statistics of each variable.
+
+```{r data-summary, echo=FALSE, message=FALSE, warning=FALSE}
 # Checking the summary of results of each column
-summary_automobile
+options(knitr.kable.NA = '')
+summary_automobile %>%
+  kable(caption = "Summary of Automobile Dataset", digits = 4) %>%
+  make_kable()
 ```
 
 
 
-There are `r sum(!complete.cases(automobile))` rows that contain NA values. And the number of rows that have complete observations are `r sum(complete.cases(automobile))`.
+According to table \@ref(tab:data-summary), there are `r sum(!complete.cases(automobile))` rows that contain NA values. And the number of rows that have complete observations are `r sum(complete.cases(automobile))`.
 
 
-#### **Exploratory Data Analysis**
+# Exploratory Data Analysis
 
 Next, we will perform EDA to better understand the variables that we will be using in our analysis. 
 
@@ -107,41 +119,87 @@ Firstly, we want to calculate the coefficient of determination of all of our pre
 
 
 
-```{r top 8 variables, echo=FALSE, message=FALSE, warning=FALSE}
-top8_output
+```{r top-8, echo=FALSE, message=FALSE, warning=FALSE}
+kable(top8,
+      caption = "The 8 variables with highest R^2", 
+      digits = 3) %>%
+  make_kable()
+
 ```
 
 
-Based on the summary table, the variable that has the highest R^2 value is `make` with a value of 0.796. This can be interpreted as 79.6% of the variation observed in `price` is explained by the model with `make` as the explanatory variable. 
+Based on the result in table \@ref(tab:top-8), the variable that has the highest R^2 value is `make` with a value of `r round(top8[1,1], 3)`. This can be interpreted as `r round(top8[1,1], 3)*100`% of the variation observed in `price` is explained by the model with `make` as the explanatory variable. 
 
-Then, we created plots for the top 8 predictor variables. For the numerical variables, we created both a histogram to see the distribution, and a scatterplot to see the relationship between the variable and the car price. For the categorical variables, we created a bar graph to compare the count of each category in a variable. Analysis of the plots created are written after the code. 
+Then, we created plots for the top 8 predictor variables. For the numerical variables, we created both a histogram to see the distribution, and a scatter plot to see the relationship between the variable and the car price. For the categorical variables, we created a bar graph to compare the count of each category in a variable. Analysis of the plots created are written after the code. 
 
-
-
-
-```{r top 8 plot, echo=FALSE, message=FALSE, warning=FALSE}
-plotAll(automobile, nms)
-```
 
 Analysis on the plots:
 
-- For the variable `make`, we can see that Japanese brands, such as Toyota, Nissan and Mazada have the top 3 counts, which means they produce the most cars. 
-- For the variable `length`, we can see the distribution is approximately normal and has a positive linear relationship with `price`. 
-- For the variable `width`, we can see the distribution is approximately normal and has a positive linear relationship with `price`. 
-- For the variable `curb-weight`, we can see the distribution is skewed to right and has a positive linear relationship with `price`. 
-- For the variable `num-of-cylinders`, we can see that most cars have 4-cyclinders.
-- For the variable `engine-size`, we can see the distribution is skewed to right and has a positive linear relationship with `price`. 
-- For the variable `horse-power`, we can see the distribution is skewed to right and has a positive linear relationship with `price`.
-- For the variable `highway-mpg`, we can see the distribution is approximately normal and has a negative linear relationship with `price`. 
+```{r make-plot, echo=FALSE, fig.cap="Distribution of make", message=FALSE, warning=FALSE, out.width="90%"}
+include_graphics(here("analysis/figs/make.png"))
+```
 
-## **Methods**
+- For the variable `make` (see Figure \@ref(fig:make-plot)), we can see that Japanese brands, such as Toyota, Nissan and Mazada have the top 3 counts, which means they produce the most cars. 
+
+
+```{r length-plot, echo=FALSE, fig.cap="Distribution of length and price vs length", message=FALSE, warning=FALSE, out.width="90%"}
+include_graphics(here("analysis/figs/length.png"))
+```
+
+- For the variable `length` (see Figure \@ref(fig:length-plot)), we can see the distribution is approximately normal and has a positive linear relationship with `price`. 
+
+
+```{r width-plot, echo=FALSE, fig.cap="Distribution of width and price vs width", message=FALSE, warning=FALSE, out.width="90%"}
+include_graphics(here("analysis/figs/width.png"))
+```
+
+- For the variable `width` (see Figure \@ref(fig:width-plot)), we can see the distribution is approximately normal and has a positive linear relationship with `price`. 
+
+
+```{r curb-weight-plot, echo=FALSE, fig.cap="Distribution of car weight and price vs weight", message=FALSE, warning=FALSE, out.width="90%"}
+include_graphics(here("analysis/figs/curb_weight.png"))
+```
+
+- For the variable `curb-weight` (see Figure \@ref(fig:curb-weight-plot)), we can see the distribution is skewed to right and has a positive linear relationship with `price`. 
+
+
+```{r num-of-cylinders-plot, echo=FALSE, fig.cap="Distribution of number of cylinders", message=FALSE, warning=FALSE, out.width="90%"}
+include_graphics(here("analysis/figs/cld.png"))
+```
+
+- For the variable `num-of-cylinders` (see Figure \@ref(fig:num-of-cylinders-plot)), we can see that most cars have 4-cylinders.
+
+
+```{r eg-size-plot, echo=FALSE, fig.cap="Distribution of engine size and price vs engine size", message=FALSE, warning=FALSE, out.width="90%"}
+include_graphics(here("analysis/figs/eg_size.png"))
+```
+
+- For the variable `engine-size` (see Figure \@ref(fig:eg-size-plot)), we can see the distribution is skewed to right and has a positive linear relationship with `price`. 
+
+
+```{r horse-power-plot, echo=FALSE, fig.cap="Distribution of horse power and price vs horse power", message=FALSE, warning=FALSE, out.width="90%"}
+include_graphics(here("analysis/figs/horse_pw.png"))
+```
+
+- For the variable `horse-power` (see Figure \@ref(fig:horse-power-plot)), we can see the distribution is skewed to right and has a positive linear relationship with `price`.
+
+
+```{r hw-mpg-plot, echo=FALSE, fig.cap="Distribution of highway mpg and Price vs highway mpg", message=FALSE, warning=FALSE, out.width="90%"}
+include_graphics(here("analysis/figs/hw_mpg.png"))
+```
+
+- For the variable `highway-mpg` (see Figure \@ref(fig:hw-mpg-plot)), we can see the distribution is approximately normal and has a negative linear relationship with `price`. 
+
+# Methods
 
 ```{r levels, echo=FALSE, message=FALSE, warning=FALSE}
 # The levels of all variables without NAs 
-levels_kb
+levels_all %>%
+  kable(caption = "Levels of all variables") %>%
+  make_kable()
 ```
 
-Based on the summary above, we noticed that the variables:`r mul_lvl_fct` have more than 2 levels. Since the shrinkage methods we are planning to use to perform model selection (LASSO and Ridge) is not possible when there are more than 2 levels in a categorical variable, the variables listed above are all dropped because of their high levels. 
+Based on table \@ref(tab:levels), we noticed that the variables:`r mul_lvl_fct` have more than 2 levels. Since the shrinkage methods we are planning to use to perform model selection (LASSO and Ridge) is not possible when there are more than 2 levels in a categorical variable, the variables listed above are all dropped because of their high levels. 
 
 Apart from that, after we omit NA, the levels of engine-location appears to be 1. This will cause contrasts since we need a categorical variables to be factors with 2 or more levels. Thus we need to remove `engine-location`.
 
@@ -163,16 +221,16 @@ Then the plot function will be used to visualise the MSE of different lambdas.
 get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="plot")
 ```
 
-The plot shows the estimated testMSE on the y-axis for a grid of values of ${\lambda}$ on the x-axis (on a natural log-scale). The two vertical dotted lines show us where lambda is minimized, in other words, how many variables are needed for the best model. The numbers on the top x-axis indicate the number of input variables whose estimated coefficients are different for 0 for different values of lambda. The error bars represent the variation across the different sets of the CV folds.  The left line shows $\hat{\lambda}_{\text{min}}$ - which is the minimum MSE in the grind and the right line represents $\hat{\lambda}_{\text{1SE}}$ - which is the largest values of lambda such that the corresponding MSE is still within 1 standard error of that of the minimum (more penalization at low cost). 
+Figure \@ref(fig:lasso) shows the estimated test MSE on the y-axis for a grid of values of ${\lambda}$ on the x-axis (on a natural log-scale). The two vertical dotted lines show us where lambda is minimized, in other words, how many variables are needed for the best model. The numbers on the top x-axis indicate the number of input variables whose estimated coefficients are different for 0 for different values of lambda. The error bars represent the variation across the different sets of the CV folds.  The left line shows $\hat{\lambda}_{\text{min}}$ - which is the minimum MSE in the grind and the right line represents $\hat{\lambda}_{\text{1SE}}$ - which is the largest values of lambda such that the corresponding MSE is still within 1 standard error of that of the minimum (more penalization at low cost). 
 
 A similar method is followed for Ridge, except `alpha = 0`. 
 `ridge_mod` provides the  $\hat{\lambda}_{\text{min}}$ for Ridge and `ridge_mod_1se` provides the  $\hat{\lambda}_{\text{1SE}}$ value for Ridge (explained above).
 
-```{r ridge, echo=FALSE, message=FALSE, warning=FALSE}
+```{r ridge, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Ridge Regression", out.width="90%"}
 get_model_plot(x_train_mat,y_train_mat,model="ridge",ask="plot")
 ```
 
-The plot for Ridge shows the estimated testMSE’s for each value of lambda, just like that of LASSO. However the main difference here is that the top x-axis is all the same value - 17. This is because the Ridge estimator never shrinks estimates to 0, unlike LASSO. The two vertical lines represent $\hat{\lambda}_{\text{min}}$ and  $\hat{\lambda}_{\text{1SE}}$ with the x and y axis being the same as LASSO.
+Figure \@ref(fig:ridge) for Ridge regression shows the estimated test MSE for each value of lambda, just like that of LASSO. However the main difference here is that the top x-axis is all the same value - 17. This is because the Ridge estimator never shrinks estimates to 0, unlike LASSO. The two vertical lines represent $\hat{\lambda}_{\text{min}}$ and  $\hat{\lambda}_{\text{1SE}}$ with the x and y axis being the same as LASSO.
 
 For explanatory analysis purposes, we will be using both $\hat{\lambda}_{\text{min}}$ and $\hat{\lambda}_{\text{1SE}}$ for both LASSO and Ridge to create four different regression models. Additionally, we also be creating an OLS model for comparison. The 5 models we will be creating are listed below: 
 1. `mod_lasso`:  LASSO regression using $\lambda$ = $\hat{\lambda}_{\text{min}}$ from LASSO
@@ -186,27 +244,32 @@ After creating the 5 models, we will then obtain the out-of-sample predictions f
 Finally, we are able to compute the RMSE (root mean squared error) to evaluate the predicted models, which is clearly summarised in the tibble below.
 
 ```{r cross-validation, echo=FALSE, message=FALSE, warning=FALSE}
-cv_result
+cv_result %>%
+  kable(caption = "Cross-Validation Result",
+        digits = 3) %>%
+  make_kable()
 ```
 
 
-Through the 10 fold cross validation error (root mean squared error), we see that lasso model with $\hat{\lambda}_{\text{1SE}}$ has the lowest value. Thus we decide to use the LASSO Regression model with 1se MSE for our final predictions.
+Through the 10 fold cross validation error (root mean squared error) in table \@ref(tab:cross-validation), we see that lasso model with $\hat{\lambda}_{\text{1SE}}$ has the lowest value. Thus we decide to use the LASSO Regression model with 1se MSE for our final predictions.
 
+Beside that, we obtained a root mean squared prediction error of `r round(err,3)` when using the LASSO Regression model on the test set.
 
-Based on the output above, we obtained a root mean squared prediction error of `r round(err,3)` when using the LASSO Regression model on the test set.
-
-```{r kept variables, echo=FALSE}
-kept
+```{r kept-variables, echo=FALSE}
+kept %>%
+  kable(caption = "Kept variables",
+             digits = 3) %>%
+  make_kable()
 ```
 
- Taking a look at the coefficients of our model, we noticed that the LASSO model had selected only three variables, which are `width`, `curb-weight`, and `horsepower`, while all the coefficients of other input variables were reduced to 0.
+Taking a look at the coefficients of our model in table \@ref(tab:kept-variables), we noticed that the LASSO model had selected only three variables, which are `width`, `curb-weight`, and `horsepower`, while all the coefficients of other input variables were reduced to 0.
  
 
-## **Discussion**
+# Discussion
 
 Our goal requires generating a prediction model with potential independent variables that can predict the price of the car. Based on our exploratory data analysis and regression model comparisons, we chose the LASSO model with $\hat{\lambda}_{\text{1SE}}$ , which we expect to have good prediction performance.
  
-### Summary
+## Summary
 
 Based on the results above, the variables `width`,`curb-weight`, and `horsepower` were chosen by the LASSO model. With lasso_mod_1se (more penalization at a low cost) to penalize, all of the other regression coefficients of the input variables were shrunk to 0. If we refer back to our EDA, we notice that the three variables selected by LASSO are included in the list of top 8 variables with the highest coefficient of determination. However, it was surprising to see that there were only 3 predictor variables in our final LASSO model, which means all the other variables were shrunk to 0. Some variables that we thought were going to be important, like `city-mpg`, `length`, and `height` were surprisingly not included in the final model. 
 
@@ -215,7 +278,7 @@ We also noticed that the LASSO model with $\hat{\lambda}_{\text{1SE}}$ yielded t
 We hope that this fitted LASSO model will allow users to predict the price of a car in USD based on the 3 variables that were selected. Although we initially expected to have more predictor variables, we believe that the 3 predictor variables can give a rough prediction of the price of a car (USD). Moreover, we believe such a model could not only provide the expected price of a new car to customers, but also help sellers of second-hand cars set ideal prices. 
 
 
-### Further Questions and Improvements
+## Further Questions and Improvements
 There are two main problems that need to be improved:
 
 1. Using high-level (N >2) categorical variables in the LASSO model. The LASSO model interprets N-1 dummy variables as its own separate variable, which may exclude certain levels. To deal with this issue, we dropped the variables with high levels. However by doing so, we might have dropped a statistically significant variable. In future research, maybe by using another regression model, including those categorical variables with more than 2 levels, we can improve our model’s performance. 
@@ -223,11 +286,4 @@ There are two main problems that need to be improved:
 2. Another problem involves LASSO's biased estimators. In the future, if we want to generate an inference model, we can apply post-lasso. This is done by fiting a regular least squares model to the variables selected by LASSO. 
 
 
-## **References**
-Schlimmer, Jeffrey C. (1987). “Automobile Data Set.” Machine Learning Repository,  https://archive.ics.uci.edu/ml/datasets/Automobile 
-
-Balce, Andım. (2016). Factors Affecting Prices In An Used Car E-Market. Journal of Internet Applications and Management. 7. 5-20. 10.5505/iuyd.2016.30974. 
-
-Erdem, Cumhur & Şentürk, İsmail. (2009). A Hedonic Analysis of Used Car Prices in Turkey. International Journal of Economic Perspectives. 3. 141-149. 
-
-Armstrong, M. (2022). Most Important Factors When Buying a Car [Digital image]. Retrieved February 20, 2023, from https://www.statista.com/chart/13075/most-important-factors-when-buying-a-car/
+# References

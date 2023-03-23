@@ -11,16 +11,14 @@ small_df <- data.frame(
 )
 
 # Output of make_kable function
-small_kable <- small_df %>%
-  make_kable("a caption", 2) 
+small_kable <- small_df %>% 
+  kable(caption = "a caption", digits = 2) 
 
 # The expected result, a kable
-expected_kable <- small_df %>%
-  kable(digits = 2,
-        caption = "a caption") %>%
+expected_kable <- small_kable %>%
   kable_styling(bootstrap_options = c("striped","hover","condensed"),
                 full_width = F,
                 position = "center")
 
 # Tests
-expect_equivalent(small_kable,expected_kable)
+expect_equivalent(make_kable(small_kable),expected_kable)
