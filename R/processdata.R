@@ -10,5 +10,9 @@
 #' @examples
 #' processdata(dat)
 processdata <- function(dataset) {
-  dataset[,-length(dataset)]
+  if (nrow(dataset) == 0) {
+    print("Need a non-empty dataset!")  ## handling empty-dataset case
+  }else {
+    dataset[,-length(dataset)]
+  }
 }
