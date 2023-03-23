@@ -3,8 +3,6 @@ title: "Predicting Car Prices Based on Certain Characteristics"
 author: 'DSCI310 Group 07: Harbor Zhang, Jiaying Liao, Ning Wang, Xiwen Wei'
 date: "`r Sys.Date()`"
 output:
-  bookdown::pdf_document2:
-    default
   bookdown::html_document2:
     default
 bibliography: references.bib 
@@ -217,7 +215,7 @@ Then the plot function will be used to visualise the MSE of different lambdas.
 
 `lasso_mod` provides the  $\hat{\lambda}_{\text{min}}$  for LASSO (explained below) and `lasso_mod_1se` provides the $\hat{\lambda}_{\text{1SE}}$ for LASSO (explained below).
 
-```{r lasso, echo=FALSE, message=FALSE, warning=FALSE}
+```{r lasso,echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Lasso Regression", out.width="90%"}
 get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="plot")
 ```
 
