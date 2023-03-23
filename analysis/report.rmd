@@ -118,6 +118,7 @@ It would be beneficial to visualize the pairwise correlation coefficients of our
 Firstly, we want to calculate the coefficient of determination of all of our predicted variables.
 
 
+
 ```{r top-8, echo=FALSE, message=FALSE, warning=FALSE}
 kable(top8,
       caption = "The 8 variables with highest R^2", 
