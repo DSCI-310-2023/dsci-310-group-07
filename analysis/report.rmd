@@ -119,14 +119,13 @@ Firstly, we want to calculate the coefficient of determination of all of our pre
 
 ```{r top-8, echo=FALSE, message=FALSE, warning=FALSE}
 kable(top8,
-      caption = "The 8 variables with highest R^2", 
-      digits = 3) %>%
+      caption = "The 8 variables with highest R^2") %>%
   make_kable()
 
 ```
 
 
-Based on the result in table \@ref(tab:top-8), the variable that has the highest R^2 value is `make` with a value of `r round(top8[1,1], 3)`. This can be interpreted as `r round(top8[1,1], 3)*100`% of the variation observed in `price` is explained by the model with `make` as the explanatory variable. 
+Based on the result in table \@ref(tab:top-8), the variable that has the highest R^2 value is `make` with a value of `r top8[1,1]`. This can be interpreted as `r as.numeric(top8[1,1])*100`% of the variation observed in `price` is explained by the model with `make` as the explanatory variable. 
 
 Then, we created plots for the top 8 predictor variables. For the numerical variables, we created both a histogram to see the distribution, and a scatter plot to see the relationship between the variable and the car price. For the categorical variables, we created a bar graph to compare the count of each category in a variable. Analysis of the plots created are written after the code. 
 

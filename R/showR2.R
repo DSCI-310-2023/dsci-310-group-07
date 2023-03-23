@@ -1,36 +1,47 @@
-# author: Xiwen Wei
+# author: Xiwen Wei, Jiaying Liao
 # date: 2023-03-10
+# update on: 2023-03-23
 
-#' Show the summary table of top n highest R^2 values
+#' Return the n most important variable and their R^2
 #'
-#' Print out the R^2 (coefficient of determination) of all the variables and store it in <r_sqr>
-#' 
-#' Remove the price variable (response) and store other variables' name in <names>
+#' After fitting all explanatory variables respectively in linear model, take the n variables
+#' that have the highest R^2#' 
 #' 
 #' Create a summary table of the predictor variables with the top n highest R^2 values
 #' 
-#' @param data A dataframe
-#' @param n The numbers of variables
+#' @param dat A data frame, the response variable must be in the last column
+#' @param n The numbers of most important variables that will be returned
 #'
-#' @return A summary table of R^2
+#' @return A summary table of R^2 and the corresponding variable names
 #'
 #' @examples
 #' showR2(dataset, 10)
 
-showR2 <- function(data, n) {
+showR2 <- function(dat, n) {
+  numcol <- ncol(dat)
+  # take out the response variable
+  price <- unlist(dat[,numcol])
+  # obtian all variable names
+  names<-colnames(dat[,-numcol])
   
+  # initialize an empty vector
   r_sqr<-c()
-  for (x in 1:25){
-    r_sqr<-c(r_sqr,summary(lm(unlist(data[,26])~unlist(data[,x])))$r.squared)
-    
+  for (x in 1:(numcol-1)){
+    # variable at column x
+    variable <- unlist(dat[,x])
+    # obtain current r_sqr by fitting price~variable
+    current_r_sqr <- summary(lm(price~variable))$r.squared
+    # add current_r_sqr to `r_sqr`
+    r_sqr<-c(r_sqr,
+             current_r_sqr)
   }
-  
-  names<-colnames(data[,-26])
-  
-  df_sqr<-cbind(r_sqr,names)%>%as.data.frame()
-  df_sqr$r_sqr<-as.numeric(df_sqr$r_sqr)
-  head(df_sqr%>%arrange(desc(df_sqr$r_sqr)),n)
-  
+
+  df_sqr <- cbind(r_sqr = round(as.numeric(r_sqr),3), 
+                  names) %>%  #combine the variable names and their R^2
+    as.data.frame() %>%
+    arrange(desc(r_sqr)) %>% #sort the variables by descending R^2
+    head(n) #only return the top n
+
 }
 
 
