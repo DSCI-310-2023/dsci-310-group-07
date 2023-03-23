@@ -3,9 +3,9 @@ title: "Predicting Car Prices Based on Certain Characteristics"
 author: 'DSCI310 Group 07: Harbor Zhang, Jiaying Liao, Ning Wang, Xiwen Wei'
 date: "`r Sys.Date()`"
 output:
-  bookdown::html_document2:
-    default
   bookdown::pdf_document2:
+    default
+  bookdown::html_document2:
     default
 bibliography: references.bib 
 ---
@@ -134,56 +134,56 @@ Then, we created plots for the top 8 predictor variables. For the numerical vari
 
 Analysis on the plots:
 
-```{r make-plot, echo=FALSE, fig.cap="Distribution of make", out.width="90%"}
+```{r make-plot, echo=FALSE, fig.cap="Distribution of make", message=FALSE, warning=FALSE, out.width="90%"}
 include_graphics(here("analysis/figs/make.png"))
 ```
 
 - For the variable `make` (see Figure \@ref(fig:make-plot)), we can see that Japanese brands, such as Toyota, Nissan and Mazada have the top 3 counts, which means they produce the most cars. 
 
 
-```{r length-plot, echo=FALSE, fig.cap="Distribution of length and price vs length", out.width="90%"}
+```{r length-plot, echo=FALSE, fig.cap="Distribution of length and price vs length", message=FALSE, warning=FALSE, out.width="90%"}
 include_graphics(here("analysis/figs/length.png"))
 ```
 
 - For the variable `length` (see Figure \@ref(fig:length-plot)), we can see the distribution is approximately normal and has a positive linear relationship with `price`. 
 
 
-```{r width-plot, echo=FALSE, fig.cap="Distribution of width and price vs width", out.width="90%"}
+```{r width-plot, echo=FALSE, fig.cap="Distribution of width and price vs width", message=FALSE, warning=FALSE, out.width="90%"}
 include_graphics(here("analysis/figs/width.png"))
 ```
 
 - For the variable `width` (see Figure \@ref(fig:width-plot)), we can see the distribution is approximately normal and has a positive linear relationship with `price`. 
 
 
-```{r curb-weight-plot, echo=FALSE, fig.cap="Distribution of car weight and price vs weight", out.width="90%"}
+```{r curb-weight-plot, echo=FALSE, fig.cap="Distribution of car weight and price vs weight", message=FALSE, warning=FALSE, out.width="90%"}
 include_graphics(here("analysis/figs/curb_weight.png"))
 ```
 
 - For the variable `curb-weight` (see Figure \@ref(fig:curb-weight-plot)), we can see the distribution is skewed to right and has a positive linear relationship with `price`. 
 
 
-```{r num-of-cylinders-plot, echo=FALSE, fig.cap="Distribution of number of cylinders", out.width="90%"}
+```{r num-of-cylinders-plot, echo=FALSE, fig.cap="Distribution of number of cylinders", message=FALSE, warning=FALSE, out.width="90%"}
 include_graphics(here("analysis/figs/cld.png"))
 ```
 
 - For the variable `num-of-cylinders` (see Figure \@ref(fig:num-of-cylinders-plot)), we can see that most cars have 4-cylinders.
 
 
-```{r eg-size-plot, echo=FALSE, fig.cap="Distribution of engine size and price vs engine size", out.width="90%"}
+```{r eg-size-plot, echo=FALSE, fig.cap="Distribution of engine size and price vs engine size", message=FALSE, warning=FALSE, out.width="90%"}
 include_graphics(here("analysis/figs/eg_size.png"))
 ```
 
 - For the variable `engine-size` (see Figure \@ref(fig:eg-size-plot)), we can see the distribution is skewed to right and has a positive linear relationship with `price`. 
 
 
-```{r horse-power-plot, echo=FALSE, fig.cap="Distribution of horse power and price vs horse power", out.width="90%"}
+```{r horse-power-plot, echo=FALSE, fig.cap="Distribution of horse power and price vs horse power", message=FALSE, warning=FALSE, out.width="90%"}
 include_graphics(here("analysis/figs/horse_pw.png"))
 ```
 
 - For the variable `horse-power` (see Figure \@ref(fig:horse-power-plot)), we can see the distribution is skewed to right and has a positive linear relationship with `price`.
 
 
-```{r hw-mpg-plot, echo=FALSE, fig.cap="Distribution of highway mpg and Price vs highway mpg", out.width="90%"}
+```{r hw-mpg-plot, echo=FALSE, fig.cap="Distribution of highway mpg and Price vs highway mpg", message=FALSE, warning=FALSE, out.width="90%"}
 include_graphics(here("analysis/figs/hw_mpg.png"))
 ```
 
