@@ -16,24 +16,27 @@ The analysis report can be found [here](analysis/report.rmd).
 
 We use a Docker container image to make the computational environment for this project reproducible.
 
-First, clone this repo in your terminal by
-```
-git clone https://github.com/wxw1026/dsci-310-group-07.git
-```
+First, clone this repo in your terminal by `git clone https://github.com/wxw1026/dsci-310-group-07.git`.
 
-Navigate to the root of this project by
-```
-cd dsci-310-group-07
-```
+Navigate to the root of this project by `cd dsci-310-group-07`.
 
 Make sure your working directory contains [this Dockerfile](Dockerfile).
 
-Then, build this image by 
-```
-docker build -t dsci310-project . -f Dockerfile
-```
-After installing the packages in Dockerfile. You can run this on localhost:8787 by
+Then you can obtain the docker image in two different ways:
 
+ * Pull from dockerhub (recommended, faster):
+    * Go to [this webpage](https://hub.docker.com/r/wxw1026/dsci-310-group-07/tags).
+    * Copy the command on the bottom right, which is `docker pull wxw1026/dsci-310-group-07:latest`
+    * Paste the command on your terminal and wait for pulling.
+    * When the pulling is done, type `docker images wxw1026/dsci-310-group-07` in your terminal.
+    * Copy the IMAGE ID, which should be in the third column.
+    * Type ` docker tag <IMAGE ID> dsci310-project` in your terminal.
+  
+ * Build it locally:
+    * Type `docker build -t dsci310-project . -f Dockerfile` in your terminal.
+    * Wait for installation. It may take minutes.
+
+After obtaining the docker image, you can run this on localhost:8787 by
 ```
 docker run --rm -p 8787:8787 -e PASSWORD=12345 -v /$(pwd):/home/rstudio/project dsci310-project
 ```
