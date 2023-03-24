@@ -13,6 +13,10 @@ data/levels.csv: R/03-eda_tables.R
 analysis/figs/length.png analysis/figs/width.png analysis/figs/curb_weight.png analysis/figs/eg_size.png analysis/figs/horse_pw.png analysis/figs/hw_mpg.png analysis/figs/cld.png analysis/figs/make.png:
 	Rscript R/04-eda_plots.R 
 
+# generates the kept.csv
+data/kept.csv: 05-train_models.R
+	Rscript 05-train_models.R --out_dir="data"
+
 
 .PHONY: report
 report:
@@ -20,6 +24,7 @@ report:
 	
 .PHONY: clean
 clean:
+	rm -f data/kept.csv
 	rm -f data/levels.csv
 	rm -f data/automobile.csv
 	rm -f analysis/figs/length.png

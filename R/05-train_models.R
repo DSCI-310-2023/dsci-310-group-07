@@ -10,6 +10,15 @@ library(here)
 
 source(here("R/get_model.R"))
 source(here("R/02-read_data.R"))
+library(docopt)
+
+doc<-"
+Usage:
+  R/01-write_data.R --out_dir=<output_dir> 
+Options:
+  --out_dir=<output_dir>		
+"
+opt <- docopt(doc)
 
 # generate the traning and testing sets from `get_trt_test()` function
 tst<-get_tr_tst(automobile)
@@ -58,3 +67,13 @@ summs <- summary(coef_mat)
 
 kept <- data.frame(kept_variables = rownames(coef_mat)[summs$i],
            coefficient = summs$x) 
+
+main <- function(out_dir) {
+  # Create out_dir if it does not exist
+  if (!dir.exists(out_dir)) {
+    dir.create(out_dir)
+  }
+  write_csv(kept, file.path(out_dir, "kept.csv"))
+}
+
+main(opt[["--out_dir"]])

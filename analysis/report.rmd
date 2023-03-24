@@ -255,6 +255,7 @@ Through the 10 fold cross validation error (root mean squared error) in table \@
 Beside that, we obtained a root mean squared prediction error of `r round(err,3)` when using the LASSO Regression model on the test set.
 
 ```{r kept-variables, echo=FALSE}
+kept<-read.csv("data/kept.csv")
 kept %>%
   kable(caption = "Kept variables",
              digits = 3) %>%
