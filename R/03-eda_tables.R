@@ -22,11 +22,7 @@ Options:
   --out_dir=<output_dir>		
 "
 opt <- docopt(doc)
-main <- function(out_dir) {
-  # Create out_dir if it does not exist
-  if (!dir.exists(out_dir)) {
-    dir.create(out_dir)
-  }
+
 # Preliminary Analysis
 # print out the first 6 rows of `automobile` as kables
 # the dataset will be split for being too long
@@ -56,6 +52,11 @@ mul_lvl_fct <- data.frame(variable = colnames(automobile),
   filter(mul_lvl) %>%
   pull(variable)
 
+main <- function(out_dir) {
+  # Create out_dir if it does not exist
+  if (!dir.exists(out_dir)) {
+    dir.create(out_dir)
+  }
 write_csv(levels_all, file.path(out_dir, "levels.csv"))
 }
 
