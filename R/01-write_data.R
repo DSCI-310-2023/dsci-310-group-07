@@ -5,8 +5,19 @@
 #' Read and write the dataset into automobile.csv
 #' Change the column names into more readable ones
 #' Replace all the "?" by NAs
+
+doc<-"
+Usage:
+  R/01-write_data.R --input_dir=<input_dir>  --out_dir=<output_dir> 
+Options:
+  --input_dir=<input_dir>		
+  --out_dir=<output_dir>		
+"
+
+
 library(docopt)
 library(tidyverse)
+
 opt <- docopt(doc)
 
 main <- function(input_dir, out_dir) {
