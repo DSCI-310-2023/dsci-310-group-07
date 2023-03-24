@@ -5,8 +5,15 @@
 #' Read and write the dataset into automobile.csv
 #' Change the column names into more readable ones
 #' Replace all the "?" by NAs
-
+library(docopt)
 library(tidyverse)
+opt <- docopt(doc)
+
+main <- function(input_dir, out_dir) {
+  # Create out_dir if it does not exist
+  if (!dir.exists(out_dir)) {
+    dir.create(out_dir)
+  }
 
 names<-c("symboling","normalized-losses","make","fuel-type","aspiration",
          "num-of-doors","body-style","drive-wheels","engine-location",
@@ -14,10 +21,14 @@ names<-c("symboling","normalized-losses","make","fuel-type","aspiration",
          "num-of-cylinders","engine-size","fuel-system","bore","stroke",
          "compression-ratio","horsepower","peak-rpm","city-mpg","highway-mpg","price")
 
-
-df<-read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.data",
+df<-read_csv(input_dir,
              col_names=names)
 df <- replace(df, df == "?", NA)
-write_csv(df, here("data/automobile.csv"))
+write_csv(df, file.path(out_dir, "automobile.csv"))
 rm(df)
 rm(names)
+
+}
+
+main(opt[["--input_dir"]], opt[["--out_dir"]])
+
