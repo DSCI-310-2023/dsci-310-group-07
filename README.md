@@ -65,6 +65,7 @@ You can also run the report with the following steps:
 make all
 ```
 to generate all the output in need.
+
 3. Run the following command to reset your work: 
 ```
 make clean
