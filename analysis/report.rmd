@@ -191,6 +191,8 @@ include_graphics(here("analysis/figs/hw_mpg.png"))
 
 ```{r levels, echo=FALSE, message=FALSE, warning=FALSE}
 # The levels of all variables without NAs 
+levels_all<-read.csv("data/levels.csv")
+
 levels_all %>%
   kable(caption = "Levels of all variables") %>%
   make_kable()

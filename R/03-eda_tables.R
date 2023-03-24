@@ -10,10 +10,23 @@ library(here)
 library(tidyverse)
 library(knitr)
 library(kableExtra)
+library(docopt)
 
 source(here("R/02-read_data.R"))
 source(here("R/showR2.R"))
 
+doc<-"
+Usage:
+  R/01-write_data.R --out_dir=<output_dir> 
+Options:
+  --out_dir=<output_dir>		
+"
+opt <- docopt(doc)
+main <- function(out_dir) {
+  # Create out_dir if it does not exist
+  if (!dir.exists(out_dir)) {
+    dir.create(out_dir)
+  }
 # Preliminary Analysis
 # print out the first 6 rows of `automobile` as kables
 # the dataset will be split for being too long
@@ -42,4 +55,9 @@ mul_lvl_fct <- data.frame(variable = colnames(automobile),
   mutate(mul_lvl = ((type == "factor") & (num_unique > 2))) %>%
   filter(mul_lvl) %>%
   pull(variable)
+
+write_csv(levels_all, file.path(out_dir, "levels.csv"))
+}
+
+main(opt[["--out_dir"]])
 

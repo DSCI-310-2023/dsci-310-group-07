@@ -2,13 +2,15 @@
 # date: 2023-03-23
 
 # download the data
-
 data/automobile.csv: R/01-write_data.R
 	Rscript R/01-write_data.R --input_dir="https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.data"  --out_dir="data"
 
+# generates the levels.csv
+data/levels.csv: R/03-eda_tables.R
+	Rscript R/03-eda_tables.R --out_dir="data"
 
-# store all the plots
-analysis/figs/length.png analysis/figs/width.png analysis/figs/curb_weight.png analysis/figs/eg_size.png analysis/figs/horse_pw.png analysis/figs/hw_mpg.png analysis/figs/cld.png analysis/figs/make.png: 04-eda_plots.R
+# store all the png plots
+analysis/figs/length.png analysis/figs/width.png analysis/figs/curb_weight.png analysis/figs/eg_size.png analysis/figs/horse_pw.png analysis/figs/hw_mpg.png analysis/figs/cld.png analysis/figs/make.png:
 	Rscript R/04-eda_plots.R 
 
 
@@ -18,6 +20,7 @@ report:
 	
 .PHONY: clean
 clean:
+	rm -f data/levels.csv
 	rm -f data/automobile.csv
 	rm -f analysis/figs/length.png
 	rm -f analysis/figs/width.png
