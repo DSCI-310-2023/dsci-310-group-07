@@ -14,7 +14,7 @@ The analysis report can be found [here](analysis/report.rmd).
 
 ## Usage
 
-###Method 1 -- Via Docker
+##Method 1 -- Via Docker
 We use a Docker container image to make the computational environment for this project reproducible.
 
 First, clone this repo in your terminal by `git clone https://github.com/wxw1026/dsci-310-group-07.git`.
@@ -55,7 +55,7 @@ You can also run the report with the following steps:
  * Now `report.rmd` can be seen on the top left panel. 
  * Run each code chunck by clicking the green triangles. Make sure you run all the chuncks above the chunk you want to run, otherwise, there will be error.
 
-###Method 2 -- Via Make
+##Method 2 -- Via Make
 
 1. Clone the github repo using the same procedure as Method 1. 
 
