@@ -24,3 +24,5 @@ clean:
 	rm -rf analysis/horse_pw.png
 	rm -rf analysis/hw_mpg.png
 	rm -rf analysis/report.html
+	rm -rf analysis/cld.png
+	rm -rf analysis/make.png
