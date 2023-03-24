@@ -12,9 +12,10 @@ RUN Rscript -e "remotes::install_version('tidyverse','1.3.1')"
 RUN Rscript -e "remotes::install_version('testthat','3.1.3')"
 RUN Rscript -e "remotes::install_version('here','1.0.1')"
 RUN Rscript -e "remotes::install_version('knitr','1.38')"
-RUN Rscript -e "remotes::install_github('rstudio/ggcheck')"  # version number not applicable in installation, using 0.0.4
+RUN Rscript -e "remotes::install_github('rstudio/ggcheck')"  
 RUN Rscript -e "remotes::install_version('kableExtra','1.3.4')"
 RUN Rscript -e "remotes::install_version('rmarkdown','2.13')"
 RUN Rscript -e "remotes::install_version('cowplot','1.1.1')"
 RUN Rscript -e "remotes::install_version('bookdown','0.26')"
+
 
