@@ -59,12 +59,12 @@ You can also run the report with the following steps:
 
 1. Clone the github repo using the same procedure as Method 1. 
 
-2. `cd` to the root of the cloned repo on your computer(`dsci-310-group-07/`), then run:
+2. `cd` to the root of the cloned repo on your computer(`dsci-310-group-07/`), then run the command:
 
 ```
-make
+make all
 ```
-
+to generate all the output in need.
 3. Run the following command to reset your work: 
 ```
 make clean
