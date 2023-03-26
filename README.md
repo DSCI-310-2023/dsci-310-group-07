@@ -14,12 +14,14 @@ The analysis report can be found [here](analysis/report.rmd).
 
 ## Usage
 
-### Method 1 -- Via Docker
+
 We use a Docker container image to make the computational environment for this project reproducible.
 
 First, clone this repo in your terminal by `git clone https://github.com/wxw1026/dsci-310-group-07.git`.
 
 Navigate to the root of this project by `cd dsci-310-group-07`.
+
+### Method 1 -- Via Docker
 
 Make sure your working directory contains [this Dockerfile](Dockerfile).
 
@@ -57,19 +59,12 @@ You can also run the report with the following steps:
 
 ### Method 2 -- Via Make
 
-1. Clone the github repo using the same procedure as Method 1. 
+Make sure your working directory contains [this Makefile](Makefile).
 
-2. `cd` to the root of the cloned repo on your computer(`dsci-310-group-07/`), then run the command:
+1. In your terimal, run the command `make report`. It will clean all the previous output (including dataset in .csv and plots in .png) and generate all the new output in need.
 
-```
-make all
-```
-to generate all the output in need.
+2. You can also run `make clean` to reset your work. 
 
-3. Run the following command to reset your work: 
-```
-make clean
-```
 
 ## Dependencies
 
@@ -88,6 +83,7 @@ R version 4.1.3 and R packages as follows:
  * rmarkdown:2.13
  * bookdown:0.26
  * cowplot:1.1.1
+ * docopt:0.7.1
     
 
 ## License Information
