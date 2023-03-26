@@ -17,6 +17,7 @@ RUN Rscript -e "remotes::install_version('kableExtra','1.3.4')"
 RUN Rscript -e "remotes::install_version('rmarkdown','2.13')"
 RUN Rscript -e "remotes::install_version('cowplot','1.1.1')"
 RUN Rscript -e "remotes::install_version('bookdown','0.26')"
-RUN Rscript -e "install.packages('docopt', repos='http://cran.rstudio.com/')"
+RUN Rscript -e "remotes::install_version('docopt','0.7.2')"
+# RUN Rscript -e "install.packages('docopt', repos='http://cran.rstudio.com/')"
 
 
