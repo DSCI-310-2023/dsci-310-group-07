@@ -16,8 +16,8 @@ analysis/figs/length.png analysis/figs/width.png analysis/figs/curb_weight.png a
 	Rscript R/04-eda_plots.R 
 
 # generates the kept.csv
-data/kept.csv: 05-train_models.R
-	Rscript 05-train_models.R --out_dir="data"
+data/kept.csv: R/05-train_models.R
+	Rscript R/05-train_models.R --out_dir="data"
 
 
 .PHONY: report

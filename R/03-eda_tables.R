@@ -17,11 +17,15 @@ source(here("R/showR2.R"))
 
 doc<-"
 Usage:
-  R/01-write_data.R --out_dir=<output_dir> 
+  R/03-eda_tables.R --out_dir=<output_dir> 
 Options:
-  --out_dir=<output_dir>		
+  --out_dir=<output_dir> [default: data]
 "
-opt <- docopt(doc)
+if (interactive()) {
+  opt <- docopt(doc, args = commandArgs(trailingOnly = TRUE))
+} else {
+  opt <- list(out_dir = "data")
+}
 
 # Preliminary Analysis
 # print out the first 6 rows of `automobile` as kables
@@ -52,7 +56,9 @@ mul_lvl_fct <- data.frame(variable = colnames(automobile),
   filter(mul_lvl) %>%
   pull(variable)
 
-main <- function(out_dir) {
+## adding the initial value to forbid the error when the other files call this
+## r file
+main <- function(out_dir="data") {
   # Create out_dir if it does not exist
   if (!dir.exists(out_dir)) {
     dir.create(out_dir)
@@ -60,5 +66,5 @@ main <- function(out_dir) {
 write_csv(levels_all, file.path(out_dir, "levels.csv"))
 }
 
-main(opt[["--out_dir"]])
+main(opt$out_dir)
 

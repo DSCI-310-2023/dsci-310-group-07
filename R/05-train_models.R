@@ -12,13 +12,18 @@ source(here("R/get_model.R"))
 source(here("R/02-read_data.R"))
 library(docopt)
 
-doc<-"
+doc <- "
 Usage:
-  R/01-write_data.R --out_dir=<output_dir> 
+  R/05-train_models.R [--out_dir=<output_dir>]
 Options:
-  --out_dir=<output_dir>		
+  --out_dir=<output_dir>  [default: data]
 "
-opt <- docopt(doc)
+
+if (length(commandArgs(trailingOnly = TRUE)) > 0) {
+  opt <- docopt(doc, args = commandArgs(trailingOnly = TRUE))
+} else {
+  opt <- list(out_dir = "data")
+}
 
 # generate the traning and testing sets from `get_trt_test()` function
 tst<-get_tr_tst(automobile)
@@ -68,7 +73,9 @@ summs <- summary(coef_mat)
 kept <- data.frame(kept_variables = rownames(coef_mat)[summs$i],
            coefficient = summs$x) 
 
-main <- function(out_dir) {
+## adding the initial value to forbid the error when the other files call this
+## r file
+main <- function(out_dir="data") {
   # Create out_dir if it does not exist
   if (!dir.exists(out_dir)) {
     dir.create(out_dir)
@@ -76,4 +83,4 @@ main <- function(out_dir) {
   write_csv(kept, file.path(out_dir, "kept.csv"))
 }
 
-main(opt[["--out_dir"]])
+main(opt$out_dir)
