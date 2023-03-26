@@ -58,12 +58,12 @@ mul_lvl_fct <- data.frame(variable = colnames(automobile),
 
 ## adding the initial value to forbid the error when the other files call this
 ## r file
-main <- function(out_dir="data") {
+main <- function(out_dir = "data") {
   # Create out_dir if it does not exist
   if (!dir.exists(out_dir)) {
     dir.create(out_dir)
   }
-write_csv(levels_all, file.path(out_dir, "levels.csv"))
+  write_csv(levels_all, file.path(out_dir, "levels.csv"))
 }
 
 main(opt$out_dir)
