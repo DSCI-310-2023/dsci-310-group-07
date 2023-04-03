@@ -41,7 +41,7 @@ Then you can obtain the docker image in two different ways:
 
 After obtaining the docker image, you can run this on localhost:8787 by
 ```
-docker run --rm -p 8787:8787 -e PASSWORD=12345 -v /$(pwd):/home/rstudio/project dsci310-project
+docker run -it --rm -p 8787:8787 -e PASSWORD=12345 -v /$(pwd):/home/rstudio/project dsci310-project
 ```
 
 Open `localhost:8787/` on your browser. You will see a login page. The username is `rstudio` and the password is `12345`
