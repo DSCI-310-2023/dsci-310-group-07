@@ -31,17 +31,15 @@ Then you can obtain the docker image in two different ways:
     * Go to [this webpage](https://hub.docker.com/r/wxw1026/dsci-310-group-07/tags).
     * Copy the command on the bottom right, which is `docker pull wxw1026/dsci-310-group-07:latest`
     * Paste the command on your terminal and wait for pulling.
-    * When the pulling is done, type `docker images wxw1026/dsci-310-group-07` in your terminal.
-    * Copy the IMAGE ID, which should be in the third column.
-    * Type ` docker tag <IMAGE ID> dsci310-project` in your terminal.
+    * When the pulling is done, type `docker images wxw1026/dsci-310-group-07` in your terminal and you will be able to see the image pulled.
   
  * Build it locally:
-    * Type `docker build -t dsci310-project . -f Dockerfile` in your terminal.
+    * Type `docker build -t dsci-310-group-07 . -f Dockerfile` in your terminal.
     * Wait for installation. It may take minutes.
 
 After obtaining the docker image, you can run this on localhost:8787 by
 ```
-docker run -it --rm -p 8787:8787 -e PASSWORD=12345 -v /$(pwd):/home/rstudio/project dsci310-project
+docker run -it --rm -p 8787:8787 -e PASSWORD=12345 -v /$(pwd):/home/rstudio/project dsci-310-group-07
 ```
 
 Open `localhost:8787/` on your browser. You will see a login page. The username is `rstudio` and the password is `12345`

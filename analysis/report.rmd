@@ -21,6 +21,7 @@ library(MASS)
 library(glmnet)
 
 # Source of data
+# Should not include this, for variables, use saveRDS()
 source(here("R/02-read_data.R"))
 source(here("R/03-eda_tables.R"))
 source(here("R/04-eda_plots.R"))
