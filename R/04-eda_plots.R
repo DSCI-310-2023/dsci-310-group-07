@@ -8,10 +8,13 @@ library(here)
 library(cowplot)
 library(testthat)
 
-source(here("R/02-read_data.R")) # get automobile variable
-source(here("R/03-eda_tables.R")) # get nms
-source(here("R/plotAll.R"))
 
+source(here("R/plotAll.R"))
+source(here("R/saveVar.R"))
+
+# get variables
+automobile <- readRDS(here("analysis/vars/automobile.rds"))
+nms <- readRDS(here("analysis/vars/nms.rds"))
 
 # obtain plots from `plotAll` function
 plots <- plotAll(automobile, nms)
@@ -51,4 +54,4 @@ for (i in 1:6) {
   
 }
 
-print(paste("IMAGES saved in", out_dir, sep = " "))
+print(paste("IMAGES saved to", out_dir, sep = " "))

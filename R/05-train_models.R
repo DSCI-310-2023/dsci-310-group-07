@@ -5,12 +5,16 @@
 #' will be generated
 #' 
 
+# libraries
+library(docopt)
 library(tidyverse)
 library(here)
-
+# function
 source(here("R/get_model.R"))
-source(here("R/02-read_data.R"))
-library(docopt)
+# variable
+automobile <- readRDS(here("analysis/vars/automobile.rds"))
+
+
 
 doc <- "
 Usage:
