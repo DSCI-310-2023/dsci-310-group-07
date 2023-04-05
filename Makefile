@@ -20,6 +20,11 @@ analysis/figs/length.png analysis/figs/width.png analysis/figs/curb_weight.png a
 data/kept.csv: R/05-train_models.R
 	Rscript R/05-train_models.R --out_dir="data"
 
+# run docker container
+.PHONY: container
+container:
+	docker run -it --rm -p 8787:8787 -e PASSWORD="a" -v /"$$(pwd)":/home/rstudio dsci-310-group-07
+
 # generate the report
 .PHONY: report
 report:
