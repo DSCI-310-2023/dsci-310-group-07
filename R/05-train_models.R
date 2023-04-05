@@ -80,7 +80,10 @@ main <- function(out_dir="data") {
   if (!dir.exists(out_dir)) {
     dir.create(out_dir)
   }
-  write_csv(kept, file.path(out_dir, "kept.csv"))
+  name <- "kept.csv"
+  write_csv(kept, file.path(out_dir, name))
+  # print if successfully wrote
+  print(paste(name, "wrote to", out_dir, sep = " "))
 }
 
 main(opt$out_dir)

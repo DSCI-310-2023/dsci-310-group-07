@@ -18,7 +18,7 @@ figs: data/automobile.csv
 	Rscript R/04-eda_plots.R 
 
 # (4) generates the kept.csv
-data/kept.csv: R/05-train_models.R
+data/kept.csv: R/05-train_models.R data/automobile.csv
 	Rscript R/05-train_models.R --out_dir="data"
 
 # run docker container
