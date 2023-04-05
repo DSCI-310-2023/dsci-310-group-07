@@ -66,7 +66,11 @@ main <- function(input_dir = website,
   df <- read_csv(input_dir,
                  col_names = names)
   df <- replace(df, df == "?", NA)
-  write_csv(df, file.path(out_dir, "automobile.csv"))
+  name <- "automobile.csv"
+  write_csv(df, file.path(out_dir, name))
+  # print if successfully wrote
+  print(paste(name, "wrote to", out_dir, sep = " "))
+  
 
 }
 
