@@ -9,7 +9,7 @@ data/automobile.csv: R/01-write_data.R
 	Rscript R/01-write_data.R --input_dir="https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.data"  --out_dir="data"
 
 # (2) generates the levels.csv for EDA
-data/levels.csv: R/03-eda_tables.R
+data/levels.csv: R/02-read_data.R R/03-eda_tables.R data/automobile.csv
 	Rscript R/03-eda_tables.R --out_dir="data"
 
 # (3) stores all the plots for EDA
