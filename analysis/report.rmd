@@ -20,17 +20,18 @@ library(kableExtra)
 library(MASS)
 library(glmnet)
 
-# Source of data
-# Should not include this, for variables, use saveRDS()
-source(here("R/02-read_data.R"))
-source(here("R/03-eda_tables.R"))
-source(here("R/04-eda_plots.R"))
-source(here("R/05-train_models.R"))
-
 # Source of functions
 source(here("R/showR2.R"))
 source(here("R/get_model.R"))
 source(here("R/make_kable.R"))
+
+# get variables
+automobile <- readRDS(here("analysis/vars/automobile.rds"))
+top8 <- readRDS(here("analysis/vars/top8.rds"))
+mul_lvl_fct <- readRDS(here("analysis/vars/mul_lvl_fct.rds"))
+cv_result <- readRDS(here("analysis/vars/cv_result.rds"))
+err <- readRDS(here("analysis/vars/err.rds"))
+
 
 ```
 
@@ -79,6 +80,9 @@ In this section, we load and clean the data. Note that the all `?` are replaced 
 
 ```{r left-tb, echo=FALSE, message=FALSE, warning=FALSE}
 # An overview of automobile dataset
+left_automobile <- head(automobile[,1:13]) 
+right_automobile <- head(automobile[,14:26]) 
+
 left_automobile %>% 
   kable(caption = "Row 1 to 6, Column 1 to 13 in Automobile Dataset") %>%
   make_kable()
@@ -97,6 +101,8 @@ From tables \@ref(tab:left-tb) and \@ref(tab:right-tb), we noticed that there ar
 ```{r data-summary, echo=FALSE, message=FALSE, warning=FALSE}
 # Checking the summary of results of each column
 options(knitr.kable.NA = '')
+summary_automobile <- summary(automobile) %>% 
+  t() 
 summary_automobile %>%
   kable(caption = "Summary of Automobile Dataset", digits = 4) %>%
   make_kable()
@@ -118,6 +124,7 @@ Firstly, we want to calculate the coefficient of determination of all of our pre
 
 
 ```{r top-8, echo=FALSE, message=FALSE, warning=FALSE}
+
 kable(top8,
       caption = "The 8 variables with highest R^2") %>%
   make_kable()
@@ -217,7 +224,8 @@ Then the plot function will be used to visualise the MSE of different lambdas.
 `lasso_mod` provides the  $\hat{\lambda}_{\text{min}}$  for LASSO (explained below) and `lasso_mod_1se` provides the $\hat{\lambda}_{\text{1SE}}$ for LASSO (explained below).
 
 ```{r lasso,echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Lasso Regression", out.width="90%"}
-get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="plot")
+# get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="plot")
+include_graphics(here("analysis/figs/lasso.png"))
 ```
 
 Figure \@ref(fig:lasso) shows the estimated test MSE on the y-axis for a grid of values of ${\lambda}$ on the x-axis (on a natural log-scale). The two vertical dotted lines show us where lambda is minimized, in other words, how many variables are needed for the best model. The numbers on the top x-axis indicate the number of input variables whose estimated coefficients are different for 0 for different values of lambda. The error bars represent the variation across the different sets of the CV folds.  The left line shows $\hat{\lambda}_{\text{min}}$ - which is the minimum MSE in the grind and the right line represents $\hat{\lambda}_{\text{1SE}}$ - which is the largest values of lambda such that the corresponding MSE is still within 1 standard error of that of the minimum (more penalization at low cost). 
@@ -226,7 +234,8 @@ A similar method is followed for Ridge, except `alpha = 0`.
 `ridge_mod` provides the  $\hat{\lambda}_{\text{min}}$ for Ridge and `ridge_mod_1se` provides the  $\hat{\lambda}_{\text{1SE}}$ value for Ridge (explained above).
 
 ```{r ridge, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Ridge Regression", out.width="90%"}
-get_model_plot(x_train_mat,y_train_mat,model="ridge",ask="plot")
+# get_model_plot(x_train_mat,y_train_mat,model="ridge",ask="plot")
+include_graphics(here("analysis/figs/ridge.png"))
 ```
 
 Figure \@ref(fig:ridge) for Ridge regression shows the estimated test MSE for each value of lambda, just like that of LASSO. However the main difference here is that the top x-axis is all the same value - 17. This is because the Ridge estimator never shrinks estimates to 0, unlike LASSO. The two vertical lines represent $\hat{\lambda}_{\text{min}}$ and  $\hat{\lambda}_{\text{1SE}}$ with the x and y axis being the same as LASSO.
