@@ -77,7 +77,6 @@ R version 4.1.3 and R packages as follows:
  * ggcheck:0.0.4
  * kableExtra:1.3.4
  * MASS:7.3-55
- * glmnet:4.1-4
  * rmarkdown:2.13
  * bookdown:0.26
  * cowplot:1.1.1
