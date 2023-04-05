@@ -6,6 +6,7 @@
 #' Change the column types based on the values
 
 library(tidyverse)
+library(here)
 source(here("R/saveVar.R"))
 
 automobile <- read_csv(
@@ -40,6 +41,6 @@ automobile <- read_csv(
 )
 
 # Save variable to vars
-saveVar(automobile,"automobile.rds", here::here("analysis/vars"))
+saveVar(automobile,"automobile.rds", here("analysis/vars"))
 
 
