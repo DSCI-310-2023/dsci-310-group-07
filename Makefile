@@ -13,7 +13,8 @@ data/levels.csv: R/02-read_data.R R/03-eda_tables.R data/automobile.csv
 	Rscript R/03-eda_tables.R --out_dir="data"
 
 # (3) stores all the plots for EDA
-analysis/figs/length.png analysis/figs/width.png analysis/figs/curb_weight.png analysis/figs/eg_size.png analysis/figs/horse_pw.png analysis/figs/hw_mpg.png analysis/figs/cld.png analysis/figs/make.png:
+figs=$(analysis/figs/length.png analysis/figs/width.png analysis/figs/curb_weight.png analysis/figs/eg_size.png analysis/figs/horse_pw.png analysis/figs/hw_mpg.png analysis/figs/cld.png analysis/figs/make.png)
+figs: data/automobile.csv
 	Rscript R/04-eda_plots.R 
 
 # (4) generates the kept.csv
