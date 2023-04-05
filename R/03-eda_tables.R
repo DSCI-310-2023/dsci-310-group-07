@@ -12,8 +12,11 @@ library(knitr)
 library(kableExtra)
 library(docopt)
 
-source(here("R/02-read_data.R"))
+# get automobile dataframe
+automobile <- readRDS(here("analysis/vars/automobile.rds"))
+
 source(here("R/showR2.R"))
+source(here("R/saveVar.R"))
 
 doc<-"
 Usage:
@@ -28,22 +31,16 @@ if (interactive()) {
 }
 
 # Preliminary Analysis
-# print out the first 6 rows of `automobile` as kables
-# the dataset will be split for being too long
-left_automobile <- head(automobile[,1:13]) 
-right_automobile <- head(automobile[,14:26]) 
-
-# summary of automobile
-summary_automobile <- summary(automobile) %>% 
-  t() 
 
 # The first 8 variables that explain most variations in price
 top8 <- showR2(automobile, 8)
 colnames(top8)[1] <- "R^2"
-
+saveVar(top8,"top8.rds", here("analysis/vars"))
 
 # Top 8 variables' names
 nms <- pull(top8,names)
+saveVar(nms,"nms.rds", here("analysis/vars"))
+
 
 # Levels of all variables without na
 levels_all <- data.frame(num_unique = sapply(lapply(na.omit(automobile), unique), length),
@@ -55,6 +52,7 @@ mul_lvl_fct <- data.frame(variable = colnames(automobile),
   mutate(mul_lvl = ((type == "factor") & (num_unique > 2))) %>%
   filter(mul_lvl) %>%
   pull(variable)
+saveVar(mul_lvl_fct,"mul_lvl_fct.rds", here("analysis/vars"))
 
 ## adding the initial value to forbid the error when the other files call this
 ## r file
@@ -63,7 +61,10 @@ main <- function(out_dir = "data") {
   if (!dir.exists(out_dir)) {
     dir.create(out_dir)
   }
-  write_csv(levels_all, file.path(out_dir, "levels.csv"))
+  name <- "levels.csv"
+  write_csv(levels_all, file.path(out_dir, name))
+  # print if successfully wrote
+  print(paste(name, "wrote to", out_dir, sep = " "))
 }
 
 main(opt$out_dir)

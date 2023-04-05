@@ -130,7 +130,9 @@ get_model_plot <- function(x_train_mat, y_train_mat, model = "lasso", ask = "mod
   if (model == "lasso") {
     lasso_cv <- cv.glmnet(x = x_train_mat, y = y_train_mat, alpha = 1, nfolds = 10)
     if (ask == "plot") {
+      png(file=here::here("analysis/figs/lasso.png"), width=600, height=400)
       plot(lasso_cv, main = "MSE of LASSO estimated by CV for different lambdas\n\n")
+      dev.off()
     } 
     else if (ask == "modeling") {
       lasso_mod <- glmnet(x = x_train_mat, y = y_train_mat, alpha = 1, lambda = lasso_cv$lambda.min)
@@ -144,7 +146,9 @@ get_model_plot <- function(x_train_mat, y_train_mat, model = "lasso", ask = "mod
   else if (model == "ridge") {
     ridge_cv <- cv.glmnet(x = x_train_mat, y = y_train_mat, alpha = 0, nfolds = 10)
     if (ask == "plot") {
+      png(file=here::here("analysis/figs/ridge.png"), width=600, height=400)
       plot(ridge_cv, main = "MSE of Ridge estimated by CV for different lambdas\n\n")
+      dev.off()
     } 
     else if (ask == "modeling") {
       ridge_mod <- glmnet(x = x_train_mat, y = y_train_mat, alpha = 0, lambda = ridge_cv$lambda.min)

@@ -8,13 +8,22 @@ library(here)
 library(cowplot)
 library(testthat)
 
-source(here("R/02-read_data.R"))
-source(here("R/03-eda_tables.R"))
-source(here("R/plotAll.R"))
 
+source(here("R/plotAll.R"))
+source(here("R/saveVar.R"))
+
+# get variables
+automobile <- readRDS(here("analysis/vars/automobile.rds"))
+nms <- readRDS(here("analysis/vars/nms.rds"))
 
 # obtain plots from `plotAll` function
 plots <- plotAll(automobile, nms)
+
+# create dir if not exists
+out_dir <- here("analysis/figs")
+if (!dir.exists(out_dir)) {
+  dir.create(out_dir)
+}
 
 # This will save the bar plot to figs
 
@@ -26,7 +35,7 @@ for (i in 1:2) {
   name <- bar_names[i]
   ggsave(name,
          plot = plots[[idx]],
-         path = here("analysis/figs"),
+         path = out_dir,
          width = 5, height = 3)
 }
 
@@ -40,7 +49,9 @@ for (i in 1:6) {
   name <- combine_names[i]
   ggsave(name,
          plot = plot_grid(plots[[idx]],plots[[idx+1]]),
-         path = here("analysis/figs"),
+         path = out_dir,
          width = 6, height = 2.5)
   
 }
+
+print(paste("IMAGES saved to", out_dir, sep = " "))
