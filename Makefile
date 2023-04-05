@@ -1,4 +1,4 @@
-# author: Ning Wang
+# author: Ning Wang, Jiaying Liao
 # date: 2023-03-23
 
 # runs all but not the report
@@ -31,8 +31,7 @@ model_figs: data/automobile.csv data/kept.csv
 	Rscript R/06-model_plots.R 
 
 
-
-# run docker container
+# run docker container (for windows)
 .PHONY: container
 container:
 	docker run -it --rm -p 8787:8787 -e PASSWORD="a" -v /"$$(pwd)":/home/rstudio dsci-310-group-07

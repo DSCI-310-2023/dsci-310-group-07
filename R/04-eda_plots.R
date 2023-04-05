@@ -6,7 +6,6 @@
 library(tidyverse)
 library(here)
 library(cowplot)
-library(testthat)
 
 
 source(here("R/plotAll.R"))
