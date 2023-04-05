@@ -2,7 +2,7 @@ FROM rocker/rstudio:4.1.3
 
 # update ubuntu repos and install tidyverse system dependencies
 RUN apt update -y
-RUN apt install -y libcurl4-openssl-dev libssl-dev libxml2-dev zlib1g-dev
+RUN apt install -y libcurl4-openssl-dev libssl-dev libxml2-dev zlib1g-dev libxt6
 
 # Install R packages
 RUN Rscript -e "install.packages('remotes', repos = 'http://cran.us.r-project.org')"
