@@ -11,6 +11,7 @@ library(tidyverse)
 library(here)
 # function
 source(here("R/get_model.R"))
+source(here("R/saveVar.R"))
 # variable
 automobile <- readRDS(here("analysis/vars/automobile.rds"))
 
@@ -47,6 +48,10 @@ y_train_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="training")[[2]]
 x_test_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="testing")[[1]]
 y_test_mat<-get_trm_tsm(training_df_sub,testing_df_sub,set="testing")[[2]]
 
+# save training matrices for plotting
+saveVar(x_train_mat,"x_train_mat.rds", here("analysis/vars"))
+saveVar(y_train_mat,"y_train_mat.rds", here("analysis/vars"))
+
 # Lasso regression
 ## model
 lasso_mods<-get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="modeling")
@@ -63,11 +68,13 @@ ridge_mod_1se<-ridge_mods[[2]]
 lasso_cv<-get_model_plot(x_train_mat,y_train_mat,model="lasso",ask="modeling")[[3]]
 ridge_cv<-get_model_plot(x_train_mat,y_train_mat,model="ridge",ask="modeling")[[3]]
 
-cv_result <- get_er_cv(training_df_at,training_df_sub,kfolds=10,lasso_cv,ridge_cv) 
+cv_result <- get_er_cv(training_df_at,training_df_sub,kfolds=10,lasso_cv,ridge_cv)
+saveVar(cv_result,"cv_result.rds", here("analysis/vars"))
 
 # Prediction error of best model
 preds <- predict(lasso_mod_1se,x_test_mat)
 err <- sqrt(mean(y_test_mat-preds)^2)
+saveVar(err,"err.rds",here("analysis/vars"))
 
 # Kept variables of the best model
 coef_mat<-coef(lasso_mod_1se)

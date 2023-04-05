@@ -31,14 +31,6 @@ if (interactive()) {
 }
 
 # Preliminary Analysis
-# print out the first 6 rows of `automobile` as kables
-# the dataset will be split for being too long
-left_automobile <- head(automobile[,1:13]) 
-right_automobile <- head(automobile[,14:26]) 
-
-# summary of automobile
-summary_automobile <- summary(automobile) %>% 
-  t() 
 
 # The first 8 variables that explain most variations in price
 top8 <- showR2(automobile, 8)

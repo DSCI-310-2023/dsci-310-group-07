@@ -2,7 +2,7 @@
 # date: 2023-03-23
 
 # runs all (1) (2) (3) (4) with one command, but not the report
-all: data/automobile.csv data/levels.csv figs data/kept.csv 
+all: data/automobile.csv data/levels.csv eda_figs data/kept.csv model_figs
 
 # (1) download the data
 data/automobile.csv: R/01-write_data.R
@@ -13,11 +13,16 @@ data/levels.csv: R/02-read_data.R R/03-eda_tables.R data/automobile.csv
 	Rscript R/03-eda_tables.R --out_dir="data"
 
 # (3) stores all the plots for EDA
-figs=$(analysis/figs/length.png analysis/figs/width.png analysis/figs/curb_weight.png analysis/figs/eg_size.png analysis/figs/horse_pw.png analysis/figs/hw_mpg.png analysis/figs/cld.png analysis/figs/make.png)
-figs: data/automobile.csv
+eda_figs=$(analysis/figs/length.png analysis/figs/width.png analysis/figs/curb_weight.png analysis/figs/eg_size.png analysis/figs/horse_pw.png analysis/figs/hw_mpg.png analysis/figs/cld.png analysis/figs/make.png)
+eda_figs: data/automobile.csv
 	Rscript R/04-eda_plots.R 
 
-# (4) generates the kept.csv
+# (4) stores all plots for model
+model_figs=$(analysis/figs/lasso.png analysis/figs/ridge.png)
+model_figs: data/automobile.csv data/kept.csv
+	Rscript R/06-model_plots.R 
+
+# (5) generates the kept.csv
 data/kept.csv: R/05-train_models.R data/automobile.csv
 	Rscript R/05-train_models.R --out_dir="data"
 
