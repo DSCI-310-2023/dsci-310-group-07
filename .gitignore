@@ -1,6 +1,7 @@
 .DS_Store
 .config
 .local
+.bash_history
 
 # Added manually: don't know if we should ignore all project files
 *.Rproj
