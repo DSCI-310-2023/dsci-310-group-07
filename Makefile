@@ -41,7 +41,7 @@ container:
 report:
 	make clean 
 	make all
-	Rscript -e "rmarkdown::render('analysis/report.rmd', output_dir='analysis')"
+	Rscript -e "rmarkdown::render('analysis/report.rmd', output_dir='analysis',output_format = 'all')"
 	
 # clean all output
 .PHONY: clean
@@ -52,3 +52,4 @@ clean:
 	rm -rf analysis/figs/
 	rm -rf analysis/vars/
 	rm -rf analysis/report.html
+	rm -rf analysis/report.pdf
