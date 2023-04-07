@@ -3,6 +3,8 @@ title: "Predicting Car Prices Based on Certain Characteristics"
 author: 'DSCI310 Group 07: Harbor Zhang, Jiaying Liao, Ning Wang, Xiwen Wei'
 date: "`r Sys.Date()`"
 output:
+  bookdown::pdf_document2:
+    toc: false
   bookdown::html_document2:
     default
 bibliography: references.bib 
@@ -12,18 +14,13 @@ Original Project Authors: Henry Zhang, Moira Renata, Ning Wang, Paige Wills, Xin
 
 ```{r setup, message = FALSE, warning=FALSE, include=FALSE}
 # Libraries
-# library(leaps)
 library(tidyverse)
 library(here)
 library(knitr)
-# library(kableExtra)
-# library(MASS)
-# library(glmnet)
 
 # Source of functions
 source(here("R/showR2.R"))
 source(here("R/get_model.R"))
-# source(here("R/make_kable.R"))
 
 # get variables
 automobile <- readRDS(here("analysis/vars/automobile.rds"))
@@ -84,15 +81,13 @@ left_automobile <- head(automobile[,1:13])
 right_automobile <- head(automobile[,14:26]) 
 
 left_automobile %>% 
-  kable(caption = "Row 1 to 6, Column 1 to 13 in Automobile Dataset") #%>%
-  # make_kable()
+  kable(caption = "Row 1 to 6, Column 1 to 13 in Automobile Dataset") 
 
 ```
 
 ```{r right-tb, echo=FALSE}
 right_automobile %>%
-  kable(caption = "Row 1 to 6, Column 14 to 26 in Automobile Dataset") #%>%
-  # make_kable()
+  kable(caption = "Row 1 to 6, Column 14 to 26 in Automobile Dataset") 
 ```
 
 
@@ -104,8 +99,7 @@ options(knitr.kable.NA = '')
 summary_automobile <- summary(automobile) %>% 
   t() 
 summary_automobile %>%
-  kable(caption = "Summary of Automobile Dataset", digits = 4) #%>%
-  # make_kable()
+  kable(caption = "Summary of Automobile Dataset", digits = 4) 
 ```
 
 
@@ -117,7 +111,7 @@ According to table \@ref(tab:data-summary), there are `r sum(!complete.cases(aut
 
 Next, we will perform EDA to better understand the variables that we will be using in our analysis. 
 
-It would be beneficial to visualize the pairwise correlation coefficients of our dataset to check for multicollinearity. This can be done either by using the `ggpairs` function, or by creating a correlation heatmap. However, since our data contains mulitple categorical variables with a large number of levels, this is not possible to do at this point. Therefore, our EDA is limited to checking the Coefficient of Determination of all the predictor variables and visualizing the relationship of the top 8 predictor variables based on their R^2 value. 
+It would be beneficial to visualize the pairwise correlation coefficients of our dataset to check for multicollinearity. This can be done either by using the `ggpairs` function, or by creating a correlation heatmap. However, since our data contains mulitple categorical variables with a large number of levels, this is not possible to do at this point. Therefore, our EDA is limited to checking the Coefficient of Determination of all the predictor variables and visualizing the relationship of the top 8 predictor variables based on their $R^2$ value. 
 
 Firstly, we want to calculate the coefficient of determination of all of our predicted variables.
 
@@ -126,13 +120,12 @@ Firstly, we want to calculate the coefficient of determination of all of our pre
 ```{r top-8, echo=FALSE, message=FALSE, warning=FALSE}
 
 kable(top8,
-      caption = "The 8 variables with highest R^2") #%>%
-  # make_kable()
+      caption = "The 8 variables with highest $R^2$") 
 
 ```
 
 
-Based on the result in table \@ref(tab:top-8), the variable that has the highest R^2 value is `make` with a value of `r top8[1,1]`. This can be interpreted as `r as.numeric(top8[1,1])*100`% of the variation observed in `price` is explained by the model with `make` as the explanatory variable. 
+Based on the result in table \@ref(tab:top-8), the variable that has the highest $R^2$ value is `make` with a value of `r top8[1,1]`. This can be interpreted as `r as.numeric(top8[1,1])*100`% of the variation observed in `price` is explained by the model with `make` as the explanatory variable. 
 
 Then, we created plots for the top 8 predictor variables. For the numerical variables, we created both a histogram to see the distribution, and a scatter plot to see the relationship between the variable and the car price. For the categorical variables, we created a bar graph to compare the count of each category in a variable. Analysis of the plots created are written after the code. 
 
@@ -201,8 +194,7 @@ include_graphics(here("analysis/figs/hw_mpg.png"))
 levels_all<-read.csv("data/levels.csv")
 
 levels_all %>%
-  kable(caption = "Levels of all variables") #%>%
-  # make_kable()
+  kable(caption = "Levels of all variables") 
 ```
 
 Based on table \@ref(tab:levels), we noticed that the variables:`r mul_lvl_fct` have more than 2 levels. Since the shrinkage methods we are planning to use to perform model selection (LASSO and Ridge) is not possible when there are more than 2 levels in a categorical variable, the variables listed above are all dropped because of their high levels. 
@@ -254,8 +246,7 @@ Finally, we are able to compute the RMSE (root mean squared error) to evaluate t
 ```{r cross-validation, echo=FALSE, message=FALSE, warning=FALSE}
 cv_result %>%
   kable(caption = "Cross-Validation Result",
-        digits = 3) #%>%
-  # make_kable()
+        digits = 3)
 ```
 
 
@@ -267,8 +258,7 @@ Beside that, we obtained a root mean squared prediction error of `r round(err,3)
 kept<-read.csv("data/kept.csv")
 kept %>%
   kable(caption = "Kept variables",
-             digits = 3) #%>%
-  # make_kable()
+             digits = 3) 
 ```
 
 Taking a look at the coefficients of our model in table \@ref(tab:kept-variables), we noticed that the LASSO model had selected only three variables, which are `width`, `curb-weight`, and `horsepower`, while all the coefficients of other input variables were reduced to 0.

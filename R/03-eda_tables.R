@@ -8,8 +8,6 @@
 
 library(here)
 library(tidyverse)
-library(knitr)
-library(kableExtra)
 library(docopt)
 
 # get automobile dataframe
