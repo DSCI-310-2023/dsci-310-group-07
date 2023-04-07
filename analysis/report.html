@@ -11,7 +11,7 @@
 
 <meta name="author" content="DSCI310 Group 07: Harbor Zhang, Jiaying Liao, Ning Wang, Xiwen Wei" />
 
-<meta name="date" content="2023-04-06" />
+<meta name="date" content="2023-04-07" />
 
 <title>Predicting Car Prices Based on Certain Characteristics</title>
 
@@ -361,7 +361,7 @@ display: none;
 
 <h1 class="title toc-ignore">Predicting Car Prices Based on Certain Characteristics</h1>
 <h4 class="author">DSCI310 Group 07: Harbor Zhang, Jiaying Liao, Ning Wang, Xiwen Wei</h4>
-<h4 class="date">2023-04-06</h4>
+<h4 class="date">2023-04-07</h4>
 
 </div>
 
@@ -525,8 +525,14 @@ display: none;
 <div id="preliminary-analysis" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Preliminary Analysis</h1>
 <p>In this section, we load and clean the data. Note that the all <code>?</code> are replaced with <code>NA</code>.</p>
+<table class="kable_wrapper">
+<caption>
+<span id="tab:auto-head">Table 3.1: </span>Automobile Dataset
+</caption>
+<tbody>
+<tr>
+<td>
 <table>
-<caption><span id="tab:left-tb">Table 3.1: </span>Row 1 to 6, Column 1 to 13 in Automobile Dataset</caption>
 <colgroup>
 <col width="6%" />
 <col width="12%" />
@@ -562,7 +568,7 @@ display: none;
 <tbody>
 <tr class="odd">
 <td align="left">3</td>
-<td align="right">NA</td>
+<td align="right"></td>
 <td align="left">alfa-romero</td>
 <td align="left">gas</td>
 <td align="left">std</td>
@@ -577,7 +583,7 @@ display: none;
 </tr>
 <tr class="even">
 <td align="left">3</td>
-<td align="right">NA</td>
+<td align="right"></td>
 <td align="left">alfa-romero</td>
 <td align="left">gas</td>
 <td align="left">std</td>
@@ -592,7 +598,7 @@ display: none;
 </tr>
 <tr class="odd">
 <td align="left">1</td>
-<td align="right">NA</td>
+<td align="right"></td>
 <td align="left">alfa-romero</td>
 <td align="left">gas</td>
 <td align="left">std</td>
@@ -637,7 +643,7 @@ display: none;
 </tr>
 <tr class="even">
 <td align="left">2</td>
-<td align="right">NA</td>
+<td align="right"></td>
 <td align="left">audi</td>
 <td align="left">gas</td>
 <td align="left">std</td>
@@ -652,8 +658,9 @@ display: none;
 </tr>
 </tbody>
 </table>
+</td>
+<td>
 <table>
-<caption><span id="tab:right-tb">Table 3.2: </span>Row 1 to 6, Column 14 to 26 in Automobile Dataset</caption>
 <colgroup>
 <col width="8%" />
 <col width="8%" />
@@ -779,9 +786,13 @@ display: none;
 </tr>
 </tbody>
 </table>
-<p>From tables <a href="#tab:left-tb">3.1</a> and <a href="#tab:right-tb">3.2</a>, we noticed that there are some NA values. Each row represents an observation, each column is a variable, and each cell is a value, which means there is not a lot of data tidying to do. We will first check the number of NA values in each column, the number of levels in columns that are categorical variables, and the summary statistics of each variable.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>From tables <a href="#tab:auto-head">3.1</a>, we noticed that there are some NA values. Each row represents an observation, each column is a variable, and each cell is a value, which means there is not a lot of data tidying to do. We will first check the number of NA values in each column, the number of levels in columns that are categorical variables, and the summary statistics of each variable.</p>
 <table>
-<caption><span id="tab:data-summary">Table 3.3: </span>Summary of Automobile Dataset</caption>
+<caption><span id="tab:data-summary">Table 3.2: </span>Summary of Automobile Dataset</caption>
 <colgroup>
 <col width="14%" />
 <col width="12%" />
@@ -1055,15 +1066,15 @@ display: none;
 </tr>
 </tbody>
 </table>
-<p>According to table <a href="#tab:data-summary">3.3</a>, there are 46 rows that contain NA values. And the number of rows that have complete observations are 159.</p>
+<p>According to table <a href="#tab:data-summary">3.2</a>, there are 46 rows that contain NA values. And the number of rows that have complete observations are 159.</p>
 </div>
 <div id="exploratory-data-analysis" class="section level1" number="4">
 <h1><span class="header-section-number">4</span> Exploratory Data Analysis</h1>
 <p>Next, we will perform EDA to better understand the variables that we will be using in our analysis.</p>
-<p>It would be beneficial to visualize the pairwise correlation coefficients of our dataset to check for multicollinearity. This can be done either by using the <code>ggpairs</code> function, or by creating a correlation heatmap. However, since our data contains mulitple categorical variables with a large number of levels, this is not possible to do at this point. Therefore, our EDA is limited to checking the Coefficient of Determination of all the predictor variables and visualizing the relationship of the top 8 predictor variables based on their R^2 value.</p>
+<p>It would be beneficial to visualize the pairwise correlation coefficients of our dataset to check for multicollinearity. This can be done either by using the <code>ggpairs</code> function, or by creating a correlation heatmap. However, since our data contains mulitple categorical variables with a large number of levels, this is not possible to do at this point. Therefore, our EDA is limited to checking the Coefficient of Determination of all the predictor variables and visualizing the relationship of the top 8 predictor variables based on their <span class="math inline">\(R^2\)</span> value.</p>
 <p>Firstly, we want to calculate the coefficient of determination of all of our predicted variables.</p>
 <table>
-<caption><span id="tab:top-8">Table 4.1: </span>The 8 variables with highest R^2</caption>
+<caption><span id="tab:top-8">Table 4.1: </span>The 8 variables with highest <span class="math inline">\(R^2\)</span></caption>
 <thead>
 <tr class="header">
 <th align="left">R^2</th>
@@ -1105,7 +1116,7 @@ display: none;
 </tr>
 </tbody>
 </table>
-<p>Based on the result in table <a href="#tab:top-8">4.1</a>, the variable that has the highest R^2 value is <code>make</code> with a value of 0.796. This can be interpreted as 79.6% of the variation observed in <code>price</code> is explained by the model with <code>make</code> as the explanatory variable.</p>
+<p>Based on the result in table <a href="#tab:top-8">4.1</a>, the variable that has the highest <span class="math inline">\(R^2\)</span> value is <code>make</code> with a value of 0.796. This can be interpreted as 79.6% of the variation observed in <code>price</code> is explained by the model with <code>make</code> as the explanatory variable.</p>
 <p>Then, we created plots for the top 8 predictor variables. For the numerical variables, we created both a histogram to see the distribution, and a scatter plot to see the relationship between the variable and the car price. For the categorical variables, we created a bar graph to compare the count of each category in a variable. Analysis of the plots created are written after the code.</p>
 <p>Analysis on the plots:</p>
 <div class="figure"><span style="display:block;" id="fig:make-plot"></span>

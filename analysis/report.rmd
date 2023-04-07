@@ -5,6 +5,7 @@ date: "`r Sys.Date()`"
 output:
   bookdown::pdf_document2:
     toc: false
+    extra_dependencies: ["longtable", "float"]
   bookdown::html_document2:
     default
 bibliography: references.bib 
@@ -75,31 +76,55 @@ Variable|Type|Description|
 # Preliminary Analysis
 In this section, we load and clean the data. Note that the all `?` are replaced with `NA`.
 
-```{r left-tb, echo=FALSE, message=FALSE, warning=FALSE}
+```{r auto-head, echo=FALSE, message=FALSE, warning=FALSE}
 # An overview of automobile dataset
-left_automobile <- head(automobile[,1:13]) 
-right_automobile <- head(automobile[,14:26]) 
 
-left_automobile %>% 
-  kable(caption = "Row 1 to 6, Column 1 to 13 in Automobile Dataset") 
+if (knitr::is_latex_output()) {
+  automobile1 <- head(automobile[, 1:7])
+  automobile2 <- head(automobile[, 8:14])
+  automobile3 <- head(automobile[, 15:21])
+  automobile4 <- head(automobile[, 22:26])
+  kable(
+    list(automobile1, automobile2,automobile3,automobile4),
+    caption = "Automobile Dataset"
+  )
+
+} else {
+  left_automobile <- head(automobile[, 1:13])
+  right_automobile <- head(automobile[, 14:26])
+  
+  kable(
+    list(left_automobile, right_automobile),
+    caption = "Automobile Dataset"
+  )
+}
 
 ```
 
-```{r right-tb, echo=FALSE}
-right_automobile %>%
-  kable(caption = "Row 1 to 6, Column 14 to 26 in Automobile Dataset") 
-```
 
-
-From tables \@ref(tab:left-tb) and \@ref(tab:right-tb), we noticed that there are some NA values. Each row represents an observation, each column is a variable, and each cell is a value, which means there is not a lot of data tidying to do. We will first check the number of NA values in each column, the number of levels in columns that are categorical variables, and the summary statistics of each variable.
+From tables \@ref(tab:auto-head), we noticed that there are some NA values. Each row represents an observation, each column is a variable, and each cell is a value, which means there is not a lot of data tidying to do. We will first check the number of NA values in each column, the number of levels in columns that are categorical variables, and the summary statistics of each variable.
 
 ```{r data-summary, echo=FALSE, message=FALSE, warning=FALSE}
-# Checking the summary of results of each column
 options(knitr.kable.NA = '')
-summary_automobile <- summary(automobile) %>% 
-  t() 
-summary_automobile %>%
-  kable(caption = "Summary of Automobile Dataset", digits = 4) 
+summary_automobile <- summary(automobile)
+if (knitr::is_latex_output()) {
+  summary1 <- summary_automobile[, 1:7]
+  summary2 <- summary_automobile[, 8:14]
+  summary3 <- summary_automobile[, 15:21]
+  summary4 <- summary_automobile[, 22:26]
+  kable(
+    list(summary1, summary2, summary3, summary4),
+    caption = "Summary of Automobile Dataset",
+    digits = 4
+  )
+} else {
+  summary_automobile <- summary_automobile %>% t()
+  kable(
+    summary_automobile,
+    caption = "Summary of Automobile Dataset",
+    digits = 4
+  )
+}
 ```
 
 
