@@ -3,8 +3,8 @@
 #'
 #'This R script will saves the plots for model training
 library(here)
+library(carpriceprediction)
 
-source(here("R/get_model.R"))
 
 # get x, y training matrices
 x_train_mat <- readRDS(here("analysis/vars/x_train_mat.rds"))

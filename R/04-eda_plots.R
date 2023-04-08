@@ -6,10 +6,8 @@
 library(tidyverse)
 library(here)
 library(cowplot)
+library(carpriceprediction)
 
-
-source(here("R/plotAll.R"))
-source(here("R/saveVar.R"))
 
 # get variables
 automobile <- readRDS(here("analysis/vars/automobile.rds"))

@@ -1312,9 +1312,11 @@ Figure 4.8: Distribution of highway mpg and Price vs highway mpg
 <p>Based on table <a href="#tab:levels">5.1</a>, we noticed that the variables:symboling, make, body-style, drive-wheels, engine-type, num-of-cylinders, fuel-system have more than 2 levels. Since the shrinkage methods we are planning to use to perform model selection (LASSO and Ridge) is not possible when there are more than 2 levels in a categorical variable, the variables listed above are all dropped because of their high levels.</p>
 <p>Apart from that, after we omit NA, the levels of engine-location appears to be 1. This will cause contrasts since we need a categorical variables to be factors with 2 or more levels. Thus we need to remove <code>engine-location</code>.</p>
 <p>Then, the data set is split into two data sets - training and testing using a 70-30% basis and the ID variables are removed.</p>
-<p>We then create new training and testing datasets that excludes the variables listed. We call them:
-1. <code>training_df_sub</code>
-2. <code>testing_df_sub</code></p>
+<p>We then create new training and testing datasets that excludes the variables listed. We call them:</p>
+<ol style="list-style-type: decimal">
+<li><p><code>training_df_sub</code></p></li>
+<li><p><code>testing_df_sub</code></p></li>
+</ol>
 <p>This code prepares the dataset(s) for <code>glmnet()</code> which only takes matrices (hence <code>model.matrix</code>). The <code>glmnet()</code> function has an argument <code>object</code>, which is the formula of the model and therefore needs clear x and y variables, explaining why the training and testing datasets are split into subsets of x and y.</p>
 <p>Now our data is prepared for the <code>glmnet()</code> function, we will use <code>cv.glmnet</code> to obtain the optimal value of lambda using the training set. Since this is a LASSO model, we will use the argument <code>alpha=1</code> and <code>n.folds=10</code> to find the optimal value of lambda using cross-validation by defining a sequence of values.</p>
 <p>Then the plot function will be used to visualise the MSE of different lambdas.</p>
@@ -1335,12 +1337,14 @@ Figure 5.2: Ridge Regression
 </p>
 </div>
 <p>Figure <a href="#fig:ridge">5.2</a> for Ridge regression shows the estimated test MSE for each value of lambda, just like that of LASSO. However the main difference here is that the top x-axis is all the same value - 17. This is because the Ridge estimator never shrinks estimates to 0, unlike LASSO. The two vertical lines represent <span class="math inline">\(\hat{\lambda}_{\text{min}}\)</span> and <span class="math inline">\(\hat{\lambda}_{\text{1SE}}\)</span> with the x and y axis being the same as LASSO.</p>
-<p>For explanatory analysis purposes, we will be using both <span class="math inline">\(\hat{\lambda}_{\text{min}}\)</span> and <span class="math inline">\(\hat{\lambda}_{\text{1SE}}\)</span> for both LASSO and Ridge to create four different regression models. Additionally, we also be creating an OLS model for comparison. The 5 models we will be creating are listed below:
-1. <code>mod_lasso</code>: LASSO regression using <span class="math inline">\(\lambda\)</span> = <span class="math inline">\(\hat{\lambda}_{\text{min}}\)</span> from LASSO
-2. <code>mod_lasso_1se</code>: LASSO regression using <span class="math inline">\(\lambda\)</span> = <span class="math inline">\(\hat{\lambda}_{\text{1SE}}\)</span> from LASSO
-3. <code>ridge_mod</code>: Ridge regression using <span class="math inline">\(\lambda\)</span> = <span class="math inline">\(\hat{\lambda}_{\text{min}}\)</span> from Ridge
-4. <code>ridge_mod_1se</code>: Ridge regression using <span class="math inline">\(\lambda\)</span> = <span class="math inline">\(\hat{\lambda}_{\text{1SE}}\)</span> from Ridge
-5. <code>ols_fs</code>: Ordinary least squares full regression using <span class="math inline">\(\lambda\)</span> = 0</p>
+<p>For explanatory analysis purposes, we will be using both <span class="math inline">\(\hat{\lambda}_{\text{min}}\)</span> and <span class="math inline">\(\hat{\lambda}_{\text{1SE}}\)</span> for both LASSO and Ridge to create four different regression models. Additionally, we also be creating an OLS model for comparison. The 5 models we will be creating are listed below:</p>
+<ol style="list-style-type: decimal">
+<li><p><code>mod_lasso</code>: LASSO regression using <span class="math inline">\(\lambda\)</span> = <span class="math inline">\(\hat{\lambda}_{\text{min}}\)</span> from LASSO</p></li>
+<li><p><code>mod_lasso_1se</code>: LASSO regression using <span class="math inline">\(\lambda\)</span> = <span class="math inline">\(\hat{\lambda}_{\text{1SE}}\)</span> from LASSO</p></li>
+<li><p><code>ridge_mod</code>: Ridge regression using <span class="math inline">\(\lambda\)</span> = <span class="math inline">\(\hat{\lambda}_{\text{min}}\)</span> from Ridge</p></li>
+<li><p><code>ridge_mod_1se</code>: Ridge regression using <span class="math inline">\(\lambda\)</span> = <span class="math inline">\(\hat{\lambda}_{\text{1SE}}\)</span> from Ridge</p></li>
+<li><p><code>ols_fs</code>: Ordinary least squares full regression using <span class="math inline">\(\lambda\)</span> = 0</p></li>
+</ol>
 <p>After creating the 5 models, we will then obtain the out-of-sample predictions for the test sets of all five different models above, shown by <code>preds_1</code>, <code>preds_2</code>, <code>preds_3</code>, <code>preds_4</code> and <code>preds_5</code>.</p>
 <p>Finally, we are able to compute the RMSE (root mean squared error) to evaluate the predicted models, which is clearly summarised in the tibble below.</p>
 <table>
@@ -1370,7 +1374,7 @@ Figure 5.2: Ridge Regression
 </tr>
 <tr class="odd">
 <td align="left">OLS Full Regression</td>
-<td align="right">782.862</td>
+<td align="right">33.526</td>
 </tr>
 </tbody>
 </table>

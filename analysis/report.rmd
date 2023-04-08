@@ -18,10 +18,7 @@ Original Project Authors: Henry Zhang, Moira Renata, Ning Wang, Paige Wills, Xin
 library(tidyverse)
 library(here)
 library(knitr)
-
-# Source of functions
-source(here("R/showR2.R"))
-source(here("R/get_model.R"))
+library(carpriceprediction)
 
 # get variables
 automobile <- readRDS(here("analysis/vars/automobile.rds"))
@@ -229,7 +226,9 @@ Apart from that, after we omit NA, the levels of engine-location appears to be 1
 Then, the data set is split into two data sets - training and testing using a 70-30% basis and the ID variables are removed.
 
 We then create new training and testing datasets that excludes the variables listed. We call them: 
+
 1. `training_df_sub`
+
 2. `testing_df_sub`
 
 This code prepares the dataset(s) for `glmnet()` which only takes matrices (hence `model.matrix`). The `glmnet()` function has an argument `object`, which is the formula of the model and therefore needs clear x and y variables, explaining why the training and testing datasets are split into subsets of x and y. 
@@ -258,10 +257,15 @@ include_graphics(here("analysis/figs/ridge.png"))
 Figure \@ref(fig:ridge) for Ridge regression shows the estimated test MSE for each value of lambda, just like that of LASSO. However the main difference here is that the top x-axis is all the same value - 17. This is because the Ridge estimator never shrinks estimates to 0, unlike LASSO. The two vertical lines represent $\hat{\lambda}_{\text{min}}$ and  $\hat{\lambda}_{\text{1SE}}$ with the x and y axis being the same as LASSO.
 
 For explanatory analysis purposes, we will be using both $\hat{\lambda}_{\text{min}}$ and $\hat{\lambda}_{\text{1SE}}$ for both LASSO and Ridge to create four different regression models. Additionally, we also be creating an OLS model for comparison. The 5 models we will be creating are listed below: 
+
 1. `mod_lasso`:  LASSO regression using $\lambda$ = $\hat{\lambda}_{\text{min}}$ from LASSO
+
 2. `mod_lasso_1se`: LASSO regression using $\lambda$ = $\hat{\lambda}_{\text{1SE}}$ from LASSO
+
 3. `ridge_mod`:  Ridge regression using $\lambda$ = $\hat{\lambda}_{\text{min}}$ from Ridge
+
 4. `ridge_mod_1se`: Ridge regression using $\lambda$ = $\hat{\lambda}_{\text{1SE}}$ from Ridge
+
 5. `ols_fs`: Ordinary least squares full regression using $\lambda$ = 0
 
 After creating the 5 models, we will then obtain the out-of-sample predictions for the test sets of all five different models above, shown by `preds_1`, `preds_2`, `preds_3`, `preds_4` and `preds_5`.

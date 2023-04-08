@@ -51,5 +51,5 @@ clean:
 	rm -f data/automobile.csv
 	rm -rf analysis/figs/
 	rm -rf analysis/vars/
-	rm -rf analysis/report.html
-	rm -rf analysis/report.pdf
+	rm -f analysis/report.html
+	rm -f analysis/report.pdf

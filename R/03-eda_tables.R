@@ -9,12 +9,11 @@
 library(here)
 library(tidyverse)
 library(docopt)
+library(carpriceprediction)
 
 # get automobile dataframe
 automobile <- readRDS(here("analysis/vars/automobile.rds"))
 
-source(here("R/showR2.R"))
-source(here("R/saveVar.R"))
 
 doc<-"
 Usage:
@@ -31,7 +30,7 @@ if (interactive()) {
 # Preliminary Analysis
 
 # The first 8 variables that explain most variations in price
-top8 <- showR2(automobile, 8)
+top8 <- getR2(automobile, 8)
 colnames(top8)[1] <- "R^2"
 saveVar(top8,"top8.rds", here("analysis/vars"))
 

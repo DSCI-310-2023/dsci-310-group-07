@@ -7,7 +7,8 @@
 
 library(tidyverse)
 library(here)
-source(here("R/saveVar.R"))
+library(carpriceprediction)
+# source(here("R/saveVar.R"))
 
 automobile <- read_csv(
   here("data/automobile.csv"),

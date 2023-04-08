@@ -9,9 +9,8 @@
 library(docopt)
 library(tidyverse)
 library(here)
-# function
-source(here("R/get_model.R"))
-source(here("R/saveVar.R"))
+library(carpriceprediction)
+
 # variable
 automobile <- readRDS(here("analysis/vars/automobile.rds"))
 
@@ -78,11 +77,12 @@ saveVar(err,"err.rds",here("analysis/vars"))
 
 # Kept variables of the best model
 coef_mat<-coef(lasso_mod_1se)
-
-summs <- summary(coef_mat)
-
-kept <- data.frame(kept_variables = rownames(coef_mat)[summs$i],
-           coefficient = summs$x) 
+row_names <- rownames(coef_mat)
+non_zero_indices <- which(as.numeric(coef_mat) != 0)
+non_zero_coef_mat <- coef_mat[non_zero_indices]
+non_zero_row_names <- row_names[non_zero_indices]
+kept <- data.frame(kept_variables = non_zero_row_names,
+                   coefficient = non_zero_coef_mat) 
 
 ## adding the initial value to forbid the error when the other files call this
 ## r file
