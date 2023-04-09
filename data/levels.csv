@@ -4,7 +4,7 @@ num_unique,type
 18,factor
 2,factor
 2,factor
-2,factor
+3,factor
 5,factor
 3,factor
 1,factor
@@ -24,4 +24,4 @@ num_unique,type
 20,numeric
 25,numeric
 28,numeric
-145,numeric
+146,numeric

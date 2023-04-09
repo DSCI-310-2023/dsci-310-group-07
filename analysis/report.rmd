@@ -279,7 +279,7 @@ cv_result %>%
 ```
 
 
-Through the 10 fold cross validation error (root mean squared error) in table \@ref(tab:cross-validation), we see that lasso model with $\hat{\lambda}_{\text{1SE}}$ has the lowest value. Thus we decide to use the LASSO Regression model with 1se MSE for our final predictions.
+Through the 10 fold cross validation error (root mean squared error) in table \@ref(tab:cross-validation), RMSE are in the same scale across all models. Therefore, due to model simplicity and robustness to outliers, we decide to use the LASSO Regression model with 1se MSE for our final predictions.
 
 Beside that, we obtained a root mean squared prediction error of `r round(err,3)` when using the LASSO Regression model on the test set.
 
@@ -299,9 +299,9 @@ Our goal requires generating a prediction model with potential independent varia
  
 ## Summary
 
-Based on the results above, the variables `width`,`curb-weight`, and `horsepower` were chosen by the LASSO model. With lasso_mod_1se (more penalization at a low cost) to penalize, all of the other regression coefficients of the input variables were shrunk to 0. If we refer back to our EDA, we notice that the three variables selected by LASSO are included in the list of top 8 variables with the highest coefficient of determination. However, it was surprising to see that there were only 3 predictor variables in our final LASSO model, which means all the other variables were shrunk to 0. Some variables that we thought were going to be important, like `city-mpg`, `length`, and `height` were surprisingly not included in the final model. 
+Based on the results above, the variables `width`,`curb-weight`, and `horsepower` were chosen by the LASSO model. With `lasso_mod_1se` (more penalization at a low cost) to penalize, all of the other regression coefficients of the input variables were shrunk to 0. If we refer back to our EDA, we notice that the three variables selected by LASSO are included in the list of top 8 variables with the highest coefficient of determination. However, it was surprising to see that there were only 3 predictor variables in our final LASSO model, which means all the other variables were shrunk to 0. Some variables that we thought were going to be important, like `city-mpg`, `length`, and `height` were surprisingly not included in the final model. 
 
-We also noticed that the LASSO model with $\hat{\lambda}_{\text{1SE}}$ yielded the smallest RMSE value compared to the other models, which means that it provides higher accuracy. LASSO penalizes the RSS with an $L_1$ penalty, and the penalty parameter $\hat{\lambda}_{\text{1SE}}$ that we chose was selected through a process called tuning in order to avoid using the test set when creating our model. Although this shrinkage method (LASSO) might lead to bias of the estimated coefficients, we sacrifice this for a lower variance to gain better prediction performance in our model.
+LASSO penalizes the residual sum of squares with $L_1$ penalty, and the penalty parameter $\hat{\lambda}_{\text{1SE}}$ that we chose was selected through a process called tuning in order to avoid using the test set when creating our model. Although this shrinkage method (LASSO) might lead to bias of the estimated coefficients, we sacrifice this for a lower variance to gain better prediction performance and robustness in our model.
 
 We hope that this fitted LASSO model will allow users to predict the price of a car in USD based on the 3 variables that were selected. Although we initially expected to have more predictor variables, we believe that the 3 predictor variables can give a rough prediction of the price of a car (USD). Moreover, we believe such a model could not only provide the expected price of a new car to customers, but also help sellers of second-hand cars set ideal prices. 
 
