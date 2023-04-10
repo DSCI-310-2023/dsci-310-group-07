@@ -43,7 +43,8 @@ Then you can obtain the docker image in two different ways:
   
  * Build it locally:
     * Type 
-    ```docker build -t dsci-310-group-07 . -f Dockerfile
+    ```
+    docker build -t dsci-310-group-07 . -f Dockerfile
     ```
      in your terminal.
     * Wait for installation. It may take minutes.
