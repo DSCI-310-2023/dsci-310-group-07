@@ -18,7 +18,7 @@ In [pdf](analysis/report.pdf) and in [html](analysis/report.html).
 
 We use a Docker container image to make the computational environment for this project reproducible.
 
-First, clone this repo in your terminal by `git clone https://github.com/wxw1026/dsci-310-group-07.git`.
+First, clone this repo in your terminal by `git clone https://github.com/DSCI-310/dsci-310-group-07.git`.
 
 Navigate to the root of this project by `cd dsci-310-group-07`.
 
