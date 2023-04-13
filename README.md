@@ -40,6 +40,11 @@ Then you can obtain the docker image in two different ways:
     docker images wxw1026/dsci-310-group-07
     ``` 
     in your terminal and you will be able to see the image pulled.
+    
+    * After obtaining the docker image, you can run this on localhost:8787 by
+    ```
+    docker run -it --rm -p 8787:8787 -e PASSWORD=12345 -v /$(pwd):/home/rstudio/project wxw1026/dsci-310-group-07
+    ```
   
  * Build it locally:
     * Type 
@@ -49,10 +54,10 @@ Then you can obtain the docker image in two different ways:
      in your terminal.
     * Wait for installation. It may take minutes.
 
-After obtaining the docker image, you can run this on localhost:8787 by
-```
-docker run -it --rm -p 8787:8787 -e PASSWORD=12345 -v /$(pwd):/home/rstudio/project dsci-310-group-07
-```
+    * then after obtaining the docker image, you can run this on localhost:8787 by
+    ```
+    docker run -it --rm -p 8787:8787 -e PASSWORD=12345 -v /$(pwd):/home/rstudio/project dsci-310-group-07
+    ```
 
 Open `localhost:8787/` on your browser. You will see a login page. The username is `rstudio` and the password is `12345`.
 
